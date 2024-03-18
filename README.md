@@ -35,6 +35,7 @@ Lokvani is built using the MERN stack, which comprises:
 - **Express.js:** To build robust and scalable web applications.
 - **React:** For building dynamic and interactive user interfaces.
 - **Node.js:** For server-side development and handling backend operations.
+- **Bootstrap:** For styling and responsiveness.
 
 ---
 
