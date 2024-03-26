@@ -21,8 +21,6 @@
 
 .Signup-Body {
   width: 470px;
-  height: 90%;
-  
 }
 
 #Signup-heading {
@@ -90,12 +88,10 @@
     align-items: center;
     margin-top: 15px;
     cursor: pointer;
-    margin-bottom: 40px;
 }
 
 .google-btn:hover{
     background-color: rgb(235, 235, 235);
-    /* color: #000000; */
 }
 
 .google-btn:active{
