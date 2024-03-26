@@ -1,0 +1,114 @@
+@import url("https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&family=Marcellus+SC&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+.Signup-main {
+  height: 100vh;
+  display: flex;
+}
+
+.Signup-Img {
+  height: 100%;
+  width: 40%;
+  background-image: url(../Assets/Login.jpg);
+  background-size: cover;
+}
+
+.Signup-Page {
+  width: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Signup-Body {
+  width: 470px;
+  height: 90%;
+  
+}
+
+#Signup-heading {
+  font-family: "Poppins", sans-serif;
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.input-box {
+  width: 100%;
+}
+
+#username-input {
+  border-radius: 5px;
+}
+
+.LoginPage-btn {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.Login-btn {
+  font-family: "Poppins", sans-serif;
+  align-items: center;
+  background-color: #f46416;
+  border: 0;
+  border-radius: 100px;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 20px;
+  font-weight: 400;
+  justify-content: center;
+  padding: 0px;
+  text-align: center;
+  height: 50px;
+  width: 100%;
+}
+
+.Login-btn:hover,
+.Login-btn:focus {
+  background-color: #df5003;
+  color: #ffffff;
+}
+
+.Login-btn:active {
+  background: #f46416;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.Login-btn:disabled {
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.google-btn{
+    height: 50px;
+    width: 100%;
+    border:1px solid black ;
+    border-radius: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+    cursor: pointer;
+    margin-bottom: 40px;
+}
+
+.google-btn:hover{
+    background-color: rgb(235, 235, 235);
+    /* color: #000000; */
+}
+
+.google-btn:active{
+  background-color: #ffffff;
+}
+
+.google-img{
+  height: 20px;
+  width: 30px;
+  background-image: url(../Assets/kisspng-google-logo-google-search-google-images-g-suite-google-adwords-5b5695e501bbf6.0297111215324011250071.png);
+  background-size: cover;
+}
+
+p{
+  font-family: "Poppins", sans-serif;
+}
