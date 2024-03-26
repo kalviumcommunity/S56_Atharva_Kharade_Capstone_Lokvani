@@ -3,8 +3,17 @@ import './SignUpPage.css';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import { Link } from 'react-router-dom';
+import IconButton from '@mui/material/IconButton';
+import eyeIconVisible from '../Assets/visibility.png';
+import eyeIconHidden from '../Assets/hide.png';
 
 const SignUpPage = () => {
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handlePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -80,25 +89,31 @@ const SignUpPage = () => {
                                 style: { fontSize: '20px', marginTop: '-25px', height: '40px', borderRadius: '6px' }
                             }}
                         />
-                        <InputLabel shrink htmlFor="password-input" style={{ fontSize: '25px', fontWeight: '400', color: '#000000', fontFamily: 'Poppins', marginTop: '10px' }}>
+                        <InputLabel shrink htmlFor="password-input" style={{ fontSize: '25px', fontWeight: '400', color: '#000000', fontFamily: 'Poppins', marginTop: '20px' }}>
                             Password
                         </InputLabel>
                         <TextField
                             id="password-input"
-                            name="password"
                             variant="outlined"
                             type={showPassword ? 'text' : 'password'}
                             fullWidth
                             margin="normal"
-                            value={formData.password}
-                            onChange={handleInputChange}
                             InputProps={{
-                                style: { fontSize: '20px', marginTop: '-25px', height: '40px', borderRadius: '6px' }
+                                style: { fontSize: '25px', marginTop: '-25px', height: '40px', borderRadius: '6px' },
+                                endAdornment: (
+                                    <IconButton onClick={handlePasswordVisibility} edge="end">
+                                        <img
+                                            src={showPassword ? eyeIconVisible : eyeIconHidden}
+                                            alt={showPassword ? 'Hide password' : 'Show password'}
+                                            style={{ width: '24px', height: '24px', objectFit: 'contain' }}
+                                        />
+                                    </IconButton>
+                                )
                             }}
                         />
                     </div>
                     <div className="LoginPage-btn">
-                        <button className="Login-btn" onClick={handleLogin}>LOGIN</button>
+                        <button className="Login-btn" onClick={handleLogin}>Sign Up</button>
                     </div>
                     <div style={{ marginTop: '15px', textAlign: 'center', fontSize: '20px' }}>
                         <p>OR</p>
