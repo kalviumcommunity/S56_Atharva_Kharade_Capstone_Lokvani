@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&family=Marcellus+SC&display=swap');
+
+nav{
+    height: 12vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 200px;
+    height: 100%;
+    margin: 2px;
+}
+
+.logoImg{
+    height: 60px;
+    width: 60px;
+    background-image: url(../Assets/Logo.png);
+    background-size: cover;
+}
+
+.logo h1{
+    font-size: 30px;
+    font-family: "Marcellus SC", serif;
+}
+
+.navList{
+    height: 100%;
+    width: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.navList h1{
+  font-size: 25px;
+  font-family: "Marcellus SC", serif;
+}
+
+.SignUp-btn {
+  
+  background-color: #496BAA;;
+  border-radius: 5px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  height: 40px;
+  width: 100px;
+  text-align: center;
+  transition: all .5s;
+  font-family: "Marcellus SC", serif;
+  font-size: 20px;
+}
+
+.SignUp-btn:hover {
+  box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
+  transition-duration: .1s;
+}
+
+.button-59 {
+  align-items: center;
+  background-color: #fff;
+  border: 3px solid #6ea1ff;
+  border-radius: 5px;
+  box-sizing: border-box;
+  color: #000;
+  cursor: pointer;
+  display: inline-flex;
+  height: 40px;
+  width: 100px;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  transition: all .3s;
+  font-family: "Marcellus SC", serif;
+  font-size: 20px;
+}
+
+.button-59:focus {
+  color: #171e29;
+}
+
+.button-59:hover {
+  border-color: #496BAA;
+  color: #496BAA;
+  fill: #496BAA;
+}
+
+.button-59:active {
+  border-color: #496BAA;
+  color: #496BAA;
+  fill: #496BAA;
+}
