@@ -16,6 +16,7 @@ const SignUpPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState(false);
+    const [usernameError, setUsernameError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
 
     const handlePasswordVisibility = () => {
@@ -23,15 +24,25 @@ const SignUpPage = () => {
     };
 
     const handleEmailChange = (event) => {
-        const emailValue = event.target.value.trim(); 
-        setEmail(emailValue);
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        setEmailError(!emailRegex.test(emailValue));
+        setEmail(event.target.value);
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(event.target.value)) {
+            setEmailError(true);
+        } else {
+            setEmailError(false);
+        }
     };
 
     const handleUsernameChange = (event) => {
-        setUsername(event.target.value);
+        const usernameValue = event.target.value;
+        setUsername(usernameValue);
+
+        if (usernameValue.length < 4) {
+            setUsernameError(true);
+        } else {
+            setUsernameError(false);
+        }
     };
+
 
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
@@ -48,7 +59,7 @@ const SignUpPage = () => {
             return;
         }
 
-        if (emailError || passwordError) {
+        if (emailError || usernameError || passwordError) {
             toast.error('Please correct the errors before proceeding.');
             return;
         }
@@ -80,11 +91,11 @@ const SignUpPage = () => {
             <div className="Signup-Img"></div>
             <div className="Signup-Page">
                 <div className="Signup-Body">
-                    <div style={{ display: 'flex', alignItems:'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <h1 id='Signup-heading'>Create an Account</h1>
                         <Link to={'/Login'}><p><u>Log-in instead</u></p></Link>
                     </div>
-                    <p id='Login-para'>Sign up for Lokvani and join a network of residents <br />working together for a thriving community.</p>
+
                     <div className="input-box">
                         <InputLabel shrink htmlFor="email-input" style={{ fontSize: '25px', fontWeight: '400', color: '#000000', fontFamily: 'Poppins', marginTop: '10px' }}>
                             Email
@@ -97,11 +108,12 @@ const SignUpPage = () => {
                             value={email}
                             onChange={handleEmailChange}
                             error={emailError}
-                            helperText={emailError ? 'Please enter a valid email address.' : ''}
+                            helperText={emailError ? 'Invalid email address.' : ''}
                             InputProps={{
                                 style: { fontSize: '18px', marginTop: '-20px', height: '50px', borderRadius: '6px' }
                             }}
                         />
+
                         <InputLabel shrink htmlFor="username-input" style={{ fontSize: '25px', fontWeight: '400', color: '#000000', fontFamily: 'Poppins', marginTop: '10px' }}>
                             Username
                         </InputLabel>
@@ -112,6 +124,8 @@ const SignUpPage = () => {
                             margin="normal"
                             value={username}
                             onChange={handleUsernameChange}
+                            error={usernameError}
+                            helperText={usernameError ? 'Username should be at least 4 characters long.' : ''}
                             InputProps={{
                                 style: { fontSize: '18px', marginTop: '-20px', height: '50px', borderRadius: '6px' }
                             }}

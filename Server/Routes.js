@@ -7,14 +7,13 @@ router.use(express.json());
 router.post("/users", async (req, res) => {
   try {
     const newUser = await userModel.create(req.body);
+    res.status(201).json(newUser);
     console.log("New user created:", newUser);
-    return res.status(201).json(newUser);
   } catch (error) {
     console.error("Error creating user:", error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 
 router.get("/users", async (req, res) => {
   try {
