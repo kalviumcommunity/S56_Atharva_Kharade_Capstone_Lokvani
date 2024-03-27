@@ -15,5 +15,15 @@ router.post('/users', async (req, res) => {
     }
 });
 
+router.get('/users', async (req, res) => {
+    try {
+        const users = await userModel.find();
+        res.status(200).json(users);
+        console.log("Users retrieved:", users);
+    } catch (error) {
+        console.error("Error retrieving users:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 module.exports = router;
