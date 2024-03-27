@@ -36,15 +36,8 @@ const SignUpPage = () => {
     };
 
     const handleSignUp = async () => {
-        const formData = {
-            username: username,
-            firstName: firstName,
-            lastName: lastName,
-            password: password
-        };
-
         try {
-            const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/users', formData);
+            const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/users', {username, firstName, lastName, password});
             console.log('Success:', response.data);
         } catch (error) {
             console.error('Error:', error);
