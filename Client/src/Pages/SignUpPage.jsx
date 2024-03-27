@@ -7,13 +7,18 @@ import IconButton from '@mui/material/IconButton';
 import eyeIconVisible from '../Assets/visibility.png';
 import eyeIconHidden from '../Assets/hide.png';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignUpPage = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [firstname, setFirstName] = useState('');
+    const [lastname, setLastName] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [firstnameError, setFirstnameError] = useState(false);
+    const [lastnameError, setLastnameError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
 
     const handlePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -21,10 +26,20 @@ const SignUpPage = () => {
 
     const handleFirstNameChange = (event) => {
         setFirstName(event.target.value);
+        if (!/^[a-zA-Z]*$/.test(event.target.value)) {
+            setFirstnameError(true);
+        } else {
+            setFirstnameError(false);
+        }
     };
 
     const handleLastNameChange = (event) => {
         setLastName(event.target.value);
+        if (!/^[a-zA-Z]*$/.test(event.target.value)) {
+            setLastnameError(true);
+        } else {
+            setLastnameError(false);
+        }
     };
 
     const handleUsernameChange = (event) => {
@@ -33,22 +48,48 @@ const SignUpPage = () => {
 
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
-    };
-
-    const handleSignUp = async () => {
-        try {
-            const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/users', {username, firstName, lastName, password});
-            console.log('Success:', response.data);
-        } catch (error) {
-            console.error('Error:', error);
+        if (event.target.value.length > 0 && event.target.value.length < 8) {
+            setPasswordError(true);
+        } else {
+            setPasswordError(false);
         }
     };
 
+    const handleSignUp = async () => {
+        if (!username || !firstname || !lastname || !password) {
+            toast.warn('Please fill all input boxes.');
+            return;
+        }
 
+        if (firstnameError || lastnameError || passwordError) {
+            toast.error('Please correct the errors before proceeding.');
+            return;
+        }
 
+        try {
+            const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/users', { username, firstname, lastname, password });
+            console.log('Success:', response.data);
+            toast.success('User has been registered successfully.');
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error('An error occurred while registering User.');
+        }
+    };
 
     return (
         <div className="Signup-main">
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+            />
             <div className="Signup-Img"></div>
             <div className="Signup-Page">
                 <div className="Signup-Body">
@@ -66,10 +107,12 @@ const SignUpPage = () => {
                             variant="outlined"
                             fullWidth
                             margin="normal"
-                            value={firstName}
+                            value={firstname}
                             onChange={handleFirstNameChange}
+                            error={firstnameError}
+                            helperText={firstnameError ? 'First name should only contain letters.' : ''}
                             InputProps={{
-                                style: { fontSize: '20px', marginTop: '-25px', height: '40px', borderRadius: '6px' }
+                                style: { fontSize: '18px', marginTop: '-20px', height: '40px', borderRadius: '6px' }
                             }}
                         />
                         <InputLabel shrink htmlFor="lastName-input" style={{ fontSize: '25px', fontWeight: '400', color: '#000000', fontFamily: 'Poppins', marginTop: '10px' }}>
@@ -80,10 +123,12 @@ const SignUpPage = () => {
                             variant="outlined"
                             fullWidth
                             margin="normal"
-                            value={lastName}
+                            value={lastname}
                             onChange={handleLastNameChange}
+                            error={lastnameError}
+                            helperText={lastnameError ? 'Last name should only contain letters.' : ''}
                             InputProps={{
-                                style: { fontSize: '20px', marginTop: '-25px', height: '40px', borderRadius: '6px' }
+                                style: { fontSize: '18px', marginTop: '-20px', height: '40px', borderRadius: '6px' }
                             }}
                         />
                         <InputLabel shrink htmlFor="username-input" style={{ fontSize: '25px', fontWeight: '400', color: '#000000', fontFamily: 'Poppins', marginTop: '10px' }}>
@@ -97,7 +142,7 @@ const SignUpPage = () => {
                             value={username}
                             onChange={handleUsernameChange}
                             InputProps={{
-                                style: { fontSize: '20px', marginTop: '-25px', height: '40px', borderRadius: '6px' }
+                                style: { fontSize: '18px', marginTop: '-20px', height: '40px', borderRadius: '6px' }
                             }}
                         />
                         <InputLabel shrink htmlFor="password-input" style={{ fontSize: '25px', fontWeight: '400', color: '#000000', fontFamily: 'Poppins', marginTop: '20px' }}>
@@ -111,8 +156,10 @@ const SignUpPage = () => {
                             margin="normal"
                             value={password}
                             onChange={handlePasswordChange}
+                            error={passwordError}
+                            helperText={passwordError ? 'Password must be at least 8 characters long.' : ''}
                             InputProps={{
-                                style: { fontSize: '25px', marginTop: '-25px', height: '40px', borderRadius: '6px' },
+                                style: { fontSize: '18px', marginTop: '-20px', height: '40px', borderRadius: '6px' },
                                 endAdornment: (
                                     <IconButton onClick={handlePasswordVisibility} edge="end">
                                         <img
