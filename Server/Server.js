@@ -5,6 +5,7 @@ const port = 3000;
 const { connectDB } = require("./db.js");
 
 app.use(cors());
+app.use(express.json());
 
 app.get("/", (req, res) => {
   try {
