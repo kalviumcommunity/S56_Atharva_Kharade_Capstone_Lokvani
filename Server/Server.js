@@ -1,18 +1,25 @@
-const express = require('express');
+const express = require("express");
+const cors = require("cors");
 const app = express();
-const dotenv = require('dotenv');
 const port = 3000;
+const { connectDB } = require("./db.js");
+const router = require("./Routes");
 
-dotenv.config();
+app.use(express.json());
 
-app.get('/', (req, res) => {
-    try {
-        res.send('Hello World from Atharva');
-    } catch (error) {
-        res.status(500).send(error);
-    }
+app.get("/", (req, res) => {
+  try {
+    res.json({
+      database: connectDB() ? "connected" : "disconnected",
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
+app.use(cors());
+app.use(router);
+
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
