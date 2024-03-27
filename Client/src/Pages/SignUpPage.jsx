@@ -6,32 +6,53 @@ import { Link } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import eyeIconVisible from '../Assets/visibility.png';
 import eyeIconHidden from '../Assets/hide.png';
+import axios from 'axios';
 
 const SignUpPage = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
     const handlePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
 
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        username: '',
-        password: ''
-    });
-
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
+    const handleFirstNameChange = (event) => {
+        setFirstName(event.target.value);
     };
 
-    const handleLogin = () => {
-        console.log(formData);
+    const handleLastNameChange = (event) => {
+        setLastName(event.target.value);
     };
+
+    const handleUsernameChange = (event) => {
+        setUsername(event.target.value);
+    };
+
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+    };
+
+    const handleSignUp = async () => {
+        const formData = {
+            username: username,
+            firstName: firstName,
+            lastName: lastName,
+            password: password
+        };
+
+        try {
+            const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/users', formData);
+            console.log('Success:', response.data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+
+
 
     return (
         <div className="Signup-main">
@@ -49,12 +70,11 @@ const SignUpPage = () => {
                         </InputLabel>
                         <TextField
                             id="firstName-input"
-                            name="firstName"
                             variant="outlined"
                             fullWidth
                             margin="normal"
-                            value={formData.firstName}
-                            onChange={handleInputChange}
+                            value={firstName}
+                            onChange={handleFirstNameChange}
                             InputProps={{
                                 style: { fontSize: '20px', marginTop: '-25px', height: '40px', borderRadius: '6px' }
                             }}
@@ -64,12 +84,11 @@ const SignUpPage = () => {
                         </InputLabel>
                         <TextField
                             id="lastName-input"
-                            name="lastName"
                             variant="outlined"
                             fullWidth
                             margin="normal"
-                            value={formData.lastName}
-                            onChange={handleInputChange}
+                            value={lastName}
+                            onChange={handleLastNameChange}
                             InputProps={{
                                 style: { fontSize: '20px', marginTop: '-25px', height: '40px', borderRadius: '6px' }
                             }}
@@ -79,12 +98,11 @@ const SignUpPage = () => {
                         </InputLabel>
                         <TextField
                             id="username-input"
-                            name="username"
                             variant="outlined"
                             fullWidth
                             margin="normal"
-                            value={formData.username}
-                            onChange={handleInputChange}
+                            value={username}
+                            onChange={handleUsernameChange}
                             InputProps={{
                                 style: { fontSize: '20px', marginTop: '-25px', height: '40px', borderRadius: '6px' }
                             }}
@@ -98,6 +116,8 @@ const SignUpPage = () => {
                             type={showPassword ? 'text' : 'password'}
                             fullWidth
                             margin="normal"
+                            value={password}
+                            onChange={handlePasswordChange}
                             InputProps={{
                                 style: { fontSize: '25px', marginTop: '-25px', height: '40px', borderRadius: '6px' },
                                 endAdornment: (
@@ -113,7 +133,7 @@ const SignUpPage = () => {
                         />
                     </div>
                     <div className="LoginPage-btn">
-                        <button className="Login-btn" onClick={handleLogin}>Sign Up</button>
+                        <button className="Login-btn" onClick={handleSignUp}>Sign Up</button>
                     </div>
                     <div style={{ marginTop: '15px', textAlign: 'center', fontSize: '20px' }}>
                         <p>OR</p>
