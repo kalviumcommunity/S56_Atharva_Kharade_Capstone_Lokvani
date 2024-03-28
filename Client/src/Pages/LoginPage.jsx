@@ -54,13 +54,12 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        '/login',
+        'https://s56-atharva-kharade-capstone-lokvani.onrender.com/users',
         { username, password }
       );
 
       console.log('Logged in as:', response.data);
       toast.success('Successfully logged in!');
-      // Redirect the user to the dashboard or another page upon successful login
     } catch (error) {
       console.error('Error:', error.response.data.error);
       toast.error(error.response.data.error);
