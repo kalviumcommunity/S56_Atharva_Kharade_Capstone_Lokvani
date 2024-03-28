@@ -54,7 +54,7 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        'https://s56-atharva-kharade-capstone-lokvani.onrender.com/users',
+        'https://s56-atharva-kharade-capstone-lokvani.onrender.com/login',
         { username, password }
       );
 
