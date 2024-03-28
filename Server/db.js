@@ -12,19 +12,8 @@ const connectDB = async () => {
   }
 };
 
-const disconnectDB = async () => {
-  try {
-    await mongoose.disconnect();
-    console.log("MongoDB disconnected");
-  } catch (err) {
-    console.error("Error disconnecting from MongoDB");
-    console.error(err);
-    process.exit(1);
-  }
-};
-
 const isConnected = () => {
   return mongoose.connection.readyState === 1;
 };
 
-module.exports = { connectDB, disconnectDB, isConnected };
+module.exports = { connectDB, isConnected };

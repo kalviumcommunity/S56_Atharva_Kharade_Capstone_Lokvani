@@ -1,11 +1,12 @@
 const express = require("express");
-const cors = require("cors");
 const app = express();
+const cors = require("cors");
 const port = 3000;
 const { connectDB } = require("./db.js");
 const router = require("./Routes");
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   try {
@@ -17,7 +18,6 @@ app.get("/", (req, res) => {
   }
 });
 
-app.use(cors());
 app.use(router);
 
 app.listen(port, () => {
