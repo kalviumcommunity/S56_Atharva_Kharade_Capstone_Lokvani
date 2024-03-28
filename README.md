@@ -39,9 +39,10 @@ Lokvani is built using the MERN stack, which comprises:
 
 ---
 
+## Frontend Link
+The frontend for this project is hosted at [LOKVANI](https://lokvani.netlify.app/).
+
 ## Backend Link
 The backend for this project is hosted at [https://s56-atharva-kharade-capstone-lokvani.onrender.com](https://s56-atharva-kharade-capstone-lokvani.onrender.com).
-
-
 
 *Lokvani - Empowering Pune's Citizens for a Better Tomorrow!* 🌟🏙️
