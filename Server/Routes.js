@@ -22,8 +22,6 @@ router.post("/users", async (req, res) => {
   }
 });
 
-const bcrypt = require('bcryptjs');
-
 router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
