@@ -47,34 +47,23 @@ const LoginPage = () => {
       return;
     }
 
-    if (usernameError) {
+    if (usernameError || passwordError) {
       toast.error('Please correct the errors before proceeding.');
       return;
     }
 
     try {
-      const response = await axios.get(
-        'https://s56-atharva-kharade-capstone-lokvani.onrender.com/users'
+      const response = await axios.post(
+        '/login',
+        { username, password }
       );
 
-      const existingUser = response.data.find((user) => user.username === username);
-
-      if (!existingUser) {
-        toast.error('User with this username does not exist.');
-        return;
-      }
-
-      if (existingUser.password !== password) {
-        toast.error('Incorrect password. Please try again.');
-        return;
-      }
-
-      console.log('Logged in as:', existingUser);
+      console.log('Logged in as:', response.data);
       toast.success('Successfully logged in!');
-
+      // Redirect the user to the dashboard or another page upon successful login
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('An error occurred while logging in.');
+      console.error('Error:', error.response.data.error);
+      toast.error(error.response.data.error);
     }
   };
 
