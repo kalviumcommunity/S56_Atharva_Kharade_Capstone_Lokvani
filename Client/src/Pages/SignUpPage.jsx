@@ -64,8 +64,8 @@ const SignUpPage = () => {
 
         try {
             const response = await axios.post(
-                "/signup",
-                { username, email, password }
+                "https://s56-atharva-kharade-capstone-lokvani.onrender.com/Signup",
+                { email, password, username }
             );
 
             console.log("Success:", response.data);
