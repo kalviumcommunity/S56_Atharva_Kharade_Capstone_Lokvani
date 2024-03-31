@@ -1,0 +1,85 @@
+
+.MainPage-body{
+    width: calc(100vw - 250px);
+    height: 100%;
+    display: flex;
+}
+
+.MainPage-middle{
+    /* border: 1px solid red; */
+    width: calc(100% - 300px);
+    height: 100%;
+
+}
+
+.MainPage-side{
+    /* border: 1px solid black; */
+    width: 300px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.MainPage-side-Navbar{
+    width: 100%;
+    border-radius: 10px;
+    height: 80%;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.side-community-title{
+    height: 50px;
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.side-community-title h1{
+    font-size: 30px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+}
+
+.UserIcon{
+    width: 20%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Community1{
+    height: 50px;
+    width: 95%;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.Communities{
+    width: 100%;
+    height: calc(100% - 50px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.comm-viewAll{
+    width: 95%;
+    padding: 5px;
+    margin-top: 15px;
+}
+
+.middle-SearhBar{
+    height: 80px;
+    width: 100%;
+    border: 1px solid red;
+}
