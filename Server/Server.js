@@ -1,25 +1,20 @@
 const express = require("express");
-const app = express();
+const mongoose = require("mongoose");
 const cors = require("cors");
-const port = 3000;
-const { connectDB } = require("./db.js");
-const router = require("./Routes");
+const { router } = require("./Routes");
+require("dotenv").config();
+const port = process.env.PORT || 3000;
 
+const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-  try {
-    res.json({
-      database: connectDB() ? "connected" : "disconnected",
-    });
-  } catch (err) {
-    console.log(err);
-  }
-});
+mongoose
+  .connect(process.env.Mongo_URI)
+  .then(() => console.log("Connected to MongoDB!"))
+  .catch((error) => console.error("Failed to connect to mongodb", error));
 
 app.use(router);
-
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server running on port: ${port}`);
 });

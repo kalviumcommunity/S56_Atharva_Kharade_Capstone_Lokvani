@@ -62,9 +62,20 @@ const LoginPage = () => {
       toast.success('Successfully logged in!');
     } catch (error) {
       console.error('Error:', error.response.data.error);
-      toast.error(error.response.data.error);
+      if (error.response.status === 401) {
+        if (error.response.data.error === 'User not found') {
+          toast.error('User not found.');
+        } else if (error.response.data.error === 'Password doesn\'t match') {
+          toast.error('Password doesn\'t match.');
+        } else {
+          toast.error('An error occurred while logging in.');
+        }
+      } else {
+        toast.error('An error occurred while logging in.');
+      }
     }
   };
+
 
   return (
     <div className="Login-main">

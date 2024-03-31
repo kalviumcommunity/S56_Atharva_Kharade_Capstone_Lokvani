@@ -56,46 +56,36 @@ const SignUpPage = () => {
             toast.warn("Please fill all input boxes.");
             return;
         }
-
+    
         if (emailError || usernameError || passwordError) {
             toast.error("Please correct the errors before proceeding.");
             return;
         }
-
+    
         try {
-            const response = await axios.get(
-                "https://s56-atharva-kharade-capstone-lokvani.onrender.com/users"
+            const response = await axios.post(
+                "https://s56-atharva-kharade-capstone-lokvani.onrender.com/Signup",
+                { email, password, username }
             );
-
-            const existingUserByEmail = response.data.find(
-                (user) => user.email === email
-            );
-            if (existingUserByEmail) {
-                toast.warning("User with this email already exists.");
-                return;
-            }
-
-            const existingUserByUsername = response.data.find(
-                (user) => user.username === username
-            );
-            if (existingUserByUsername) {
-                toast.warning(
-                    "Username already exists. Please choose a different Username."
-                );
-                return;
-            }
-
-            const signUpResponse = await axios.post(
-                "https://s56-atharva-kharade-capstone-lokvani.onrender.com/users",
-                { username, email, password }
-            );
-            console.log("Success:", signUpResponse.data);
+    
+            console.log("Success:", response.data);
             toast.success("User has been registered successfully.");
         } catch (error) {
-            console.error("Error:", error);
-            toast.error("An error occurred while registering User.");
+            // console.error("Error:", error.response.data);
+            if (error.response.status === 400) {
+                if (error.response.data.error === "Email already exists!") {
+                    toast.warning("Email already exists. Please log in instead.");
+                } else if (error.response.data.error === "Username already exists! Please choose a different username.") {
+                    toast.warning("Username already exists. Please choose a different username.");
+                } else {
+                    toast.error("An error occurred while registering User.");
+                }
+            } else {
+                toast.error("An error occurred while registering User.");
+            }
         }
     };
+    
 
     return (
         <div className="Signup-main">

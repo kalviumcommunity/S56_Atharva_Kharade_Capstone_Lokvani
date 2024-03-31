@@ -3,6 +3,7 @@ import LandingPage from './Pages/LandingPage';
 import LoginPage from './Pages/LoginPage';
 import SignUpPage from './Pages/SignUpPage';
 import { Routes, Route } from 'react-router-dom';
+import UserPage from './Pages/UserPage';
 
 const App = () => {
   return (

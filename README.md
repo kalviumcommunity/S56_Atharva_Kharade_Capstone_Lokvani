@@ -18,14 +18,12 @@ Lokvani goes beyond discussion with a hyper-local complaint system. Residents ca
 - **Holding Authorities Accountable:** Lokvani aims to amplify residents' voices by highlighting recurring problems and citizen concerns.
 - **Public Representative Profiles:** Lokvani features profiles of relevant public representatives for each area. Residents can easily access contact information and hold their elected officials directly accountable.
 - **Complaint Moderation:** A dedicated admin team moderates complaints to ensure a productive and respectful environment. This helps filter irrelevant information and prioritise genuine concerns.
-- **NGO Collaboration:** Lokvani showcases profiles of local NGOs categorised by their areas of expertise. Residents can connect with NGOs who might be able to assist with specific issues. Additionally, NGOs can actively monitor complaints and offer solutions or support when their expertise aligns.
 
 ## Benefits of Lokvani 🌟
 
 - **Empowered Citizens:** Lokvani empowers residents to address issues impacting their daily lives and work towards a better city.
 - **Stronger Advocacy:** By amplifying resident concerns, Lokvani strengthens advocacy efforts, compelling authorities to take action.
 - **Improved Transparency & Accountability:** Public representative profiles and complaint moderation promote transparency. Residents can hold authorities accountable and track progress on reported issues.
-- **Effective Collaboration:** Lokvani fosters collaboration between residents and NGOs, leading to more efficient problem-solving.
 
 ## Technology Stack 💻
 

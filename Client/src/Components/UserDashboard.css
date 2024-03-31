@@ -1,0 +1,103 @@
+.DashBoard-main{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+}
+
+.Sidenav{
+    width: 300px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+}
+
+.Sidenav1{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #72bdd85d;
+}
+
+.logoSidenav{
+    height: 60px;
+    width: 60px;
+    background-image: url(../Assets/Logo.png);
+    background-size: cover;
+}
+
+.SideNav-logo{
+    width: 100%;
+    height: 70px;
+    padding:10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.SideNav-logo h1{
+    font-size: 35px;
+    font-family: "Marcellus SC", serif;
+}
+
+.userDetail{
+    width: 240px;
+    height: 70px;
+    /* border: solid 1px rgb(201, 201, 201); */
+    border-radius: 5px;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 15px;
+    background-color: #fff;
+}
+
+.userDetail h1{
+    font-size: 22px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+}
+
+.userDetail p{
+    font-size: 12px;
+    font-family: "Poppins", sans-serif;
+    color: #3d3d3d;
+}
+
+.UserOptions{
+    width: 240px;
+    height: 50px;
+    border-radius: 5px;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+    transition: 0.2s;
+    margin-top: 10px;
+}
+
+.UserOptions h1{
+    font-size: 20px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+.UserIcon{
+    width: 20%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.UserOptions:hover{
+    /* box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 2px 0px, rgba(0, 0, 0, 0.35) 0px 1px 3px 1px; */
+    cursor: pointer;
+    background-color: #ffffff;
+}
