@@ -56,25 +56,36 @@ const SignUpPage = () => {
             toast.warn("Please fill all input boxes.");
             return;
         }
-
+    
         if (emailError || usernameError || passwordError) {
             toast.error("Please correct the errors before proceeding.");
             return;
         }
-
+    
         try {
             const response = await axios.post(
                 "https://s56-atharva-kharade-capstone-lokvani.onrender.com/Signup",
                 { email, password, username }
             );
-
+    
             console.log("Success:", response.data);
             toast.success("User has been registered successfully.");
         } catch (error) {
-            console.error("Error:", error.response.data);
-            toast.error("An error occurred while registering User.");
+            // console.error("Error:", error.response.data);
+            if (error.response.status === 400) {
+                if (error.response.data.error === "Email already exists!") {
+                    toast.warning("Email already exists. Please log in instead.");
+                } else if (error.response.data.error === "Username already exists! Please choose a different username.") {
+                    toast.warning("Username already exists. Please choose a different username.");
+                } else {
+                    toast.error("An error occurred while registering User.");
+                }
+            } else {
+                toast.error("An error occurred while registering User.");
+            }
         }
     };
+    
 
     return (
         <div className="Signup-main">
