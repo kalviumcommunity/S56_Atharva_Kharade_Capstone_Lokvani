@@ -21,7 +21,7 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    background-color: #72bdd85d;
+    background-color: rgba(80, 63, 205, 0.5);
 }
 
 .logoSidenav{
@@ -94,6 +94,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.UserOptions-active{
+    background-color: #ffffff;
 }
 
 .UserOptions:hover{
