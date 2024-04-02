@@ -9,6 +9,8 @@ import { BsFillPeopleFill } from "react-icons/bs";
 import { FaBuildingNgo } from "react-icons/fa6";
 import { TbLogout } from "react-icons/tb";
 
+import { Link } from 'react-router-dom'
+
 const UserDashboard = () => {
     return (
         <>
@@ -34,21 +36,24 @@ const UserDashboard = () => {
                         </div>
                     </div>
 
-                    <div style={{marginTop:'15px'}}>
-                        <div className="UserOptions">
-                            <div className="UserIcon">
-                                <IconContext.Provider
-                                    value={{ color: 'black', size: '30px' }}
-                                >
-                                    <GoHome />
-                                </IconContext.Provider>
+                    <div style={{ marginTop: '15px' }}>
+                        <Link to={'/User'}>
+                            <div className="UserOptions">
+                                <div className="UserIcon">
+                                    <IconContext.Provider
+                                        value={{ color: 'black', size: '30px' }}
+                                    >
+                                        <GoHome />
+                                    </IconContext.Provider>
+                                </div>
+                                <div>
+                                    <h1>Home</h1>
+                                </div>
                             </div>
-                            <div>
-                                <h1>Home</h1>
-                            </div>
-                        </div>
+                        </Link>
 
-                        <div className="UserOptions">
+                        <Link to={'/Complaint'}>
+                            <div className="UserOptions">
                             <div className="UserIcon">
                                 <IconContext.Provider
                                     value={{ color: 'black', size: '30px' }}
@@ -60,6 +65,7 @@ const UserDashboard = () => {
                                 <h1>Raise Complaint</h1>
                             </div>
                         </div>
+                        </Link>
 
                         <div className="UserOptions">
                             <div className="UserIcon">

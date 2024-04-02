@@ -128,7 +128,7 @@ const LoginPage = () => {
               }
               InputProps={{
                 style: {
-                  fontSize: '25px',
+                  fontSize: '20px',
                   marginTop: '-25px',
                   height: '50px',
                   borderRadius: '6px',

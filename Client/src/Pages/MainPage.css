@@ -1,85 +1,295 @@
-
-.MainPage-body{
-    width: calc(100vw - 250px);
-    height: 100%;
-    display: flex;
+.MainPage-body {
+  width: calc(100vw - 250px);
+  height: 100%;
+  display: flex;
 }
 
-.MainPage-middle{
-    /* border: 1px solid red; */
-    width: calc(100% - 300px);
-    height: 100%;
-
+.MainPage-middle {
+  width: calc(100% - 300px);
+  height: 100%;
 }
 
-.MainPage-side{
-    /* border: 1px solid black; */
-    width: 300px;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 10px;
+.MainPage-side {
+  width: 300px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
 }
 
-.MainPage-side-Navbar{
-    width: 100%;
-    border-radius: 10px;
-    height: 80%;
-    border: 1px solid black;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+.MainPage-side-Navbar {
+  width: 100%;
+  border-radius: 10px;
+  height: 80%;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
-.side-community-title{
-    height: 50px;
-    width: 100%;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+.side-community-title {
+  height: 50px;
+  width: 100%;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
-.side-community-title h1{
-    font-size: 30px;
-    font-family: "Poppins", sans-serif;
-    font-weight: 500;
+.side-community-title h1 {
+  font-size: 30px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
 }
 
-.UserIcon{
-    width: 20%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.UserIcon {
+  width: 20%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.Community1{
-    height: 50px;
-    width: 95%;
-    border: 1px solid black;
-    border-radius: 5px;
-    margin-top: 10px;
+.Community1 {
+  height: 50px;
+  width: 95%;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-top: 10px;
 }
 
-.Communities{
-    width: 100%;
-    height: calc(100% - 50px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+.Communities {
+  width: 100%;
+  height: calc(100% - 50px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
-.comm-viewAll{
-    width: 95%;
-    padding: 5px;
-    margin-top: 15px;
+.comm-viewAll {
+  width: 95%;
+  padding: 5px;
+  margin-top: 15px;
 }
 
-.middle-SearhBar{
-    height: 80px;
-    width: 100%;
-    border: 1px solid red;
+.middle-SearchBar {
+  height: 60px;
+  width: auto;
+  margin: 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #e4e4e4;
+}
+
+.SearchBar-sort {
+  width: 180px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SearchBar-areaSelect {
+  width: 180px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SeachBar-searchInput {
+  width: 48%;
+  margin-right: 5px;
+}
+
+.SearchBar-left {
+  display: flex;
+  width: 380px;
+  justify-content: space-between;
+  margin-left: 5px;
+}
+
+.middle-Complaints {
+  width: 100%;
+  height: calc(100% - 80px);
+  margin-top: 10px;
+  overflow-y: auto;
+  /* scrollbar-width: none; */
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.middle-Complaints::-webkit-scrollbar{
+  width: 0.5vw;
+}
+
+.middle-Complaints::-webkit-scrollbar-track {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+
+.middle-Complaints::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	background-color: rgba(80, 63, 205, 0.5);
+}
+.Complaint-Box{
+  width: 95%;
+  height: 300px;
+  justify-self: center;
+  margin-top: 10px;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  position: relative;
+}
+
+.Complaint-data{
+  height: 100%;
+  width: 65%;
+  /* border: 1px solid red; */
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.complaint-img{
+  width: 35%;
+  height: 100%;
+  border-radius: 8px;
+  /* border: 1px solid red; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-right: 10px;
+}
+
+.arrow{
+  position: absolute;
+  width: 1.8rem;
+  height: 2rem;
+  color: white;
+  cursor: pointer;
+}
+
+.arrowleft{
+  left: 5px;
+}
+.arrowright{
+  right: 5px;
+}
+
+.indicators{
+  display: flex;
+  position: absolute;
+  bottom: 10px;
+}
+
+.dot{
+  background-color: black;
+  height: 6px;
+  width: 5px;
+  outline: none;
+  border: none;
+  border-radius: 100%;
+  margin: 0 2px;
+  pointer-events: none;
+}
+
+.slide{
+  border-radius: 8px;
+}
+
+.Comaplaint-functionalities{
+  position: absolute;
+  width: 65%;
+  height: 40px;
+  bottom: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.function-reviewTag{
+  height: 30px;
+  width: auto;
+  border-radius: 35px;
+  margin-left: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(27, 228, 27);
+}
+.function-reviewTag h1{
+  font-family: "Poppins", serif;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0 10px;
+  
+}
+
+.function-Type{
+  height: 30px;
+  width: auto;
+  border: 1px solid black;
+  border-radius: 35px;
+  margin-left: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.function-Type h1{
+  font-family: "Poppins", serif;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0 10px;
+}
+
+.function-vote{
+  display: flex;
+  width: 100px;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.upvote,.downvote{
+  display: flex;
+  align-items: center;
+}
+
+.function-vote h1{
+  font-size: 25px;
+  font-family: "Poppins", serif;
+}
+
+.function-comment{
+  margin-left: 15px;
+}
+
+.Complaint-title h1{
+  font-size: 30px;
+  font-family: "Poppins", serif;
+  font-weight: 600;
+}
+
+.Complaint-descp{
+  height: 200px;
+}
+.Complaint-descp p{
+  font-size: 18px;
+  font-family: "Poppins", serif;
+}
+
+.slideHidden{
+  display: none;
+}
+
+.dot-inactive{
+  background-color: grey;
 }
