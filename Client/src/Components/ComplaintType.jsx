@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
-const ComaplaintOptions = [
+const complaintOptions = [
   "Potholes",
   "Sanitation Issues",
   "Noise Pollution",
@@ -15,18 +15,14 @@ const ComaplaintOptions = [
   "Illegal Construction"
 ];
 
-export default function ComplaintType() {
-  const [value, setValue] = useState(null);
-
+const ComplaintType = ({ value, onChange }) => {
   return (
     <Autocomplete
       fullWidth
       size="small"
       value={value}
-      onChange={(event, newValue) => {
-        setValue(newValue);
-      }}
-      options={ComaplaintOptions}
+      onChange={(event, newValue) => onChange(newValue)}
+      options={complaintOptions}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -37,4 +33,6 @@ export default function ComplaintType() {
       )}
     />
   );
-}
+};
+
+export default ComplaintType;

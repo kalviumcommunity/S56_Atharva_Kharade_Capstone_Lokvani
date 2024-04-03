@@ -27,7 +27,7 @@ const LogComplaint = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('/Complaint', {
+            const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint', {
                 title,
                 description,
                 area,
@@ -44,6 +44,7 @@ const LogComplaint = () => {
         } catch (error) {
             console.error('Error creating complaint:', error);
         }
+        console.log(title, description, area, complaintType, location);
     };
 
     return (
@@ -121,13 +122,12 @@ const LogComplaint = () => {
 
                     <div className="Complaint-Location">
                         <div className="Complaint-Area-input">
-                            <PuneAreaSelect onChange={(e) => setArea(e.target.value)} />
+                            <PuneAreaSelect value={area} onChange={setArea} />
                         </div>
                         <div className="Complaint-Options-input">
-                            <ComplaintType onChange={(e) => setComplaintType(e.target.value)} />
+                            <ComplaintType value={complaintType} onChange={setComplaintType} />
                         </div>
                     </div>
-
                     <div className="Complaint-Location-input">
                         <InputLabel
                             shrink
@@ -181,7 +181,7 @@ const LogComplaint = () => {
                             variant="outlined"
                             fullWidth
                             margin="normal"
-                            multiline
+                            
                             InputProps={{
                                 style: {
                                     fontSize: "20px",

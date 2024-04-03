@@ -1,38 +1,41 @@
-import React from 'react'
-import './UserDashboard.css'
-import { FaRegUserCircle } from "react-icons/fa";
-import { IconContext } from "react-icons";
-import { GoHome } from "react-icons/go";
-import { GrDocumentUser } from "react-icons/gr";
-import { MdOutlineSmsFailed } from "react-icons/md";
-import { BsFillPeopleFill } from "react-icons/bs";
-import { FaBuildingNgo } from "react-icons/fa6";
-import { TbLogout } from "react-icons/tb";
+import React from 'react';
+import './UserDashboard.css';
+import { FaRegUserCircle } from 'react-icons/fa';
+import { IconContext } from 'react-icons';
+import { GoHome } from 'react-icons/go';
+import { GrDocumentUser } from 'react-icons/gr';
+import { MdOutlineSmsFailed } from 'react-icons/md';
+import { BsFillPeopleFill } from 'react-icons/bs';
+import { FaBuildingNgo } from 'react-icons/fa6';
+import { TbLogout } from 'react-icons/tb';
 import Cookies from 'js-cookie';
-
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
 
 const UserDashboard = () => {
+    const navigate = useNavigate();
 
     const username = Cookies.get('username');
     const email = Cookies.get('email');
 
+    const handleLogout = () => {
+        Cookies.remove('username');
+        Cookies.remove('email');
+        navigate('/');
+    };
+
     return (
         <>
-            <div className='Sidenav'>
+            <div className="Sidenav">
                 <div className="Sidenav1">
                     <div className="SideNav-logo">
-                        <div className="logoSidenav">
-                        </div>
+                        <div className="logoSidenav"></div>
                         <div>
                             <h1>LOKVANI</h1>
                         </div>
                     </div>
 
                     <div className="userDetail">
-                        <IconContext.Provider
-                            value={{ color: 'black', size: '40px' }}
-                        >
+                        <IconContext.Provider value={{ color: 'black', size: '40px' }}>
                             <FaRegUserCircle />
                         </IconContext.Provider>
                         <div>
@@ -45,9 +48,7 @@ const UserDashboard = () => {
                         <Link to={'/User'}>
                             <div className="UserOptions">
                                 <div className="UserIcon">
-                                    <IconContext.Provider
-                                        value={{ color: 'black', size: '30px' }}
-                                    >
+                                    <IconContext.Provider value={{ color: 'black', size: '30px' }}>
                                         <GoHome />
                                     </IconContext.Provider>
                                 </div>
@@ -60,9 +61,7 @@ const UserDashboard = () => {
                         <Link to={'/Complaint'}>
                             <div className="UserOptions">
                                 <div className="UserIcon">
-                                    <IconContext.Provider
-                                        value={{ color: 'black', size: '30px' }}
-                                    >
+                                    <IconContext.Provider value={{ color: 'black', size: '30px' }}>
                                         <MdOutlineSmsFailed />
                                     </IconContext.Provider>
                                 </div>
@@ -74,9 +73,7 @@ const UserDashboard = () => {
 
                         <div className="UserOptions">
                             <div className="UserIcon">
-                                <IconContext.Provider
-                                    value={{ color: 'black', size: '30px' }}
-                                >
+                                <IconContext.Provider value={{ color: 'black', size: '30px' }}>
                                     <GrDocumentUser />
                                 </IconContext.Provider>
                             </div>
@@ -87,9 +84,7 @@ const UserDashboard = () => {
 
                         <div className="UserOptions">
                             <div className="UserIcon">
-                                <IconContext.Provider
-                                    value={{ color: 'black', size: '30px' }}
-                                >
+                                <IconContext.Provider value={{ color: 'black', size: '30px' }}>
                                     <BsFillPeopleFill />
                                 </IconContext.Provider>
                             </div>
@@ -100,9 +95,7 @@ const UserDashboard = () => {
 
                         <div className="UserOptions">
                             <div className="UserIcon">
-                                <IconContext.Provider
-                                    value={{ color: 'black', size: '30px' }}
-                                >
+                                <IconContext.Provider value={{ color: 'black', size: '30px' }}>
                                     <FaBuildingNgo />
                                 </IconContext.Provider>
                             </div>
@@ -110,11 +103,9 @@ const UserDashboard = () => {
                                 <h1>NGOs</h1>
                             </div>
                         </div>
-                        <div className="UserOptions">
+                        <div className="UserOptions" onClick={handleLogout}>
                             <div className="UserIcon">
-                                <IconContext.Provider
-                                    value={{ color: 'black', size: '30px' }}
-                                >
+                                <IconContext.Provider value={{ color: 'black', size: '30px' }}>
                                     <TbLogout />
                                 </IconContext.Provider>
                             </div>
@@ -123,12 +114,10 @@ const UserDashboard = () => {
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
-export default UserDashboard
+export default UserDashboard;
