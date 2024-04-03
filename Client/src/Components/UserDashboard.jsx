@@ -8,10 +8,15 @@ import { MdOutlineSmsFailed } from "react-icons/md";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { FaBuildingNgo } from "react-icons/fa6";
 import { TbLogout } from "react-icons/tb";
+import Cookies from 'js-cookie';
 
 import { Link } from 'react-router-dom'
 
 const UserDashboard = () => {
+
+    const username = Cookies.get('username');
+    const email = Cookies.get('email');
+
     return (
         <>
             <div className='Sidenav'>
@@ -31,8 +36,8 @@ const UserDashboard = () => {
                             <FaRegUserCircle />
                         </IconContext.Provider>
                         <div>
-                            <h1>Atharva279</h1>
-                            <p>atharvak6363@gmail.com</p>
+                            <h1>{username}</h1>
+                            <p>{email}</p>
                         </div>
                     </div>
 
@@ -54,17 +59,17 @@ const UserDashboard = () => {
 
                         <Link to={'/Complaint'}>
                             <div className="UserOptions">
-                            <div className="UserIcon">
-                                <IconContext.Provider
-                                    value={{ color: 'black', size: '30px' }}
-                                >
-                                    <MdOutlineSmsFailed />
-                                </IconContext.Provider>
+                                <div className="UserIcon">
+                                    <IconContext.Provider
+                                        value={{ color: 'black', size: '30px' }}
+                                    >
+                                        <MdOutlineSmsFailed />
+                                    </IconContext.Provider>
+                                </div>
+                                <div>
+                                    <h1>Raise Complaint</h1>
+                                </div>
                             </div>
-                            <div>
-                                <h1>Raise Complaint</h1>
-                            </div>
-                        </div>
                         </Link>
 
                         <div className="UserOptions">

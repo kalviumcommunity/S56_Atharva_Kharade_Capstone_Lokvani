@@ -82,3 +82,9 @@
 #submit{
     background-color: rgb(25, 235, 25);
 }
+
+.Complaint-main-body{
+    height: 100vh;
+    width:100vw;
+    display: flex;
+}

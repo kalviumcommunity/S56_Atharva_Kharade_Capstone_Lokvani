@@ -3,7 +3,7 @@ import './LoginPage.css';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import eyeIconVisible from '../Assets/visibility.png';
 import eyeIconHidden from '../Assets/hide.png';
 import axios from 'axios';
@@ -17,6 +17,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const navigate = useNavigate();
 
   const handlePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -64,6 +65,8 @@ const LoginPage = () => {
 
       Cookies.set('username', username);
       Cookies.set('email', response.data.email);
+
+      navigate('/User')
     } catch (error) {
       console.error('Error:', error.response.data.error);
       if (error.response.status === 401) {
