@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
@@ -16,17 +16,13 @@ const areasInPune = [
   "Koregaon Park",
 ];
 
-export default function PuneAreaAutocomplete() {
-  const [value, setValue] = useState(null);
-
+const PuneAreaSelect = ({ value, onChange }) => {
   return (
     <Autocomplete
       fullWidth
       size="small"
       value={value}
-      onChange={(event, newValue) => {
-        setValue(newValue);
-      }}
+      onChange={(event, newValue) => onChange(newValue)}
       options={areasInPune}
       renderInput={(params) => (
         <TextField
@@ -38,4 +34,6 @@ export default function PuneAreaAutocomplete() {
       )}
     />
   );
-}
+};
+
+export default PuneAreaSelect;

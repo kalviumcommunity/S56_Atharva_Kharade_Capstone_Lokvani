@@ -3,12 +3,13 @@ import './LoginPage.css';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import eyeIconVisible from '../Assets/visibility.png';
 import eyeIconHidden from '../Assets/hide.png';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'js-cookie';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,6 +17,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const navigate = useNavigate();
 
   const handlePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -60,6 +62,11 @@ const LoginPage = () => {
 
       console.log('Logged in as:', response.data);
       toast.success('Successfully logged in!');
+      
+      Cookies.set('username', username, { secure: true, httpOnly: true });
+      Cookies.set('email', response.data.email, { secure: true, httpOnly: true });
+
+      navigate('/User')
     } catch (error) {
       console.error('Error:', error.response.data.error);
       if (error.response.status === 401) {
@@ -75,7 +82,6 @@ const LoginPage = () => {
       }
     }
   };
-
 
   return (
     <div className="Login-main">

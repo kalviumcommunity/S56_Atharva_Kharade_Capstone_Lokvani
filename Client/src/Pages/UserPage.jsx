@@ -7,11 +7,11 @@ import LogComplaint from './LogComplaint'
 const UserPage = () => {
   return (
     <div className='DashBoard-main'>
-            <UserDashboard/>
+      <UserDashboard />
+      <MainPage />
       <Routes>
-       <Route path="/User" element={<MainPage />} />
-       <Route path="/Complaint" element={<LogComplaint />} />
-     </Routes>
+        <Route path="/User/Complaint" element={<LogComplaint />} />
+      </Routes>
     </div>
   )
 }
