@@ -2,8 +2,11 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const cookieParser = require('cookie-parser'); 
 require("dotenv").config();
 const User = require("./Models/userSchema");
+
+router.use(cookieParser());
 
 router.get("/", (req, res) => {
   res.send("SERVER WORKING!");
@@ -66,6 +69,13 @@ router.post("/Login", async (req, res) => {
     const token = jwt.sign({ _id: user._id }, process.env.Access_Token, {
       expiresIn: "100d",
     });
+
+    const userEmail = user.email;
+
+    res.cookie('userData', {
+      username,
+      email: userEmail
+    }, { httpOnly: true }); 
 
     res.status(200).json({
       status: "success",
