@@ -9,6 +9,7 @@ import eyeIconHidden from '../Assets/hide.png';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'js-cookie';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -60,6 +61,9 @@ const LoginPage = () => {
 
       console.log('Logged in as:', response.data);
       toast.success('Successfully logged in!');
+
+      Cookies.set('username', username);
+      Cookies.set('email', response.data.email);
     } catch (error) {
       console.error('Error:', error.response.data.error);
       if (error.response.status === 401) {
@@ -75,7 +79,6 @@ const LoginPage = () => {
       }
     }
   };
-
 
   return (
     <div className="Login-main">
