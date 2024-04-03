@@ -62,9 +62,9 @@ const LoginPage = () => {
 
       console.log('Logged in as:', response.data);
       toast.success('Successfully logged in!');
-
-      Cookies.set('username', username);
-      Cookies.set('email', response.data.email);
+      
+      Cookies.set('username', username, { secure: true, httpOnly: true });
+      Cookies.set('email', response.data.email, { secure: true, httpOnly: true });
 
       navigate('/User')
     } catch (error) {

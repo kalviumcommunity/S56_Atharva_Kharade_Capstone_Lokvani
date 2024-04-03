@@ -40,7 +40,6 @@ const LogComplaint = () => {
             setArea('');
             setComplaintType('');
             setLocation('');
-            setImage('');
         } catch (error) {
             console.error('Error creating complaint:', error);
         }
