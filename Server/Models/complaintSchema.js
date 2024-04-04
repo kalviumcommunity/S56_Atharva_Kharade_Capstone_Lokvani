@@ -1,28 +1,34 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-const complaintSchema = new mongoose.Schema({
-    title:{
-        type:String,
-        required:true,
+const complaintSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
     },
-    description:{
-        type:String,
-        required:true,
+    description: {
+      type: String,
+      required: true,
     },
-    area:{
-        type:String,
-        required:true,
+    area: {
+      type: String,
+      required: true,
     },
-    complaintType:{
-        type:String,
-        required:true,
+    complaintType: {
+      type: String,
+      required: true,
     },
-    Location:{
-        type:String,
-        required:true,
-    }
-},{versionKey:false})
+    Location: {
+      type: String,
+    },
+    Image: {
+      type: String,
+      required: true,
+    },
+  },
+  { versionKey: false }
+);
 
-const Complaint = mongoose.model("complaint",complaintSchema)
+const Complaint = mongoose.model("complaint", complaintSchema);
 
-module.exports=Complaint;
+module.exports = Complaint;

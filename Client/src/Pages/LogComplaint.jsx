@@ -7,6 +7,8 @@ import ComplaintType from "../Components/ComplaintType";
 import axios from 'axios';
 import UserDashboard from '../Components/UserDashboard';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LogComplaint = () => {
     const navigate = useNavigate();
@@ -15,6 +17,9 @@ const LogComplaint = () => {
     const [area, setArea] = useState('');
     const [complaintType, setComplaintType] = useState('');
     const [location, setLocation] = useState('');
+    const [titleError, setTitleError] = useState('');
+    const [descriptionError, setDescriptionError] = useState('');
+    const [file, setFile] = useState(null);
 
     const handleCancel = () => {
         setTitle('');
@@ -22,28 +27,82 @@ const LogComplaint = () => {
         setArea('');
         setComplaintType('');
         setLocation('');
-        navigate('/User')
+        navigate('/User');
+    };
+
+    const handleTitleChange = (e) => {
+        const inputTitle = e.target.value;
+        setTitle(inputTitle);
+
+        const wordCount = inputTitle.trim().split(/\s/).filter(Boolean).length;
+        const characterCount = inputTitle.length;
+
+        if (wordCount < 3) {
+            setTitleError('Title must contain at least 3 words');
+        } else if (characterCount > 35) {
+            setTitleError('Title is too long');
+        } else {
+            setTitleError('');
+        }
+    };
+
+    const handleDescriptionChange = (e) => {
+        const inputDescription = e.target.value;
+        setDescription(inputDescription);
+
+        const wordCount = inputDescription.trim().split(/\s/).filter(Boolean).length;
+
+        if (wordCount < 25) {
+            setDescriptionError('Description must contain at least 25 words');
+        } else if (wordCount > 100) {
+            setDescriptionError('Description is too long');
+        } else {
+            setDescriptionError('');
+        }
+    };
+
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
     };
 
     const handleSubmit = async () => {
+        if (!title || !description || !area || !complaintType || !file) {
+            toast.error('Please fill out all fields.');
+            return;
+        }
+
+        if (titleError || descriptionError) {
+            toast.error('Please fix the errors before submitting.');
+            return;
+        }
+
         try {
-            const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint', {
-                title,
-                description,
-                area,
-                complaintType,
-                Location: location,
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('description', description);
+            formData.append('area', area);
+            formData.append('complaintType', complaintType);
+            formData.append('location', location);
+            formData.append('image', file);
+
+            const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
+
             console.log('Complaint created successfully:', response.data);
+            toast.success('Complaint submitted successfully.');
             setTitle('');
             setDescription('');
             setArea('');
             setComplaintType('');
             setLocation('');
+            setFile(null);
         } catch (error) {
             console.error('Error creating complaint:', error);
+            toast.error('Failed to submit complaint.');
         }
-        console.log(title, description, area, complaintType, location);
     };
 
     return (
@@ -68,7 +127,7 @@ const LogComplaint = () => {
                             Title
                         </InputLabel>
                         <TextField
-                            id="Complaint-title--input"
+                            id="Complaint-title-input"
                             variant="outlined"
                             fullWidth
                             margin="normal"
@@ -78,10 +137,13 @@ const LogComplaint = () => {
                                     marginTop: "-30px",
                                     height: "40px",
                                     borderRadius: "6px",
+                                    borderColor: titleError ? 'red' : '',
                                 },
                             }}
                             value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            onChange={handleTitleChange}
+                            error={!!titleError}
+                            helperText={titleError}
                         />
                     </div>
 
@@ -106,16 +168,18 @@ const LogComplaint = () => {
                             fullWidth
                             margin="normal"
                             multiline
+                            size='small'
                             InputProps={{
                                 style: {
                                     fontSize: "20px",
                                     marginTop: "-30px",
                                     borderRadius: "6px",
-                                    height: "80px",
                                 },
                             }}
                             value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                            onChange={handleDescriptionChange}
+                            error={!!descriptionError}
+                            helperText={descriptionError}
                         />
                     </div>
 
@@ -139,7 +203,7 @@ const LogComplaint = () => {
                                 marginTop: "15px",
                             }}
                         >
-                            Location
+                            Location <span style={{ fontSize: "14px" }}>(Optional)</span>
                         </InputLabel>
                         <TextField
                             id="Complaint-Location-input"
@@ -175,21 +239,7 @@ const LogComplaint = () => {
                         >
                             Image
                         </InputLabel>
-                        <TextField
-                            id="Complaint-Image-input"
-                            variant="outlined"
-                            fullWidth
-                            margin="normal"
-                            
-                            InputProps={{
-                                style: {
-                                    fontSize: "20px",
-                                    marginTop: "-30px",
-                                    borderRadius: "6px",
-                                    height: "40px",
-                                },
-                            }}
-                        />
+                        <input type="file" onChange={handleFileChange} />
                     </div>
 
                     <div className="Complaint-buttons">
@@ -198,6 +248,7 @@ const LogComplaint = () => {
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 }

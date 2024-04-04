@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const User = require("./Models/userSchema");
 const Complaint = require("./Models/complaintSchema");
+const upload = require("./Multer");
+const cloudinary = require("./Cloudinary");
 
 router.get("/", (req, res) => {
   res.send("SERVER WORKING!");
@@ -77,23 +79,43 @@ router.post("/Login", async (req, res) => {
   }
 });
 
-router.post("/Complaint", async (req, res) => {
+router.post("/Complaint", upload.single("image"), async (req, res) => {
   try {
-    const { title, description, area, complaintType, Location } = req.body;
-    const newComplaint = await Complaint.create({
-      title,
-      description,
-      area,
-      complaintType,
-      Location,
-    });
-    res.status(201).json({
-      status: "success",
-      message: "Complaint created successfully",
-      newComplaint,
+    if (!req.file) {
+      return res.status(400).json({ error: "No image uploaded" });
+    }
+    cloudinary.uploader.upload(req.file.path, async function (error, result) {
+      if (error) {
+        return res
+          .status(500)
+          .json({ error: "Error uploading image to cloudinary" });
+      }
+      try {
+        const { title, description, area, complaintType, Location } = req.body;
+        const newComplaint = await Complaint.create({
+          title,
+          description,
+          area,
+          complaintType,
+          Location,
+          Image: result.secure_url,
+        });
+
+        res.status(201).json({
+          status: "success",
+          message: "Complaint created successfully",
+          newComplaint,
+        });
+      } catch (error) {
+        res
+          .status(500)
+          .json({ error: "Error creating complaint", details: error.message });
+      }
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res
+      .status(500)
+      .json({ error: "Internal server error", details: error.message });
   }
 });
 

@@ -69,7 +69,7 @@ const MainPage = () => {
                 <h1>Water Wastage</h1>
               </div>
               <div className="Complaint-descp">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil incidunt excepturi eos sed, atque nostrum corporis veniam ratione ex, ducimus, totam impedit animi. Dolores necessitatibus id minima a quisquam cumque?</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque accusamus dolorem non quae aspernatur, rerum assumenda cumque dolores voluptate officia facilis modi error totam voluptas atque neque accusantium, dolor fugit quis aut ipsam maiores delectus! Tenetur provident ex sapiente, rerum explicabo repellat quia aspernatur earum?</p>
               </div>
               <div className="Comaplaint-functionalities">
                 <div className="function-vote">
