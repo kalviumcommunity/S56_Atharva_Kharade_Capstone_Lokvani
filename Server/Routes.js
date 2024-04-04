@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const User = require("./Models/userSchema");
 const Complaint = require("./Models/complaintSchema");
+import upload from "./Multer";
+import cloudinary from "./Cloudinary";
 
 router.get("/", (req, res) => {
   res.send("SERVER WORKING!");
@@ -80,11 +82,13 @@ router.post("/Login", async (req, res) => {
 router.post("/Complaint", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: 'No image uploaded' });
+      return res.status(400).json({ error: "No image uploaded" });
     }
     cloudinary.uploader.upload(req.file.path, async function (error, result) {
       if (error) {
-        return res.status(500).json({ error: 'Error uploading image to cloudinary' });
+        return res
+          .status(500)
+          .json({ error: "Error uploading image to cloudinary" });
       }
       try {
         const { title, description, area, complaintType, Location } = req.body;
@@ -101,18 +105,19 @@ router.post("/Complaint", upload.single("image"), async (req, res) => {
           status: "success",
           message: "Complaint created successfully",
           newComplaint,
-
         });
       } catch (error) {
-        res.status(500).json({ error: 'Error creating complaint', details: error.message });
+        res
+          .status(500)
+          .json({ error: "Error creating complaint", details: error.message });
       }
     });
-
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error', details: error.message });
+    res
+      .status(500)
+      .json({ error: "Internal server error", details: error.message });
   }
 });
-
 
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };
