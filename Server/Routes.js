@@ -5,8 +5,8 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const User = require("./Models/userSchema");
 const Complaint = require("./Models/complaintSchema");
-import upload from "./Multer";
-import cloudinary from "./Cloudinary";
+const upload = require("./Multer");
+const cloudinary = require("./Cloudinary");
 
 router.get("/", (req, res) => {
   res.send("SERVER WORKING!");
