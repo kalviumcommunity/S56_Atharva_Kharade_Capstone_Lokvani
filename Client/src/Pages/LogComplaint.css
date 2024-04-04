@@ -1,90 +1,105 @@
-.Complaint-main{
-    width: calc(100vw - 250px);
-    height: 100%;
-    display: flex;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
+.Complaint-main {
+  width: calc(100vw - 250px);
+  height: 100%;
+  display: flex;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
 }
 
-.Complaint-Box-Body{
-    width:600px;
-    height: 100%;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    padding: 10px;
-    overflow-y: auto;
-    background-color: rgba(80, 63, 205, 0.26);
+.Complaint-Box-Body {
+  width: 600px;
+  height: 100%;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px;
+  overflow-y: auto;
+  background-color: rgba(80, 63, 205, 0.26);
 }
 
-.Complaint-Box-Body h1{
-    font-size: 40px;
-    text-align: center;
-    font-family: "Marcellus SC", serif;
+.Complaint-Box-Body::-webkit-scrollbar {
+  width: 0.5vw;
 }
 
-.Complaint-title-input{
-    width: 80%;
+.Complaint-Box-Body::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.267);
 }
 
-.Complaint-descp-input{
-    width: 80%;
+.Complaint-Box-Body::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(80, 63, 205, 0.5);
 }
 
-.Complaint-Location{
-    width: 80%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 10px;
+.Complaint-Box-Body h1 {
+  font-size: 40px;
+  text-align: center;
+  font-family: "Marcellus SC", serif;
 }
 
-.Complaint-Area-input{
-    width: 45%;
-}
-.Complaint-Options-input{
-    width: 45%;
+.Complaint-title-input {
+  width: 80%;
 }
 
-.Complaint-Location-input{
-    width: 80%;
+.Complaint-descp-input {
+  width: 80%;
 }
 
-.Complaint-Image-input{
-    width: 80%;
+.Complaint-Location {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  height: 70px;
 }
 
-.Complaint-buttons{
-    width: 80%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    margin-top: 15px;
+.Complaint-Area-input {
+  width: 45%;
+}
+.Complaint-Options-input {
+  width: 45%;
 }
 
-.Complaint-buttons button{
-    height: 40px;
-    width: 40%;
-    border-radius: 5px;
-    font-size: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: "Poppins", serif;
+.Complaint-Location-input {
+  width: 80%;
 }
 
-#cancel{
-    background-color: rgb(243, 73, 51);
-}
-#submit{
-    background-color: rgb(25, 235, 25);
+.Complaint-Image-input {
+  width: 80%;
 }
 
-.Complaint-main-body{
-    height: 100vh;
-    width:100vw;
-    display: flex;
+.Complaint-buttons {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.Complaint-buttons button {
+  height: 40px;
+  width: 40%;
+  border-radius: 5px;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Poppins", serif;
+}
+
+#cancel {
+  background-color: #E55842;
+}
+#submit {
+  background-color: #3CED6F;
+}
+
+.Complaint-main-body {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
 }
