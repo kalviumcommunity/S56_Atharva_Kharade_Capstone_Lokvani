@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import './LogComplaint.css';
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
-import  PuneAreaSelect  from "../Components/AreaSelect";
-import  ComplaintType  from "../Components/ComplaintType";
+import PuneAreaSelect from "../Components/AreaSelect";
+import ComplaintType from "../Components/ComplaintType";
 import axios from 'axios';
 import UserDashboard from '../Components/UserDashboard';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +19,7 @@ const LogComplaint = () => {
     const [location, setLocation] = useState('');
     const [titleError, setTitleError] = useState('');
     const [descriptionError, setDescriptionError] = useState('');
+    const [file, setFile] = useState(null);
 
     const handleCancel = () => {
         setTitle('');
@@ -60,25 +61,36 @@ const LogComplaint = () => {
         }
     };
 
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+    };
+
     const handleSubmit = async () => {
-        if (!title || !description || !area || !complaintType || !location) {
+        if (!title || !description || !area || !complaintType || !file) {
             toast.error('Please fill out all fields.');
             return;
         }
-    
+
         if (titleError || descriptionError) {
             toast.error('Please fix the errors before submitting.');
             return;
         }
-    
+
         try {
-            const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint', {
-                title,
-                description,
-                area,
-                complaintType,
-                Location: location,
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('description', description);
+            formData.append('area', area);
+            formData.append('complaintType', complaintType);
+            formData.append('location', location);
+            formData.append('image', file);
+
+            const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
+
             console.log('Complaint created successfully:', response.data);
             toast.success('Complaint submitted successfully.');
             setTitle('');
@@ -86,12 +98,12 @@ const LogComplaint = () => {
             setArea('');
             setComplaintType('');
             setLocation('');
+            setFile(null);
         } catch (error) {
             console.error('Error creating complaint:', error);
             toast.error('Failed to submit complaint.');
         }
     };
-    
 
     return (
         <div className="Complaint-main-body">
@@ -227,20 +239,7 @@ const LogComplaint = () => {
                         >
                             Image
                         </InputLabel>
-                        <TextField
-                            id="Complaint-Image-input"
-                            variant="outlined"
-                            fullWidth
-                            margin="normal"
-                            InputProps={{
-                                style: {
-                                    fontSize: "20px",
-                                    marginTop: "-30px",
-                                    borderRadius: "6px",
-                                    height: "40px",
-                                },
-                            }}
-                        />
+                        <input type="file" onChange={handleFileChange} />
                     </div>
 
                     <div className="Complaint-buttons">
