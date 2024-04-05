@@ -1,14 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./MainPage.css";
-import { useState, useEffect } from "react";
 import PuneAreaSelect from "../Components/AreaSelect";
 import SortBySelect from "../Components/SortBy";
 import SearchInput from "../Components/Search";
 import axios from "axios";
 
-import { BsArrowDownSquare } from "react-icons/bs";
-import { BsArrowUpSquare } from "react-icons/bs";
+import { BsArrowDownSquare, BsArrowUpSquare } from "react-icons/bs";
 import { FaRegComment } from "react-icons/fa";
+import { MdOutlineReport } from "react-icons/md";
 
 const MainPage = () => {
   const [complaints, setComplaints] = useState([]);
@@ -43,38 +42,48 @@ const MainPage = () => {
           </div>
         </div>
         <div className="middle-Complaints">
-          {complaints.map((complaint) => (
-            <div className="Complaint-Box" key={complaint._id}>
-              <div className="Complaint-data">
-                <div className="Complaint-title">
-                  <h1>{complaint.title}</h1>
-                </div>
-                <div className="Complaint-descp">
-                  <p>{complaint.description}</p>
-                </div>
-                <div className="Comaplaint-functionalities">
-                  <div className="function-vote">
-                    <div className="upvote">
-                      <BsArrowUpSquare />
-                    </div>
-                    <h1>4</h1>
-                    <div className="downvote">
-                      <BsArrowDownSquare />
-                    </div>
-                  </div>
-                  <div className="function-comment">
-                    <FaRegComment />
-                  </div>
-                  <div className="function-reviewTag">
-                    <h1>Verified</h1>
-                  </div>
-                  <div className="function-Type">
-                    <h1>{complaint.complaintType}</h1>
-                  </div>
-                </div>
+          {complaints.map((complaint, index) => (
+            <div className="Complaint-Box" key={index}>
+              <div className="Complaint-Box-title">
+                <h1>{complaint.title}</h1>
               </div>
-              <div className="complaint-img">
-                {complaint.image && <img src={complaint.image} alt="Complaint" />}
+              <div className="Complaint-lower">
+                <div className="Complaint-lower-descp">
+                  <div className="Complaint-descp">
+                    <p>{complaint.description}</p>
+                  </div>
+                  <div className="lower-descp-funct">
+                    <div className="Complaint-vote">
+                      <BsArrowUpSquare className="vote-arrows" />
+                      <h1>4</h1>
+                      <BsArrowDownSquare className="vote-arrows" />
+                    </div>
+                    <div className="Complaint-comment">
+                      <FaRegComment className="vote-arrows" />
+                      <h1>4</h1>
+                    </div>
+                    <div className="Complaint-report">
+                      <MdOutlineReport className="vote-report" />
+                    </div>
+                  </div>
+                </div>
+                <div className="Complaint-lower-right">
+                  <div className="lower-right-img">
+                    <img src={complaint.Image} alt="Complaint" className="complaint-img-size" />
+                  </div>
+                  <div className="lower-right-tags">
+                    <div className="ComplaintType">
+                      <div className="function-Type">
+                        <h1>{complaint.complaintType}</h1>
+                      </div>
+                    </div>
+                    <div className="Complaint-verfication">
+                      <div className="function-reviewTag">
+                        <h1>{complaint.verified ? 'Verified' : 'Not Verified'}</h1>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           ))}

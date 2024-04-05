@@ -91,7 +91,8 @@ router.post("/Complaint", upload.single("image"), async (req, res) => {
           .json({ error: "Error uploading image to cloudinary" });
       }
       try {
-        const { title, description, area, complaintType, Location } = req.body;
+        const { title, description, area, complaintType, Location, createdBy } =
+          req.body;
         const newComplaint = await Complaint.create({
           title,
           description,
@@ -99,6 +100,7 @@ router.post("/Complaint", upload.single("image"), async (req, res) => {
           complaintType,
           Location,
           Image: result.secure_url,
+          createdBy,
         });
 
         res.status(201).json({
