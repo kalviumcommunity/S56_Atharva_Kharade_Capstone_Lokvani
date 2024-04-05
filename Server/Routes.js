@@ -122,33 +122,35 @@ router.post("/Complaint", upload.single("image"), async (req, res) => {
 });
 
 router.get("/Complaint", async (req, res) => {
-  const page = parseInt(req.query.page) || 1; 
-  const limit = parseInt(req.query.limit) || 3; 
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 3;
 
   try {
     const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
 
-    const complaints = await Complaint.find().limit(limit).skip(startIndex).exec();
+    const complaints = await Complaint.find()
+      .limit(limit)
+      .skip(startIndex)
+      .exec();
 
     const totalDocuments = await Complaint.countDocuments();
 
+    const totalPages = Math.ceil(totalDocuments / limit);
+
     const pagination = {
-      totalPages: Math.ceil(totalDocuments / limit),
+      totalPages: totalPages,
       currentPage: page,
-      totalDocuments: totalDocuments
+      totalDocuments: totalDocuments,
     };
 
-    console.log('Total Documents:', totalDocuments);
-    console.log('Total Pages:', pagination.totalPages);
+    console.log("Total Documents:", totalDocuments);
+    console.log("Total Pages:", totalPages);
 
     res.json({ complaints, pagination });
   } catch (error) {
     res.status(500).json({ error: "Error fetching complaints" });
   }
 });
-
-
 
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };
