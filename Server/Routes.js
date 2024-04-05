@@ -119,5 +119,19 @@ router.post("/Complaint", upload.single("image"), async (req, res) => {
   }
 });
 
+router.get("/Complaint", async (req, res) => {
+  try {
+    const complaints = await Complaint.find();
+    res.send(complaints);
+    // res.status(200).json({
+    //   status: "success",
+    //   message: "Complaints fetched successfully",
+    //   complaints,
+    // });
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching complaints" });
+  }
+});
+
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };
