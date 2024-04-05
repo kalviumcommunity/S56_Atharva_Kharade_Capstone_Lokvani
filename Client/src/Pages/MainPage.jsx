@@ -11,18 +11,24 @@ import { MdOutlineReport } from "react-icons/md";
 
 const MainPage = () => {
   const [complaints, setComplaints] = useState([]);
+  const [pagination, setPagination] = useState({});
 
   useEffect(() => {
     fetchComplaints();
   }, []);
 
-  const fetchComplaints = async () => {
+  const fetchComplaints = async (page = 1, limit = 10) => {
     try {
-      const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint");
-      setComplaints(response.data);
+      const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint?page=${page}&limit=${limit}`);
+      setComplaints(response.data.complaints);
+      setPagination(response.data.pagination);
     } catch (error) {
       console.error("Error fetching complaints:", error);
     }
+  };
+
+  const handlePageChange = (page) => {
+    fetchComplaints(page);
   };
 
   return (
@@ -87,6 +93,14 @@ const MainPage = () => {
               </div>
             </div>
           ))}
+        </div>
+        <div>
+          {pagination.currentPage > 1 && (
+            <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
+          )}
+          {pagination.currentPage < pagination.totalPages && (
+            <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
+          )}
         </div>
       </div>
       <div className="MainPage-side">
