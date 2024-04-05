@@ -148,6 +148,7 @@ router.get("/Complaint", async (req, res) => {
 
     res.json({ complaints, pagination });
   } catch (error) {
+    console.error("Error fetching complaints:", error);
     res.status(500).json({ error: "Error fetching complaints" });
   }
 });
