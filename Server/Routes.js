@@ -139,11 +139,15 @@ router.get("/Complaint", async (req, res) => {
       totalDocuments: totalDocuments
     };
 
+    console.log('Total Documents:', totalDocuments);
+    console.log('Total Pages:', pagination.totalPages);
+
     res.json({ complaints, pagination });
   } catch (error) {
     res.status(500).json({ error: "Error fetching complaints" });
   }
 });
+
 
 
 router.get("*", (req, res) => res.status(404).send("Page not found"));
