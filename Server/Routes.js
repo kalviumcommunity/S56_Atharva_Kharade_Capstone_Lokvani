@@ -155,14 +155,35 @@ router.get("/Complaint", async (req, res) => {
 
 router.get("/Complaint/:username", async (req, res) => {
   try {
-      const username = req.params.username;
-      const complaints = await Complaint.find({ createdBy: username });
-      res.json(complaints);
+    const username = req.params.username;
+    const complaints = await Complaint.find({ createdBy: username });
+    res.json(complaints);
   } catch (error) {
-      res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
+router.put("/Complaint/:username", async (req, res) => {
+  const { username } = req.params;
+  const { newUsername, newEmail } = req.body;
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { username },
+      { username: newUsername, email: newEmail },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({ message: "User updated successfully", user });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };

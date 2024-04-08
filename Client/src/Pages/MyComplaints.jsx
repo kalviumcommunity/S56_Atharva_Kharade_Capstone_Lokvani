@@ -40,7 +40,7 @@ const MyComplaints = () => {
                   <h1>{complaint.title}</h1>
                 </div>
                 <div className="MyComplaint-img">
-                  <img src={complaint.Image} alt="Complaint Image" />
+                  <img src={complaint.Image} alt="Complaint Image" className='complaint-img-size'/>
                 </div>
                 <div className="MyComplaint-descp">
                   <p>{complaint.description}</p>
