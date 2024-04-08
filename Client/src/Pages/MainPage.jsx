@@ -1,50 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./MainPage.css";
-import { useState } from "react";
 import PuneAreaSelect from "../Components/AreaSelect";
 import SortBySelect from "../Components/SortBy";
 import SearchInput from "../Components/Search";
+import axios from "axios";
 
-import { IconContext } from "react-icons";
-import { BsArrowDownSquare } from "react-icons/bs";
-import { BsArrowUpSquare } from "react-icons/bs";
+import { BsArrowDownSquare, BsArrowUpSquare } from "react-icons/bs";
 import { FaRegComment } from "react-icons/fa";
-
-import { BsArrowLeftCircleFill } from "react-icons/bs";
-import { BsArrowRightCircleFill } from "react-icons/bs";
-
+import { MdOutlineReport } from "react-icons/md";
 
 const MainPage = () => {
+  const [complaints, setComplaints] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const [imgSlide, setImgSlide] = useState(0);
+  useEffect(() => {
+    fetchComplaints();
+  }, [currentPage]);
 
-  const slides = [
-    {
-      "src": "https://picsum.photos/seed/img1/400/300",
-    },
-    {
-      "src": "https://picsum.photos/seed/img2/300/200",
-    },
-    {
-      "src": "https://picsum.photos/seed/img3/400/300",
+  const fetchComplaints = async () => {
+    try {
+      const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint`, {
+        params: {
+          page: currentPage,
+          limit: 3
+        }
+      });
+      setComplaints(response.data.complaints);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.error("Error fetching complaints:", error);
     }
-  ]
+  };
 
-  const nextSlide = () => {
-    if (imgSlide < slides.length - 1) {
-      setImgSlide(imgSlide + 1);
-    } else {
-      setImgSlide(0);
-    }
-  }
-
-  const prevSlide = () => {
-    if (imgSlide > 0) {
-      setImgSlide(imgSlide - 1);
-    } else {
-      setImgSlide(slides.length - 1);
-    }
-  }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="MainPage-body">
@@ -63,168 +54,59 @@ const MainPage = () => {
           </div>
         </div>
         <div className="middle-Complaints">
-          <div className="Complaint-Box">
-            <div className="Complaint-data">
-              <div className="Complaint-title">
-                <h1>Water Wastage</h1>
+          {complaints.map((complaint, index) => (
+            <div className="Complaint-Box" key={index}>
+              <div className="Complaint-Box-title">
+                <h1>{complaint.title}</h1>
               </div>
-              <div className="Complaint-descp">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque accusamus dolorem non quae aspernatur, rerum assumenda cumque dolores voluptate officia facilis modi error totam voluptas atque neque accusantium, dolor fugit quis aut ipsam maiores delectus! Tenetur provident ex sapiente, rerum explicabo repellat quia aspernatur earum?</p>
-              </div>
-              <div className="Comaplaint-functionalities">
-                <div className="function-vote">
-                  <div className="upvote">
-                    <IconContext.Provider
-                      value={{ color: 'black', size: '30px' }}
-                    >
-                      <BsArrowUpSquare />
-                    </IconContext.Provider>
+              <div className="Complaint-lower">
+                <div className="Complaint-lower-descp">
+                  <div className="Complaint-descp">
+                    <p>{complaint.description}</p>
                   </div>
-                  <h1>4</h1>
-                  <div className="downvote">
-                    <IconContext.Provider
-                      value={{ color: 'black', size: '30px' }}
-                    >
-                      <BsArrowDownSquare />
-                    </IconContext.Provider>
+                  <div className="lower-descp-funct">
+                    <div className="Complaint-vote">
+                      <BsArrowUpSquare className="vote-arrows" />
+                      <h1>4</h1>
+                      <BsArrowDownSquare className="vote-arrows" />
+                    </div>
+                    <div className="Complaint-comment">
+                      <FaRegComment className="vote-arrows" />
+                      <h1>4</h1>
+                    </div>
+                    <div className="Complaint-report">
+                      <MdOutlineReport className="vote-report" />
+                    </div>
                   </div>
                 </div>
-                <div className="function-comment">
-                  <IconContext.Provider
-                    value={{ color: 'black', size: '32px' }}
-                  >
-                    <FaRegComment />
-                  </IconContext.Provider>
-                </div>
-                <div className="function-reviewTag">
-                  <h1>Verified</h1>
-                </div>
-                <div className="function-Type">
-                  <h1>Water Pollution</h1>
+                <div className="Complaint-lower-right">
+                  <div className="lower-right-img">
+                    <img src={complaint.Image} alt="Complaint" className="complaint-img-size" />
+                  </div>
+                  <div className="lower-right-tags">
+                    <div className="ComplaintType">
+                      <div className="function-Type">
+                        <h1>{complaint.complaintType}</h1>
+                      </div>
+                    </div>
+                    <div className="Complaint-verfication">
+                      <div className="function-reviewTag">
+                        <h1>{complaint.verified ? 'Verified' : 'Not Verified'}</h1>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="complaint-img">
-              <BsArrowLeftCircleFill className="arrow arrowleft" onClick={prevSlide} />
-              {slides.map((slide, index) => (
-                <img key={index} src={slide.src} alt={`Slide ${index}`} className={imgSlide === index ? "slide" : "slide slideHidden"} />
-              ))}
-              <BsArrowRightCircleFill className="arrow arrowright" onClick={nextSlide} />
-              <span className="indicators">
-                {slides.map((slide, index) => (
-                  <button key={index} onClick={null} className={imgSlide === index ? "dot" : "dot dot-inactive"}></button>
-                ))}
-              </span>
-            </div>
-          </div>
-          <div className="Complaint-Box">
-            <div className="Complaint-data">
-              <div className="Complaint-title">
-                <h1>Water Wastage</h1>
-              </div>
-              <div className="Complaint-descp">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil incidunt excepturi eos sed, atque nostrum corporis veniam ratione ex, ducimus, totam impedit animi. Dolores necessitatibus id minima a quisquam cumque?</p>
-              </div>
-              <div className="Comaplaint-functionalities">
-                <div className="function-vote">
-                  <div className="upvote">
-                    <IconContext.Provider
-                      value={{ color: 'black', size: '30px' }}
-                    >
-                      <BsArrowUpSquare />
-                    </IconContext.Provider>
-                  </div>
-                  <h1>4</h1>
-                  <div className="downvote">
-                    <IconContext.Provider
-                      value={{ color: 'black', size: '30px' }}
-                    >
-                      <BsArrowDownSquare />
-                    </IconContext.Provider>
-                  </div>
-                </div>
-                <div className="function-comment">
-                  <IconContext.Provider
-                    value={{ color: 'black', size: '32px' }}
-                  >
-                    <FaRegComment />
-                  </IconContext.Provider>
-                </div>
-                <div className="function-reviewTag">
-                  <h1>Verified</h1>
-                </div>
-                <div className="function-Type">
-                  <h1>Water Pollution</h1>
-                </div>
-              </div>
-            </div>
-            <div className="complaint-img">
-              <BsArrowLeftCircleFill className="arrow arrowleft" onClick={prevSlide} />
-              {slides.map((slide, index) => (
-                <img key={index} src={slide.src} alt={`Slide ${index}`} className={imgSlide === index ? "slide" : "slide slideHidden"} />
-              ))}
-              <BsArrowRightCircleFill className="arrow arrowright" onClick={nextSlide} />
-              <span className="indicators">
-                {slides.map((slide, index) => (
-                  <button key={index} onClick={null} className={imgSlide === index ? "dot" : "dot dot-inactive"}></button>
-                ))}
-              </span>
-            </div>
-          </div>
-          <div className="Complaint-Box">
-            <div className="Complaint-data">
-              <div className="Complaint-title">
-                <h1>Water Wastage</h1>
-              </div>
-              <div className="Complaint-descp">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil incidunt excepturi eos sed, atque nostrum corporis veniam ratione ex, ducimus, totam impedit animi. Dolores necessitatibus id minima a quisquam cumque?</p>
-              </div>
-              <div className="Comaplaint-functionalities">
-                <div className="function-vote">
-                  <div className="upvote">
-                    <IconContext.Provider
-                      value={{ color: 'black', size: '30px' }}
-                    >
-                      <BsArrowUpSquare />
-                    </IconContext.Provider>
-                  </div>
-                  <h1>4</h1>
-                  <div className="downvote">
-                    <IconContext.Provider
-                      value={{ color: 'black', size: '30px' }}
-                    >
-                      <BsArrowDownSquare />
-                    </IconContext.Provider>
-                  </div>
-                </div>
-                <div className="function-comment">
-                  <IconContext.Provider
-                    value={{ color: 'black', size: '32px' }}
-                  >
-                    <FaRegComment />
-                  </IconContext.Provider>
-                </div>
-                <div className="function-reviewTag">
-                  <h1>Verified</h1>
-                </div>
-                <div className="function-Type">
-                  <h1>Water Pollution</h1>
-                </div>
-              </div>
-            </div>
-            <div className="complaint-img">
-              <BsArrowLeftCircleFill className="arrow arrowleft" onClick={prevSlide} />
-              {slides.map((slide, index) => (
-                <img key={index} src={slide.src} alt={`Slide ${index}`} className={imgSlide === index ? "slide" : "slide slideHidden"} />
-              ))}
-              <BsArrowRightCircleFill className="arrow arrowright" onClick={nextSlide} />
-              <span className="indicators">
-                {slides.map((slide, index) => (
-                  <button key={index} onClick={null} className={imgSlide === index ? "dot" : "dot dot-inactive"}></button>
-                ))}
-              </span>
-            </div>
-          </div>
+          ))}
+        </div>
+        <div>
+          {currentPage > 1 && (
+            <button onClick={() => handlePageChange(currentPage - 1)}>Previous</button>
+          )}
+          {currentPage < totalPages && (
+            <button onClick={() => handlePageChange(currentPage + 1)}>Next</button>
+          )}
         </div>
       </div>
       <div className="MainPage-side">

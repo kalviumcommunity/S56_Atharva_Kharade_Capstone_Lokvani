@@ -91,7 +91,8 @@ router.post("/Complaint", upload.single("image"), async (req, res) => {
           .json({ error: "Error uploading image to cloudinary" });
       }
       try {
-        const { title, description, area, complaintType, Location } = req.body;
+        const { title, description, area, complaintType, Location, createdBy } =
+          req.body;
         const newComplaint = await Complaint.create({
           title,
           description,
@@ -99,6 +100,7 @@ router.post("/Complaint", upload.single("image"), async (req, res) => {
           complaintType,
           Location,
           Image: result.secure_url,
+          createdBy,
         });
 
         res.status(201).json({
@@ -116,6 +118,38 @@ router.post("/Complaint", upload.single("image"), async (req, res) => {
     res
       .status(500)
       .json({ error: "Internal server error", details: error.message });
+  }
+});
+
+router.get("/Complaint", async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 3;
+
+  try {
+    const startIndex = (page - 1) * limit;
+
+    const complaints = await Complaint.find()
+      .limit(limit)
+      .skip(startIndex)
+      .exec();
+
+    const totalDocuments = await Complaint.countDocuments();
+
+    const totalPages = Math.ceil(totalDocuments / limit);
+
+    const pagination = {
+      totalPages: totalPages,
+      currentPage: page,
+      totalDocuments: totalDocuments,
+    };
+
+    console.log("Total Documents:", totalDocuments);
+    console.log("Total Pages:", totalPages);
+
+    res.json({ complaints, pagination });
+  } catch (error) {
+    console.error("Error fetching complaints:", error);
+    res.status(500).json({ error: "Error fetching complaints" });
   }
 });
 

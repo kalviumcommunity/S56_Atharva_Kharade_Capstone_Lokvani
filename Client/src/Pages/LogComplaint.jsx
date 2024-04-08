@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './LogComplaint.css';
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
@@ -10,6 +10,11 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const getCookie = (name) => {
+    const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return cookieValue ? cookieValue.pop() : null;
+};
+
 const LogComplaint = () => {
     const navigate = useNavigate();
     const [title, setTitle] = useState('');
@@ -20,6 +25,11 @@ const LogComplaint = () => {
     const [titleError, setTitleError] = useState('');
     const [descriptionError, setDescriptionError] = useState('');
     const [file, setFile] = useState(null);
+
+    useEffect(() => {
+        const userEmail = getCookie('email');
+        console.log('User Email:', userEmail);
+    }, []);
 
     const handleCancel = () => {
         setTitle('');
@@ -35,11 +45,10 @@ const LogComplaint = () => {
         setTitle(inputTitle);
 
         const wordCount = inputTitle.trim().split(/\s/).filter(Boolean).length;
-        const characterCount = inputTitle.length;
 
         if (wordCount < 3) {
             setTitleError('Title must contain at least 3 words');
-        } else if (characterCount > 35) {
+        } else if (wordCount > 7) {
             setTitleError('Title is too long');
         } else {
             setTitleError('');
@@ -77,6 +86,7 @@ const LogComplaint = () => {
         }
 
         try {
+            const userEmail = getCookie('email');
             const formData = new FormData();
             formData.append('title', title);
             formData.append('description', description);
@@ -84,6 +94,7 @@ const LogComplaint = () => {
             formData.append('complaintType', complaintType);
             formData.append('location', location);
             formData.append('image', file);
+            formData.append('createdBy', userEmail);
 
             const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint', formData, {
                 headers: {
