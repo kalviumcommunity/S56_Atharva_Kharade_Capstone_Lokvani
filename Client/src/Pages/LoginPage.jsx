@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import './LoginPage.css';
+import './CSS/LoginPage.css';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
+import CircularProgress from '@mui/material/CircularProgress';
 import { Link, useNavigate } from 'react-router-dom';
 import eyeIconVisible from '../Assets/visibility.png';
 import eyeIconHidden from '../Assets/hide.png';
@@ -17,6 +18,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handlePasswordVisibility = () => {
@@ -44,15 +46,11 @@ const LoginPage = () => {
   };
 
   const handleLogin = async () => {
-    if (!username || !password) {
-      toast.warn('Please fill all input boxes.');
+    if (!username || !password || usernameError || passwordError || loading) {
       return;
     }
 
-    if (usernameError || passwordError) {
-      toast.error('Please correct the errors before proceeding.');
-      return;
-    }
+    setLoading(true);
 
     try {
       const response = await axios.post(
@@ -62,11 +60,11 @@ const LoginPage = () => {
 
       console.log('Logged in as:', response.data);
       toast.success('Successfully logged in!');
-      
+
       Cookies.set('username', username);
       Cookies.set('email', response.data.email);
 
-      navigate('/User')
+      navigate('/User');
     } catch (error) {
       console.error('Error:', error.response.data.error);
       if (error.response.status === 401) {
@@ -80,6 +78,8 @@ const LoginPage = () => {
       } else {
         toast.error('An error occurred while logging in.');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -192,8 +192,15 @@ const LoginPage = () => {
             />
           </div>
           <div className="LoginPage-btn">
-            <button className="Login-btn" onClick={handleLogin}>
-              LOGIN
+            <button className="Login-btn" onClick={handleLogin} disabled={loading}>
+              {loading ? (
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <CircularProgress size={24} color="inherit" />
+                  <span style={{ marginLeft: '8px' }}>Logging in</span>
+                </div>
+              ) : (
+                'LOGIN'
+              )}
             </button>
           </div>
           <div style={{ marginTop: '15px', textAlign: 'center', fontSize: '20px' }}>

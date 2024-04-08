@@ -1,0 +1,64 @@
+.My-Complaint-main-body {
+  display: flex;
+  height: 100vh;
+}
+
+.MyComplaint-body {
+  width: calc(100vw - 250px);
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  overflow-y: auto;
+}
+
+.MyComplaint-body::-webkit-scrollbar {
+  width: 0.5vw;
+}
+
+.MyComplaint-body::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
+}
+
+.MyComplaint-body::-webkit-scrollbar-thumb {
+  background-color: rgba(80, 63, 205, 0.5);
+}
+
+.MyComplaint-complaint-box {
+  height: auto;
+  width: 400px;
+  border-radius: 5px;
+  margin: 15px 0;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+.MyComplaint-box-title {
+  height: 90px;
+}
+
+.MyComplaint-box-title h1 {
+  font-size: 30px;
+  text-align: center;
+  font-family: "Poppins", serif;
+  font-size: 500;
+}
+
+.MyComplaint-img {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.MyComplaint-descp {
+  height: 260px;
+  padding: 5px;
+}
+
+.MyComplaint-function {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 10px 0;
+}

@@ -1,5 +1,8 @@
 import React from 'react';
-import './UserDashboard.css';
+import './CSS/UserDashboard.css';
+
+import { Link, useNavigate } from 'react-router-dom';
+
 import { FaRegUserCircle } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
 import { GoHome } from 'react-icons/go';
@@ -9,13 +12,17 @@ import { BsFillPeopleFill } from 'react-icons/bs';
 import { FaBuildingNgo } from 'react-icons/fa6';
 import { TbLogout } from 'react-icons/tb';
 import Cookies from 'js-cookie';
-import { Link, useNavigate } from 'react-router-dom';
 
 const UserDashboard = () => {
     const navigate = useNavigate();
 
     const username = Cookies.get('username');
-    const email = Cookies.get('email');
+    let email = Cookies.get('email');
+
+    const maxEmailLength = 20;
+    if (email && email.length > maxEmailLength) {
+        email = email.slice(0, maxEmailLength) + '...';
+    }
 
     const handleLogout = () => {
         Cookies.remove('username');
@@ -34,22 +41,24 @@ const UserDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="userDetail">
-                        <IconContext.Provider value={{ color: 'black', size: '40px' }}>
-                            <FaRegUserCircle />
-                        </IconContext.Provider>
-                        <div>
-                            <h1>{username}</h1>
-                            <p>{email}</p>
+                    <Link to={'/ProfileEdit'}>
+                        <div className="userDetail">
+                            <IconContext.Provider value={{ color: 'black', size: '40px' }}>
+                                <FaRegUserCircle />
+                            </IconContext.Provider>
+                            <div>
+                                <h1>{username}</h1>
+                                <p>{email}</p>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
 
                     <div style={{ marginTop: '15px' }}>
                         <Link to={'/User'}>
                             <div className="UserOptions">
                                 <div className="UserIcon">
                                     <IconContext.Provider value={{ color: 'black', size: '30px' }}>
-                                        <GoHome />
+                                        <GoHome className='Dashboard-icons' />
                                     </IconContext.Provider>
                                 </div>
                                 <div>
@@ -71,16 +80,18 @@ const UserDashboard = () => {
                             </div>
                         </Link>
 
-                        <div className="UserOptions">
-                            <div className="UserIcon">
-                                <IconContext.Provider value={{ color: 'black', size: '30px' }}>
-                                    <GrDocumentUser />
-                                </IconContext.Provider>
+                        <Link to={'/MyComplaints'}>
+                            <div className="UserOptions">
+                                <div className="UserIcon">
+                                    <IconContext.Provider value={{ color: 'black', size: '30px' }}>
+                                        <GrDocumentUser />
+                                    </IconContext.Provider>
+                                </div>
+                                <div>
+                                    <h1>My Complaints</h1>
+                                </div>
                             </div>
-                            <div>
-                                <h1>My Complaints</h1>
-                            </div>
-                        </div>
+                        </Link>
 
                         <div className="UserOptions">
                             <div className="UserIcon">

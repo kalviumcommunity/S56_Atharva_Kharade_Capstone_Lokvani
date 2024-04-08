@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './LogComplaint.css';
+import './CSS/LogComplaint.css';
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import PuneAreaSelect from "../Components/AreaSelect";
@@ -26,10 +26,6 @@ const LogComplaint = () => {
     const [descriptionError, setDescriptionError] = useState('');
     const [file, setFile] = useState(null);
 
-    useEffect(() => {
-        const userEmail = getCookie('email');
-        console.log('User Email:', userEmail);
-    }, []);
 
     const handleCancel = () => {
         setTitle('');
@@ -86,7 +82,7 @@ const LogComplaint = () => {
         }
 
         try {
-            const userEmail = getCookie('email');
+            const username = getCookie('username');
             const formData = new FormData();
             formData.append('title', title);
             formData.append('description', description);
@@ -94,7 +90,7 @@ const LogComplaint = () => {
             formData.append('complaintType', complaintType);
             formData.append('location', location);
             formData.append('image', file);
-            formData.append('createdBy', userEmail);
+            formData.append('createdBy', username);
 
             const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint', formData, {
                 headers: {

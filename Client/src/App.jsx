@@ -4,6 +4,8 @@ import LoginPage from './Pages/LoginPage';
 import SignUpPage from './Pages/SignUpPage';
 import UserPage from './Pages/UserPage';
 import LogComplaint from './Pages/LogComplaint';
+import ProfileEdit from './Pages/ProfileEdit';
+import MyComplaints from './Pages/MyComplaints';
 import { Routes, Route } from 'react-router-dom';
 
 const App = () => {
@@ -14,6 +16,8 @@ const App = () => {
       <Route path="/SignUp" element={<SignUpPage />} />
       <Route path="/User/*" element={<UserPage />} />
       <Route path="/Complaint" element={<LogComplaint />} />
+      <Route path="/ProfileEdit" element={<ProfileEdit />} />
+      <Route path="/MyComplaints" element={<MyComplaints />} />
     </Routes>
   );
 };

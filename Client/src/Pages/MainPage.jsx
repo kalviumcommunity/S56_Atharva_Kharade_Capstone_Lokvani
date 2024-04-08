@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import "./MainPage.css";
+import "./CSS/MainPage.css";
 import PuneAreaSelect from "../Components/AreaSelect";
 import SortBySelect from "../Components/SortBy";
 import SearchInput from "../Components/Search";
 import axios from "axios";
 
-import { BsArrowDownSquare, BsArrowUpSquare } from "react-icons/bs";
+import { BiUpvote } from "react-icons/bi";
+import { BiDownvote } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
 import { MdOutlineReport } from "react-icons/md";
+import CustomPagination from "../Components/Pagination";
 
 const MainPage = () => {
   const [complaints, setComplaints] = useState([]);
@@ -27,7 +29,7 @@ const MainPage = () => {
         }
       });
       setComplaints(response.data.complaints);
-      setTotalPages(response.data.totalPages);
+      setTotalPages(response.data.pagination.totalPages);
     } catch (error) {
       console.error("Error fetching complaints:", error);
     }
@@ -66,9 +68,9 @@ const MainPage = () => {
                   </div>
                   <div className="lower-descp-funct">
                     <div className="Complaint-vote">
-                      <BsArrowUpSquare className="vote-arrows" />
+                      <BiUpvote className="vote-arrows" />
                       <h1>4</h1>
-                      <BsArrowDownSquare className="vote-arrows" />
+                      <BiDownvote className="vote-arrows" />
                     </div>
                     <div className="Complaint-comment">
                       <FaRegComment className="vote-arrows" />
@@ -81,7 +83,11 @@ const MainPage = () => {
                 </div>
                 <div className="Complaint-lower-right">
                   <div className="lower-right-img">
-                    <img src={complaint.Image} alt="Complaint" className="complaint-img-size" />
+                    <img
+                      src={complaint.Image}
+                      alt="Complaint"
+                      className="complaint-img-size"
+                    />
                   </div>
                   <div className="lower-right-tags">
                     <div className="ComplaintType">
@@ -91,7 +97,9 @@ const MainPage = () => {
                     </div>
                     <div className="Complaint-verfication">
                       <div className="function-reviewTag">
-                        <h1>{complaint.verified ? 'Verified' : 'Not Verified'}</h1>
+                        <h1>
+                          {complaint.verified ? "Verified" : "Not Verified"}
+                        </h1>
                       </div>
                     </div>
                   </div>
@@ -99,19 +107,17 @@ const MainPage = () => {
               </div>
             </div>
           ))}
-        </div>
-        <div>
-          {currentPage > 1 && (
-            <button onClick={() => handlePageChange(currentPage - 1)}>Previous</button>
-          )}
-          {currentPage < totalPages && (
-            <button onClick={() => handlePageChange(currentPage + 1)}>Next</button>
-          )}
+          <CustomPagination
+            count={totalPages}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+            variant="outlined"
+            shape="rounded"
+          />
         </div>
       </div>
       <div className="MainPage-side">
-        <div className="MainPage-side-Navbar">
-        </div>
+        <div className="MainPage-side-Navbar"></div>
       </div>
     </div>
   );
