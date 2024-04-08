@@ -153,5 +153,16 @@ router.get("/Complaint", async (req, res) => {
   }
 });
 
+router.get("/Complaint/:username", async (req, res) => {
+  try {
+      const username = req.params.username;
+      const complaints = await Complaint.find({ createdBy: username });
+      res.json(complaints);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+});
+
+
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };

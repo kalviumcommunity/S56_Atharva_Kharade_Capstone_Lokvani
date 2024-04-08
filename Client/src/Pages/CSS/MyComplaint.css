@@ -1,0 +1,45 @@
+.My-Complaint-main-body{
+    display: flex;
+    height: 100vh;
+}
+
+.MyComplaint-body{
+    width: calc(100vw - 250px);
+    height: 100%;
+    padding: 10px;
+}
+
+.MyComplaint-complaint-box{
+    height: auto;
+    width: 400px;
+    border: 1px solid red;
+}
+
+.MyComplaint-box-title{
+    height: 90px;
+    border: 1px solid red;
+}
+
+.MyComplaint-box-title h1{
+    font-size: 30px;
+    text-align: center;
+    font-family: "Poppins", serif;
+    font-size: 500;
+}
+
+.MyComplaint-img{
+    height: 200px;
+    border: 1px solid red;
+}
+
+.MyComplaint-descp{
+    height: 250px;
+    border: 1px solid black;
+}
+
+.MyComplaint-function{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 10px 0;
+}

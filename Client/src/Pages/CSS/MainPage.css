@@ -2,6 +2,7 @@
   width: calc(100vw - 250px);
   height: 100%;
   display: flex;
+  background-color: #FFFFFF;
 }
 
 .MainPage-middle {
@@ -212,6 +213,9 @@
   align-items: center;
   margin-left: 10px;
   width: 15%;
+  border: 2px solid grey;
+  border-radius: 20px;
+  padding: 0 5px;
 }
 
 .Complaint-vote h1{
@@ -230,6 +234,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border: 2px solid grey;
+  border-radius: 105px;
+  padding: 0 5px;
 }
 
 .Complaint-comment h1{

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./SignUpPage.css";
+import "./CSS/SignUpPage.css";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import { Link } from "react-router-dom";
