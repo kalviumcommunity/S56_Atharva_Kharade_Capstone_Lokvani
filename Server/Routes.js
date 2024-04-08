@@ -168,6 +168,16 @@ router.put("/Complaint/:username", async (req, res) => {
   const { newUsername, newEmail } = req.body;
 
   try {
+    const existingUsername = await User.findOne({ username: newUsername });
+    if (existingUsername && existingUsername.username !== username) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
+
+    const existingEmail = await User.findOne({ email: newEmail });
+    if (existingEmail && existingEmail.username !== username) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
     const user = await User.findOneAndUpdate(
       { username },
       { username: newUsername, email: newEmail },
