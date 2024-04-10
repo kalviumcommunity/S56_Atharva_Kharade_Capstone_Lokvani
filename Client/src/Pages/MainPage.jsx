@@ -48,7 +48,7 @@ const MainPage = () => {
               <SortBySelect />
             </div>
             <div className="SearchBar-areaSelect">
-              <PuneAreaSelect />
+              <SortBySelect />
             </div>
           </div>
           <div className="SeachBar-searchInput">

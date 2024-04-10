@@ -1,0 +1,107 @@
+.Communities-main-body {
+  display: flex;
+  height: 100vh;
+}
+
+.Communities-body {
+  width: calc(100vw - 250px);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 10px 0;
+}
+
+.CommunityPage-box {
+  width: 350px;
+  height: 470px;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  border-radius: 10px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.Community-box-img {
+  height: 200px;
+  margin: 10px;
+  background-image: url(./Image-Placeholder.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.Community-box-title {
+  height: 50px;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  font-size: 40px;
+  font-size: 500;
+}
+
+.Community-box-desc {
+  height: 150px;
+  padding: 10px;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.Community-box-function {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Community-box-joinbtn {
+  width: 40%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Community-box-joinbtn button {
+  height: 60%;
+  width: 70px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.joinbtn {
+  align-items: center;
+  background-color: #fff;
+  border: 2px solid #000;
+  box-sizing: border-box;
+  color: #000;
+  cursor: pointer;
+  display: inline-flex;
+  fill: #000;
+  justify-content: center;
+  outline: 0;
+  text-align: center;
+  text-decoration: none;
+}
+
+.joinbtn:focus {
+  color: #171e29;
+}
+
+.joinbtn:hover {
+  border-color: #06f;
+  color: #06f;
+  fill: #06f;
+}
+
+.joinbtn:active {
+  border-color: #06f;
+  color: #06f;
+  fill: #06f;
+}
+
+.Community-box-members {
+  width: 60%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -6,6 +6,8 @@ import UserPage from './Pages/UserPage';
 import LogComplaint from './Pages/LogComplaint';
 import ProfileEdit from './Pages/ProfileEdit';
 import MyComplaints from './Pages/MyComplaints';
+import CommunitiesPage from './Pages/CommunitiesPage';
+import Community from './Pages/Community';
 import { Routes, Route } from 'react-router-dom';
 
 const App = () => {
@@ -18,6 +20,8 @@ const App = () => {
       <Route path="/Complaint" element={<LogComplaint />} />
       <Route path="/ProfileEdit" element={<ProfileEdit />} />
       <Route path="/MyComplaints" element={<MyComplaints />} />
+      <Route path="/Communities" element={<CommunitiesPage />} />
+      <Route path="/Community" element={<Community />} />
     </Routes>
   );
 };
