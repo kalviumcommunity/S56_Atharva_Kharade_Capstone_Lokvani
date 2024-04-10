@@ -93,16 +93,18 @@ const UserDashboard = () => {
                             </div>
                         </Link>
 
-                        <div className="UserOptions">
-                            <div className="UserIcon">
-                                <IconContext.Provider value={{ color: 'black', size: '30px' }}>
-                                    <BsFillPeopleFill />
-                                </IconContext.Provider>
+                        <Link to={'/Communities'}>
+                            <div className="UserOptions">
+                                <div className="UserIcon">
+                                    <IconContext.Provider value={{ color: 'black', size: '30px' }}>
+                                        <BsFillPeopleFill />
+                                    </IconContext.Provider>
+                                </div>
+                                <div>
+                                    <h1>Communities</h1>
+                                </div>
                             </div>
-                            <div>
-                                <h1>Communities</h1>
-                            </div>
-                        </div>
+                        </Link>
 
                         <div className="UserOptions">
                             <div className="UserIcon">

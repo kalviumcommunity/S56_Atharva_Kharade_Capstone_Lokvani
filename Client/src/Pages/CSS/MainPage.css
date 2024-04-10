@@ -2,7 +2,7 @@
   width: calc(100vw - 250px);
   height: 100%;
   display: flex;
-  background-color: #FFFFFF;
+  background-color: #F5F6FA;
 }
 
 .MainPage-middle {
@@ -83,7 +83,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #e4e4e4;
+  background-color: #ffffff;
 }
 
 .SearchBar-sort {
@@ -150,6 +150,7 @@
   display: flex;
   position: relative;
   flex-direction: column;
+  background-color: #fff;
 }
 
 .Complaint-Box-title{
