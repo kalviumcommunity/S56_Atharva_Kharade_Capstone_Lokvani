@@ -207,19 +207,16 @@ router.put("/Complaint/:complaintId/upvote", async (req, res) => {
     }
 
     if (complaint.votedUsers.includes(userId)) {
-      complaint.totalVotes--;
-      const index = complaint.votedUsers.indexOf(userId);
-      complaint.votedUsers.splice(index, 1);
-    } else {
-      complaint.totalVotes++;
-      complaint.votedUsers.push(userId);
+      return res.status(400).json({ message: "User has already voted" });
     }
+    complaint.totalVotes++;
+    complaint.votedUsers.push(userId);
 
     await complaint.save();
 
-    res.status(200).json({ message: "Vote updated successfully", complaint });
+    res.status(200).json({ message: "Upvoted successfully", complaint });
   } catch (error) {
-    console.error("Error updating vote:", error);
+    console.error("Error upvoting complaint:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
@@ -236,19 +233,16 @@ router.put("/Complaint/:complaintId/downvote", async (req, res) => {
     }
 
     if (complaint.votedUsers.includes(userId)) {
-      complaint.totalVotes++;
-      const index = complaint.votedUsers.indexOf(userId);
-      complaint.votedUsers.splice(index, 1);
-    } else {
-      complaint.totalVotes--;
-      complaint.votedUsers.push(userId);
+      return res.status(400).json({ message: "User has already voted" });
     }
+    complaint.totalVotes--;
+    complaint.votedUsers.push(userId);
 
     await complaint.save();
 
-    res.status(200).json({ message: "Vote updated successfully", complaint });
+    res.status(200).json({ message: "Downvoted successfully", complaint });
   } catch (error) {
-    console.error("Error updating vote:", error);
+    console.error("Error downvoting complaint:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
