@@ -123,33 +123,50 @@ router.post("/Complaint", upload.single("image"), async (req, res) => {
 
 router.put("/Complaint/:id", async (req, res) => {
   const { id } = req.params;
-  const { voteType } = req.body;
+  const { username, voteType } = req.body;
 
   try {
-    let updatedComplaint;
-    if (voteType === 'upvote') {
-      updatedComplaint = await Complaint.findByIdAndUpdate(
-        id,
-        { $inc: { votes: 1 } },
-        { new: true }
-      );
-    } else if (voteType === 'downvote') {
-      updatedComplaint = await Complaint.findByIdAndUpdate(
-        id,
-        { $inc: { votes: -1 } },
-        { new: true }
-      );
-    } else {
-      return res.status(400).json({ error: 'Invalid vote type' });
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
     }
 
-    res.status(200).json({ message: 'Vote updated successfully', complaint: updatedComplaint });
+    const complaint = await Complaint.findById(id);
+    if (!complaint) {
+      return res.status(404).json({ error: "Complaint not found" });
+    }
+
+    const existingVoteIndex = complaint.votes.findIndex((vote) =>
+      vote.userId.equals(user._id)
+    );
+    if (existingVoteIndex !== -1) {
+      if (complaint.votes[existingVoteIndex].voteType === voteType) {
+        complaint.votes.splice(existingVoteIndex, 1);
+      } else {
+        complaint.votes[existingVoteIndex].voteType = voteType;
+      }
+    } else {
+      complaint.votes.push({ userId: user._id, voteType });
+    }
+
+    const totalVotes = complaint.votes.reduce((total, vote) => {
+      if (vote.voteType === "upvote") {
+        return total + 1;
+      } else {
+        return total - 1;
+      }
+    }, 0);
+
+    complaint.votesCount = totalVotes;
+
+    await complaint.save();
+
+    res.status(200).json({ message: "Vote updated successfully", complaint });
   } catch (error) {
     console.error("Error updating vote:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
 
 router.get("/Complaint", async (req, res) => {
   const page = parseInt(req.query.page) || 1;

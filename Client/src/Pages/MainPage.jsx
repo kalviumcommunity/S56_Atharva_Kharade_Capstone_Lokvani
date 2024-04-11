@@ -4,11 +4,15 @@ import SortBySelect from "../Components/SortBy";
 import SearchInput from "../Components/Search";
 import axios from "axios";
 
-import { BiUpvote } from "react-icons/bi";
-import { BiDownvote } from "react-icons/bi";
+import { BiUpvote, BiDownvote } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
 import { MdOutlineReport } from "react-icons/md";
 import CustomPagination from "../Components/Pagination";
+
+const getCookie = (name) => {
+  const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  return cookieValue ? cookieValue.pop() : null;
+};
 
 const MainPage = () => {
   const [complaints, setComplaints] = useState([]);
@@ -43,11 +47,12 @@ const MainPage = () => {
 
   const handleVote = async (index, voteType) => {
     try {
+      const username = getCookie('username');
       const updatedComplaints = [...complaints];
       const complaintId = updatedComplaints[index]._id;
       await axios.put(
         `https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint/${complaintId}`,
-        { voteType }
+        { username, voteType }
       );
       fetchComplaints();
     } catch (error) {
