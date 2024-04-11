@@ -121,6 +121,36 @@ router.post("/Complaint", upload.single("image"), async (req, res) => {
   }
 });
 
+router.put("/Complaint/:id", async (req, res) => {
+  const { id } = req.params;
+  const { voteType } = req.body;
+
+  try {
+    let updatedComplaint;
+    if (voteType === 'upvote') {
+      updatedComplaint = await Complaint.findByIdAndUpdate(
+        id,
+        { $inc: { votes: 1 } },
+        { new: true }
+      );
+    } else if (voteType === 'downvote') {
+      updatedComplaint = await Complaint.findByIdAndUpdate(
+        id,
+        { $inc: { votes: -1 } },
+        { new: true }
+      );
+    } else {
+      return res.status(400).json({ error: 'Invalid vote type' });
+    }
+
+    res.status(200).json({ message: 'Vote updated successfully', complaint: updatedComplaint });
+  } catch (error) {
+    console.error("Error updating vote:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
 router.get("/Complaint", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 3;

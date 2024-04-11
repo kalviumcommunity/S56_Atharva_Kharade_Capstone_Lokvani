@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./CSS/MainPage.css";
-import PuneAreaSelect from "../Components/AreaSelect";
 import SortBySelect from "../Components/SortBy";
 import SearchInput from "../Components/Search";
 import axios from "axios";
@@ -22,12 +21,15 @@ const MainPage = () => {
 
   const fetchComplaints = async () => {
     try {
-      const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint`, {
-        params: {
-          page: currentPage,
-          limit: 3
+      const response = await axios.get(
+        `https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint`,
+        {
+          params: {
+            page: currentPage,
+            limit: 3,
+          },
         }
-      });
+      );
       setComplaints(response.data.complaints);
       setTotalPages(response.data.pagination.totalPages);
     } catch (error) {
@@ -37,6 +39,20 @@ const MainPage = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+
+  const handleVote = async (index, voteType) => {
+    try {
+      const updatedComplaints = [...complaints];
+      const complaintId = updatedComplaints[index]._id;
+      await axios.put(
+        `https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint/${complaintId}`,
+        { voteType }
+      );
+      fetchComplaints();
+    } catch (error) {
+      console.error("Error voting:", error);
+    }
   };
 
   return (
@@ -68,9 +84,15 @@ const MainPage = () => {
                   </div>
                   <div className="lower-descp-funct">
                     <div className="Complaint-vote">
-                      <BiUpvote className="vote-arrows" />
-                      <h1>4</h1>
-                      <BiDownvote className="vote-arrows" />
+                      <BiUpvote
+                        className="vote-arrows"
+                        onClick={() => handleVote(index, 'upvote')}
+                      />
+                      <h1>{complaint.votes}</h1>
+                      <BiDownvote
+                        className="vote-arrows"
+                        onClick={() => handleVote(index, 'downvote')}
+                      />
                     </div>
                     <div className="Complaint-comment">
                       <FaRegComment className="vote-arrows" />
