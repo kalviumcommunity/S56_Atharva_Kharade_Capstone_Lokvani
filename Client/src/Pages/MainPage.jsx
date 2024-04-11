@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./CSS/MainPage.css";
-import PuneAreaSelect from "../Components/AreaSelect";
 import SortBySelect from "../Components/SortBy";
 import SearchInput from "../Components/Search";
 import axios from "axios";

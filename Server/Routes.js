@@ -209,7 +209,12 @@ router.put("/Complaint/:complaintId/upvote", async (req, res) => {
     if (complaint.votedUsers.includes(userId)) {
       return res.status(400).json({ message: "User has already voted" });
     }
-    complaint.totalVotes++;
+    if (complaint.votedUsers.includes(userId)) {
+      complaint.totalVotes += 2;
+    } else {
+      complaint.totalVotes += 1;
+    }
+
     complaint.votedUsers.push(userId);
 
     await complaint.save();
@@ -235,7 +240,12 @@ router.put("/Complaint/:complaintId/downvote", async (req, res) => {
     if (complaint.votedUsers.includes(userId)) {
       return res.status(400).json({ message: "User has already voted" });
     }
-    complaint.totalVotes--;
+    if (complaint.votedUsers.includes(userId)) {
+      complaint.totalVotes -= 2;
+    } else {
+      complaint.totalVotes -= 1;
+    }
+
     complaint.votedUsers.push(userId);
 
     await complaint.save();
