@@ -195,5 +195,63 @@ router.put("/Complaint/:username", async (req, res) => {
   }
 });
 
+router.put("/Complaint/:complaintId/upvote", async (req, res) => {
+  const { complaintId } = req.params;
+  const { userId } = req.body;
+
+  try {
+    let complaint = await Complaint.findById(complaintId);
+
+    if (!complaint) {
+      return res.status(404).json({ message: "Complaint not found" });
+    }
+
+    if (complaint.votedUsers.includes(userId)) {
+      complaint.totalVotes--;
+      const index = complaint.votedUsers.indexOf(userId);
+      complaint.votedUsers.splice(index, 1);
+    } else {
+      complaint.totalVotes++;
+      complaint.votedUsers.push(userId);
+    }
+
+    await complaint.save();
+
+    res.status(200).json({ message: "Vote updated successfully", complaint });
+  } catch (error) {
+    console.error("Error updating vote:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.put("/Complaint/:complaintId/downvote", async (req, res) => {
+  const { complaintId } = req.params;
+  const { userId } = req.body;
+
+  try {
+    let complaint = await Complaint.findById(complaintId);
+
+    if (!complaint) {
+      return res.status(404).json({ message: "Complaint not found" });
+    }
+
+    if (complaint.votedUsers.includes(userId)) {
+      complaint.totalVotes++;
+      const index = complaint.votedUsers.indexOf(userId);
+      complaint.votedUsers.splice(index, 1);
+    } else {
+      complaint.totalVotes--;
+      complaint.votedUsers.push(userId);
+    }
+
+    await complaint.save();
+
+    res.status(200).json({ message: "Vote updated successfully", complaint });
+  } catch (error) {
+    console.error("Error updating vote:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };
