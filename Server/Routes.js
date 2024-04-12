@@ -200,17 +200,27 @@ router.put("/:id/upvote", async (req, res) => {
   const { userEmail } = req.body;
 
   try {
-    const complaint = await Complaint.findById(id);
+    let complaint = await Complaint.findById(id);
 
     if (!complaint) {
       return res.status(404).json({ message: "Complaint not found" });
     }
 
-    if (!complaint.upvotedBy.includes(userEmail)) {
+    if (complaint.upvotedBy.includes(userEmail)) {
+      await Complaint.findByIdAndUpdate(id, {
+        $pull: { upvotedBy: userEmail },
+      });
+    } else {
+      if (!complaint.downvotedBy.includes(userEmail)) {
+        await Complaint.findByIdAndUpdate(id, {
+          $pull: { downvotedBy: userEmail },
+        });
+      }
       complaint.upvotedBy.push(userEmail);
       await complaint.save();
     }
 
+    complaint = await Complaint.findById(id);
     res.json(complaint);
   } catch (error) {
     console.error("Error upvoting complaint:", error);
@@ -223,17 +233,27 @@ router.put("/:id/downvote", async (req, res) => {
   const { userEmail } = req.body;
 
   try {
-    const complaint = await Complaint.findById(id);
+    let complaint = await Complaint.findById(id);
 
     if (!complaint) {
       return res.status(404).json({ message: "Complaint not found" });
     }
 
-    if (!complaint.downvotedBy.includes(userEmail)) {
+    if (complaint.downvotedBy.includes(userEmail)) {
+      await Complaint.findByIdAndUpdate(id, {
+        $pull: { downvotedBy: userEmail },
+      });
+    } else {
+      if (!complaint.upvotedBy.includes(userEmail)) {
+        await Complaint.findByIdAndUpdate(id, {
+          $pull: { upvotedBy: userEmail },
+        });
+      }
       complaint.downvotedBy.push(userEmail);
       await complaint.save();
     }
 
+    complaint = await Complaint.findById(id);
     res.json(complaint);
   } catch (error) {
     console.error("Error downvoting complaint:", error);

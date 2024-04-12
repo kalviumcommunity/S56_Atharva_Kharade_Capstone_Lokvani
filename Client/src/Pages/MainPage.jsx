@@ -3,7 +3,7 @@ import "./CSS/MainPage.css";
 import SortBySelect from "../Components/SortBy";
 import SearchInput from "../Components/Search";
 import axios from "axios";
-import Cookies from "js-cookie"; 
+import Cookies from "js-cookie";
 
 import { BiUpvote } from "react-icons/bi";
 import { BiDownvote } from "react-icons/bi";
@@ -42,24 +42,81 @@ const MainPage = () => {
   const userEmail = Cookies.get("email");
 
   const handleUpvote = async (index) => {
-    const updatedComplaints = [...complaints];
-    if (updatedComplaints[index].upvotedBy) {
-      updatedComplaints[index].upvotedBy.push(userEmail); 
-    } else {
-      updatedComplaints[index].upvotedBy = [userEmail];
+    try {
+      const complaint = complaints[index];
+
+      const response = await axios.put(
+        `https://s56-atharva-kharade-capstone-lokvani.onrender.com/${complaint._id}/upvote`,
+        { userEmail }
+      );
+
+      if (response.status === 200) {
+        const updatedComplaints = [...complaints];
+        const updatedComplaint = { ...complaint };
+
+        if (updatedComplaint.upvotedBy.includes(userEmail)) {
+          const emailIndex = updatedComplaint.upvotedBy.indexOf(userEmail);
+          updatedComplaint.upvotedBy.splice(emailIndex, 1);
+        } else {
+          const downvotedIndex = updatedComplaint.downvotedBy.indexOf(userEmail);
+          if (downvotedIndex !== -1) {
+            updatedComplaint.downvotedBy.splice(downvotedIndex, 1);
+          }
+          updatedComplaint.upvotedBy.push(userEmail);
+        }
+        const upvoteCount = updatedComplaint.upvotedBy.length;
+        const downvoteCount = updatedComplaint.downvotedBy.length;
+        const totalCount = upvoteCount - downvoteCount;
+
+        updatedComplaint.voteCount = totalCount;
+
+        updatedComplaints[index] = updatedComplaint;
+        setComplaints(updatedComplaints);
+      }
+    } catch (error) {
+      console.error("Error upvoting complaint:", error);
     }
-    setComplaints(updatedComplaints);
   };
 
   const handleDownvote = async (index) => {
-    const updatedComplaints = [...complaints];
-    if (updatedComplaints[index].downvotedBy) {
-      updatedComplaints[index].downvotedBy.push(userEmail);
-    } else {
-      updatedComplaints[index].downvotedBy = [userEmail];
+    try {
+      const complaint = complaints[index];
+
+      const response = await axios.put(
+        `https://s56-atharva-kharade-capstone-lokvani.onrender.com/${complaint._id}/downvote`,
+        { userEmail }
+      );
+
+      if (response.status === 200) {
+        const updatedComplaints = [...complaints];
+        const updatedComplaint = { ...complaint };
+
+        if (updatedComplaint.downvotedBy.includes(userEmail)) {
+          const emailIndex = updatedComplaint.downvotedBy.indexOf(userEmail);
+          updatedComplaint.downvotedBy.splice(emailIndex, 1);
+        } else {
+          const upvotedIndex = updatedComplaint.upvotedBy.indexOf(userEmail);
+          if (upvotedIndex !== -1) {
+            updatedComplaint.upvotedBy.splice(upvotedIndex, 1);
+          }
+          updatedComplaint.downvotedBy.push(userEmail);
+        }
+
+        const upvoteCount = updatedComplaint.upvotedBy.length;
+        const downvoteCount = updatedComplaint.downvotedBy.length;
+        const totalCount = upvoteCount - downvoteCount;
+
+        updatedComplaint.voteCount = totalCount;
+
+        updatedComplaints[index] = updatedComplaint;
+        setComplaints(updatedComplaints);
+      }
+    } catch (error) {
+      console.error("Error downvoting complaint:", error);
     }
-    setComplaints(updatedComplaints);
   };
+
+
 
   return (
     <div className="MainPage-body">
@@ -91,7 +148,7 @@ const MainPage = () => {
                   <div className="lower-descp-funct">
                     <div className="Complaint-vote">
                       <BiUpvote className="vote-arrows" onClick={() => handleUpvote(index)} />
-                      <h1>{(complaint.upvotedBy && complaint.upvotedBy.length) || 0}</h1>
+                      <h1>{((complaint.upvotedBy && complaint.upvotedBy.length) || 0) - ((complaint.downvotedBy && complaint.downvotedBy.length) || 0)}</h1>
                       <BiDownvote className="vote-arrows" onClick={() => handleDownvote(index)} />
                     </div>
                     <div className="Complaint-comment">
