@@ -195,5 +195,109 @@ router.put("/Complaint/:username", async (req, res) => {
   }
 });
 
+router.put("/:id/upvote", async (req, res) => {
+  const { id } = req.params;
+  const { userEmail } = req.body;
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    let complaint = await Complaint.findById(id).session(session);
+
+    if (!complaint) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json({ message: "Complaint not found" });
+    }
+
+    if (complaint.upvotedBy.includes(userEmail)) {
+      await Complaint.findByIdAndUpdate(id, {
+        $pull: { upvotedBy: userEmail },
+        $inc: { voteCount: -1 },
+      }).session(session);
+    } else {
+      await Complaint.findByIdAndUpdate(id, {
+        $addToSet: { upvotedBy: userEmail },
+        $pull: { downvotedBy: userEmail },
+        $inc: { voteCount: 1 },
+      }).session(session);
+    }
+
+    await session.commitTransaction();
+    session.endSession();
+
+    complaint = await Complaint.findById(id);
+    res.json(complaint);
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+
+    console.error("Error upvoting complaint:", error);
+    res
+      .status(500)
+      .json({
+        message: "Failed to upvote complaint due to an internal server error",
+      });
+  }
+});
+
+router.put("/:id/downvote", async (req, res) => {
+  const { id } = req.params;
+  const { userEmail } = req.body;
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    let complaint = await Complaint.findById(id).session(session);
+
+    if (!complaint) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json({ message: "Complaint not found" });
+    }
+
+    if (complaint.downvotedBy.includes(userEmail)) {
+      await Complaint.findByIdAndUpdate(id, {
+        $pull: { downvotedBy: userEmail },
+        $inc: { voteCount: 1 },
+      }).session(session);
+    } else {
+      await Complaint.findByIdAndUpdate(id, {
+        $addToSet: { downvotedBy: userEmail },
+        $pull: { upvotedBy: userEmail },
+        $inc: { voteCount: -1 },
+      }).session(session);
+    }
+
+    await session.commitTransaction();
+    session.endSession();
+
+    complaint = await Complaint.findById(id);
+    res.json(complaint);
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+
+    console.error("Error downvoting complaint:", error);
+    res
+      .status(500)
+      .json({
+        message: "Failed to downvote complaint due to an internal server error",
+      });
+  }
+});
+
+router.get("/AdminComplaints", async (req, res) => {
+  try {
+    const adminComplaints = await Complaint.find({ verified: false });
+    res.json(adminComplaints);
+  } catch (error) {
+    console.error("Error fetching admin complaints:", error);
+    res.status(500).json({ error: "Error fetching admin complaints" });
+  }
+});
+
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };
