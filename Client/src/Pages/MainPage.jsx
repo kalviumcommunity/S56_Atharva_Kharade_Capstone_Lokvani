@@ -20,17 +20,6 @@ const MainPage = () => {
     fetchComplaints();
   }, [currentPage]);
 
-  const debounce = (func, delay) => {
-    let timer;
-    return function (...args) {
-      clearTimeout(timer);
-      timer = setTimeout(() => func.apply(this, args), delay);
-    };
-  };
-
-  const debouncedUpvote = debounce(handleUpvote, 300);
-  const debouncedDownvote = debounce(handleDownvote, 300);
-
   const fetchComplaints = async () => {
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint`, {
@@ -159,9 +148,9 @@ const MainPage = () => {
                   </div>
                   <div className="lower-descp-funct">
                     <div className="Complaint-vote">
-                      <BiUpvote className="vote-arrows" onClick={() => debouncedUpvote(index)} />
-                      <h1>{complaint.voteCount}</h1>
-                      <BiDownvote className="vote-arrows" onClick={() => debouncedDownvote(index)} />
+                      <BiUpvote className="vote-arrows" onClick={() => handleUpvote(index)} />
+                      <h1>{((complaint.upvotedBy && complaint.upvotedBy.length) || 0) - ((complaint.downvotedBy && complaint.downvotedBy.length) || 0)}</h1>
+                      <BiDownvote className="vote-arrows" onClick={() => handleDownvote(index)} />
                     </div>
                     <div className="Complaint-comment">
                       <FaRegComment className="vote-arrows" />
