@@ -259,5 +259,16 @@ router.put("/:id/downvote", async (req, res) => {
   }
 });
 
+router.get("/AdminComplaints", async (req, res) => {
+  try {
+    const adminComplaints = await Complaint.find({ verified: false });
+    res.json(adminComplaints);
+  } catch (error) {
+    console.error("Error fetching admin complaints:", error);
+    res.status(500).json({ error: "Error fetching admin complaints" });
+  }
+});
+
+
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };

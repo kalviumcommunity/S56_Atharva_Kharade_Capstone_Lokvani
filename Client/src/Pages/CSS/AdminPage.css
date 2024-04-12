@@ -1,0 +1,100 @@
+.AdminPage-main-body {
+  height: 100vh;
+  display: flex;
+}
+
+.AdminPage-body {
+  width: calc(100% - 250px);
+  height: 100%;
+  border: 1px solid red;
+}
+
+.Admin-SearchBar {
+  height: 60px;
+  width: auto;
+  margin: 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+}
+
+.SearchBar-sort {
+  width: 180px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SearchBar-areaSelect {
+  width: 180px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SeachBar-searchInput {
+  width: 48%;
+  margin-right: 5px;
+}
+
+.Admin-Complaints {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.Admin-Complaint-box {
+  width: 45%;
+  min-height: 500px;
+  max-height: auto;
+  border: 1px solid red;
+  display: flex;
+}
+
+.Admin-Complaint-box-left {
+  width: 60%;
+  border: 1px solid black;
+}
+
+.Admin-Complaint-img {
+  height: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Admin-Complaint-title h1 {
+  font-size: 25px;
+  font-family: "Poppins", serif;
+}
+
+.Admin-Complaint-descp p {
+  font-size: 20px;
+  font-family: "Poppins", serif;
+}
+
+.Admin-Complaint-box-right{
+  width: 40%;
+  border: 1px solid black;
+}
+
+.Admin-Complaint-Functions{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.Admin-Complaint-Functions button{
+  font-size: 20px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 0px 5px;
+  margin: 10px;
+  width: 100px;
+}
