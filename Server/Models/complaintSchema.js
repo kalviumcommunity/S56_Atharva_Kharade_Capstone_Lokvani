@@ -29,18 +29,20 @@ const complaintSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    totalVotes: {
-      type: Number,
-      default: 0,
-    },
-    votedUsers: {
-      type: [String],
-      default: [],
-    },
+    upvotedBy: [
+      {
+        type: String,
+      },
+    ],
+    downvotedBy: [
+      {
+        type: String,
+      },
+    ],
   },
   { versionKey: false }
 );
 
-const Complaint = mongoose.model("complaint", complaintSchema);
+const Complaint = mongoose.model("Complaint", complaintSchema);
 
 module.exports = Complaint;

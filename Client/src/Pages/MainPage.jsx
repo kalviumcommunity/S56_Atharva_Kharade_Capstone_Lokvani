@@ -3,6 +3,7 @@ import "./CSS/MainPage.css";
 import SortBySelect from "../Components/SortBy";
 import SearchInput from "../Components/Search";
 import axios from "axios";
+import Cookies from "js-cookie"; 
 
 import { BiUpvote } from "react-icons/bi";
 import { BiDownvote } from "react-icons/bi";
@@ -14,19 +15,10 @@ const MainPage = () => {
   const [complaints, setComplaints] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [username, setUsername] = useState("");
 
   useEffect(() => {
     fetchComplaints();
-    getUsernameFromCookie();
   }, [currentPage]);
-
-  const getUsernameFromCookie = () => {
-    const usernameFromCookie = document.cookie.split("; ").find(row => row.startsWith("username="));
-    if (usernameFromCookie) {
-      setUsername(usernameFromCookie.split("=")[1]);
-    }
-  };
 
   const fetchComplaints = async () => {
     try {
@@ -47,26 +39,26 @@ const MainPage = () => {
     setCurrentPage(page);
   };
 
-  const handleUpvote = async (complaintId) => {
-    try {
-      await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint/${complaintId}/upvote`, {
-        userId: username
-      });
-      fetchComplaints();
-    } catch (error) {
-      console.error("Error upvoting complaint:", error);
+  const userEmail = Cookies.get("email");
+
+  const handleUpvote = async (index) => {
+    const updatedComplaints = [...complaints];
+    if (updatedComplaints[index].upvotedBy) {
+      updatedComplaints[index].upvotedBy.push(userEmail); 
+    } else {
+      updatedComplaints[index].upvotedBy = [userEmail];
     }
+    setComplaints(updatedComplaints);
   };
 
-  const handleDownvote = async (complaintId) => {
-    try {
-      await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint/${complaintId}/downvote`, {
-        userId: username
-      });
-      fetchComplaints();
-    } catch (error) {
-      console.error("Error downvoting complaint:", error);
+  const handleDownvote = async (index) => {
+    const updatedComplaints = [...complaints];
+    if (updatedComplaints[index].downvotedBy) {
+      updatedComplaints[index].downvotedBy.push(userEmail);
+    } else {
+      updatedComplaints[index].downvotedBy = [userEmail];
     }
+    setComplaints(updatedComplaints);
   };
 
   return (
@@ -97,10 +89,10 @@ const MainPage = () => {
                     <p>{complaint.description}</p>
                   </div>
                   <div className="lower-descp-funct">
-                    <div className="Complaint-vote" onClick={() => handleUpvote(complaint._id)}>
-                      <BiUpvote className="vote-arrows" />
-                      <h1>{complaint.totalVotes}</h1>
-                      <BiDownvote className="vote-arrows" onClick={() => handleDownvote(complaint._id)} />
+                    <div className="Complaint-vote">
+                      <BiUpvote className="vote-arrows" onClick={() => handleUpvote(index)} />
+                      <h1>{(complaint.upvotedBy && complaint.upvotedBy.length) || 0}</h1>
+                      <BiDownvote className="vote-arrows" onClick={() => handleDownvote(index)} />
                     </div>
                     <div className="Complaint-comment">
                       <FaRegComment className="vote-arrows" />

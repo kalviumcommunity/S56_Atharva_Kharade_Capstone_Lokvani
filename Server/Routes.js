@@ -195,62 +195,46 @@ router.put("/Complaint/:username", async (req, res) => {
   }
 });
 
-router.put("/Complaint/:complaintId/upvote", async (req, res) => {
-  const { complaintId } = req.params;
-  const { userId } = req.body;
+router.put("/:id/upvote", async (req, res) => {
+  const { id } = req.params;
+  const { userEmail } = req.body;
 
   try {
-    let complaint = await Complaint.findById(complaintId);
+    const complaint = await Complaint.findById(id);
 
     if (!complaint) {
       return res.status(404).json({ message: "Complaint not found" });
     }
 
-    if (complaint.votedUsers.includes(userId)) {
-      return res.status(400).json({ message: "User has already voted" });
-    }
-    if (complaint.votedUsers.includes(userId)) {
-      complaint.totalVotes += 2;
-    } else {
-      complaint.totalVotes += 1;
+    if (!complaint.upvotedBy.includes(userEmail)) {
+      complaint.upvotedBy.push(userEmail);
+      await complaint.save();
     }
 
-    complaint.votedUsers.push(userId);
-
-    await complaint.save();
-
-    res.status(200).json({ message: "Upvoted successfully", complaint });
+    res.json(complaint);
   } catch (error) {
     console.error("Error upvoting complaint:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
-router.put("/Complaint/:complaintId/downvote", async (req, res) => {
-  const { complaintId } = req.params;
-  const { userId } = req.body;
+router.put("/:id/downvote", async (req, res) => {
+  const { id } = req.params;
+  const { userEmail } = req.body;
 
   try {
-    let complaint = await Complaint.findById(complaintId);
+    const complaint = await Complaint.findById(id);
 
     if (!complaint) {
       return res.status(404).json({ message: "Complaint not found" });
     }
 
-    if (complaint.votedUsers.includes(userId)) {
-      return res.status(400).json({ message: "User has already voted" });
-    }
-    if (complaint.votedUsers.includes(userId)) {
-      complaint.totalVotes -= 2;
-    } else {
-      complaint.totalVotes -= 1;
+    if (!complaint.downvotedBy.includes(userEmail)) {
+      complaint.downvotedBy.push(userEmail);
+      await complaint.save();
     }
 
-    complaint.votedUsers.push(userId);
-
-    await complaint.save();
-
-    res.status(200).json({ message: "Downvoted successfully", complaint });
+    res.json(complaint);
   } catch (error) {
     console.error("Error downvoting complaint:", error);
     res.status(500).json({ message: "Internal server error" });
