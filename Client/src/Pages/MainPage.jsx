@@ -43,7 +43,22 @@ const MainPage = () => {
 
   const handleUpvote = async (index) => {
     try {
-      const complaint = complaints[index];
+      const updatedComplaints = [...complaints];
+      const complaint = updatedComplaints[index];
+
+      if (complaint.upvotedBy.includes(userEmail)) {
+        const emailIndex = complaint.upvotedBy.indexOf(userEmail);
+        complaint.upvotedBy.splice(emailIndex, 1);
+        complaint.voteCount -= 1;
+      } else {
+        if (complaint.downvotedBy.includes(userEmail)) {
+          const downvotedIndex = complaint.downvotedBy.indexOf(userEmail);
+          complaint.downvotedBy.splice(downvotedIndex, 1);
+          complaint.voteCount += 1;
+        }
+        complaint.upvotedBy.push(userEmail);
+        complaint.voteCount += 1;
+      }
 
       const response = await axios.put(
         `https://s56-atharva-kharade-capstone-lokvani.onrender.com/${complaint._id}/upvote`,
@@ -51,26 +66,13 @@ const MainPage = () => {
       );
 
       if (response.status === 200) {
-        const updatedComplaints = [...complaints];
-        const updatedComplaint = { ...complaint };
-
-        if (updatedComplaint.upvotedBy.includes(userEmail)) {
-          const emailIndex = updatedComplaint.upvotedBy.indexOf(userEmail);
-          updatedComplaint.upvotedBy.splice(emailIndex, 1);
-        } else {
-          const downvotedIndex = updatedComplaint.downvotedBy.indexOf(userEmail);
-          if (downvotedIndex !== -1) {
-            updatedComplaint.downvotedBy.splice(downvotedIndex, 1);
-          }
-          updatedComplaint.upvotedBy.push(userEmail);
+        setComplaints(updatedComplaints);
+      } else {
+        if (complaint.upvotedBy.includes(userEmail)) {
+          const emailIndex = complaint.upvotedBy.indexOf(userEmail);
+          complaint.upvotedBy.splice(emailIndex, 1);
+          complaint.voteCount -= 1;
         }
-        const upvoteCount = updatedComplaint.upvotedBy.length;
-        const downvoteCount = updatedComplaint.downvotedBy.length;
-        const totalCount = upvoteCount - downvoteCount;
-
-        updatedComplaint.voteCount = totalCount;
-
-        updatedComplaints[index] = updatedComplaint;
         setComplaints(updatedComplaints);
       }
     } catch (error) {
@@ -80,7 +82,22 @@ const MainPage = () => {
 
   const handleDownvote = async (index) => {
     try {
-      const complaint = complaints[index];
+      const updatedComplaints = [...complaints];
+      const complaint = updatedComplaints[index];
+
+      if (complaint.downvotedBy.includes(userEmail)) {
+        const emailIndex = complaint.downvotedBy.indexOf(userEmail);
+        complaint.downvotedBy.splice(emailIndex, 1);
+        complaint.voteCount += 1;
+      } else {
+        if (complaint.upvotedBy.includes(userEmail)) {
+          const upvotedIndex = complaint.upvotedBy.indexOf(userEmail);
+          complaint.upvotedBy.splice(upvotedIndex, 1);
+          complaint.voteCount -= 1;
+        }
+        complaint.downvotedBy.push(userEmail);
+        complaint.voteCount -= 1;
+      }
 
       const response = await axios.put(
         `https://s56-atharva-kharade-capstone-lokvani.onrender.com/${complaint._id}/downvote`,
@@ -88,35 +105,19 @@ const MainPage = () => {
       );
 
       if (response.status === 200) {
-        const updatedComplaints = [...complaints];
-        const updatedComplaint = { ...complaint };
-
-        if (updatedComplaint.downvotedBy.includes(userEmail)) {
-          const emailIndex = updatedComplaint.downvotedBy.indexOf(userEmail);
-          updatedComplaint.downvotedBy.splice(emailIndex, 1);
-        } else {
-          const upvotedIndex = updatedComplaint.upvotedBy.indexOf(userEmail);
-          if (upvotedIndex !== -1) {
-            updatedComplaint.upvotedBy.splice(upvotedIndex, 1);
-          }
-          updatedComplaint.downvotedBy.push(userEmail);
+        setComplaints(updatedComplaints);
+      } else {
+        if (complaint.downvotedBy.includes(userEmail)) {
+          const emailIndex = complaint.downvotedBy.indexOf(userEmail);
+          complaint.downvotedBy.splice(emailIndex, 1);
+          complaint.voteCount += 1;
         }
-
-        const upvoteCount = updatedComplaint.upvotedBy.length;
-        const downvoteCount = updatedComplaint.downvotedBy.length;
-        const totalCount = upvoteCount - downvoteCount;
-
-        updatedComplaint.voteCount = totalCount;
-
-        updatedComplaints[index] = updatedComplaint;
         setComplaints(updatedComplaints);
       }
     } catch (error) {
       console.error("Error downvoting complaint:", error);
     }
   };
-
-
 
   return (
     <div className="MainPage-body">

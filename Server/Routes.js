@@ -209,15 +209,14 @@ router.put("/:id/upvote", async (req, res) => {
     if (complaint.upvotedBy.includes(userEmail)) {
       await Complaint.findByIdAndUpdate(id, {
         $pull: { upvotedBy: userEmail },
+        $inc: { voteCount: -1 },
       });
     } else {
-      if (!complaint.downvotedBy.includes(userEmail)) {
-        await Complaint.findByIdAndUpdate(id, {
-          $pull: { downvotedBy: userEmail },
-        });
-      }
-      complaint.upvotedBy.push(userEmail);
-      await complaint.save();
+      await Complaint.findByIdAndUpdate(id, {
+        $addToSet: { upvotedBy: userEmail },
+        $pull: { downvotedBy: userEmail },
+        $inc: { voteCount: 1 },
+      });
     }
 
     complaint = await Complaint.findById(id);
@@ -242,15 +241,14 @@ router.put("/:id/downvote", async (req, res) => {
     if (complaint.downvotedBy.includes(userEmail)) {
       await Complaint.findByIdAndUpdate(id, {
         $pull: { downvotedBy: userEmail },
+        $inc: { voteCount: 1 },
       });
     } else {
-      if (!complaint.upvotedBy.includes(userEmail)) {
-        await Complaint.findByIdAndUpdate(id, {
-          $pull: { upvotedBy: userEmail },
-        });
-      }
-      complaint.downvotedBy.push(userEmail);
-      await complaint.save();
+      await Complaint.findByIdAndUpdate(id, {
+        $addToSet: { downvotedBy: userEmail },
+        $pull: { upvotedBy: userEmail },
+        $inc: { voteCount: -1 },
+      });
     }
 
     complaint = await Complaint.findById(id);
