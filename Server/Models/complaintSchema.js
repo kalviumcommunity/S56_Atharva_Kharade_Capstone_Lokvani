@@ -39,10 +39,14 @@ const complaintSchema = new mongoose.Schema(
         type: String,
       },
     ],
-    verified:{
+    verified: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
+    voteCount: {
+      type: Number,
+      default: 0,
+    },
   },
   { versionKey: false }
 );
