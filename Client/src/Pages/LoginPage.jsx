@@ -11,6 +11,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -213,13 +214,22 @@ const LoginPage = () => {
                 <p>Sign-in with Google</p>
               </div>
             </div>
-            <div style={{ marginTop: '15px' }}>
-              <p>
-                Don't have an account?
-                <Link to={'/SignUp'}>
-                  <u>Sign-Up</u>
-                </Link>
-              </p>
+            <div className='LoginPage-admin'>
+              <div>
+                <p>
+                  Don't have an account?
+                  <Link to={'/SignUp'}>
+                    <u>Sign-Up</u>
+                  </Link>
+                </p>
+              </div>
+              <Link to={'/AdminLogin'}>
+                <div className='LoginPage-Admin-Logo'>
+                  <MdOutlineAdminPanelSettings className='Admin-logo' />
+                  <h1>Admin</h1>
+                </div>
+              </Link>
+
             </div>
           </div>
         </div>

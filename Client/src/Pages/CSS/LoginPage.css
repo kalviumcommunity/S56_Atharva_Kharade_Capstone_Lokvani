@@ -116,3 +116,55 @@
 p{
   font-family: "Poppins", sans-serif;
 }
+
+.LoginPage-admin{
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Admin-logo{
+  font-size: 30px;
+}
+
+.LoginPage-Admin-Logo{
+  display: flex;
+  align-items: center;
+}
+
+.LoginPage-Admin-Logo:hover{
+  cursor: pointer;
+  color: #2f60b9;
+}
+
+.LoginPage-Admin-Logo h1{
+  font-family: "Poppins", sans-serif;
+  font-size: 20px;
+  margin-left: 2px;
+  font-weight: 500;
+}
+
+.LoginPage-admin p{
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+}
+
+.LoginPage-admin u{
+  margin-left: 5px;
+  color: #f46416;
+}
+
+.LoginPage-admin u:hover{
+  color: #2f60b9;
+}
+
+
+/* Admin Login Page */
+.AdminLogin-Page{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+}

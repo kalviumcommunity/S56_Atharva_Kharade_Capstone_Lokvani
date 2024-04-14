@@ -9,22 +9,24 @@ import MyComplaints from './Pages/MyComplaints';
 import CommunitiesPage from './Pages/CommunitiesPage';
 import Community from './Pages/Community';
 import AdminPage from './Pages/AdminPage';
+import AdminLogin from './Pages/AdminLogin';
 import { Routes, Route } from 'react-router-dom';
 
 const App = () => {
   return (
-    // <Routes>
-    //   <Route path="/" element={<LandingPage />} />
-    //   <Route path="/Login" element={<LoginPage />} />
-    //   <Route path="/SignUp" element={<SignUpPage />} />
-    //   <Route path="/User/*" element={<UserPage />} />
-    //   <Route path="/Complaint" element={<LogComplaint />} />
-    //   <Route path="/ProfileEdit" element={<ProfileEdit />} />
-    //   <Route path="/MyComplaints" element={<MyComplaints />} />
-    //   <Route path="/Communities" element={<CommunitiesPage />} />
-    //   <Route path="/Community" element={<Community />} />
-    // </Routes>
-    <AdminPage />
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/Login" element={<LoginPage />} />
+      <Route path="/SignUp" element={<SignUpPage />} />
+      <Route path="/User/*" element={<UserPage />} />
+      <Route path="/Complaint" element={<LogComplaint />} />
+      <Route path="/ProfileEdit" element={<ProfileEdit />} />
+      <Route path="/MyComplaints" element={<MyComplaints />} />
+      <Route path="/Communities" element={<CommunitiesPage />} />
+      <Route path="/Community" element={<Community />} />
+      <Route path="/AdminLogin" element={<AdminLogin />} />
+      <Route path="/Admin" element={<AdminPage />} />
+    </Routes>
   );
 };
 
