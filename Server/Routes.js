@@ -276,7 +276,6 @@ router.post("/AdminLogin", async (req, res) => {
     res.status(200).json({
       status: "success",
       message: "Login successful",
-      token,
       email: user.email,
     });
   } catch (error) {
