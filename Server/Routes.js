@@ -293,5 +293,33 @@ router.get("/AdminComplaints", async (req, res) => {
   }
 });
 
+router.put("/VerifyComplaint/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const complaint = await Complaint.findByIdAndUpdate(id, { verified: true });
+    if (!complaint) {
+      return res.status(404).json({ error: "Complaint not found" });
+    }
+    res.json({ message: "Complaint verified successfully" });
+  } catch (error) {
+    console.error("Error verifying complaint:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.delete("/DeleteComplaint/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const complaint = await Complaint.findByIdAndDelete(id);
+    if (!complaint) {
+      return res.status(404).json({ error: "Complaint not found" });
+    }
+    res.json({ message: "Complaint deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting complaint:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };
