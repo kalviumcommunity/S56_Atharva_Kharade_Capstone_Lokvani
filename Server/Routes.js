@@ -264,17 +264,23 @@ router.post("/AdminLogin", async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
+
     if (!user) {
       return res.status(401).json({ error: "User not found" });
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      return res.status(401).json({ error: "Password incorrect" });
+    if (!(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ error: "Password doesn't match" });
     }
+
+    res.status(200).json({
+      status: "success",
+      message: "Login successful",
+      token,
+      email: user.email,
+    });
   } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: error.message });
   }
 });
 

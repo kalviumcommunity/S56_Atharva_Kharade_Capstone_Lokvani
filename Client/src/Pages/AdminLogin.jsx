@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
 import CircularProgress from '@mui/material/CircularProgress';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import eyeIconVisible from '../Assets/visibility.png';
 import eyeIconHidden from '../Assets/hide.png';
 import axios from 'axios';
@@ -29,56 +29,25 @@ const AdminLogin = () => {
         setEmail(emailValue);
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(emailValue)) {
-            setEmailError(true);
-        } else {
-            setEmailError(false);
-        }
+        setEmailError(!emailRegex.test(emailValue));
     };
 
     const handlePasswordChange = (event) => {
         const passwordValue = event.target.value;
         setPassword(passwordValue);
-
-        if (passwordValue.length < 8) {
-            setPasswordError(true);
-        } else {
-            setPasswordError(false);
-        }
+        setPasswordError(passwordValue.length < 8);
     };
 
     const handleLogin = async () => {
-        if (!email || !password || emailError || passwordError || loading) {
-            return;
-        }
-
-        setLoading(true);
-
         try {
-            const response = await axios.post(
-                'https://s56-atharva-kharade-capstone-lokvani.onrender.com/AdminLogin',
-                { email, password }
-            );
-
-            console.log('Logged in as:', response.data);
-            toast.success('Successfully logged in!');
-
-            navigate('/Admin');
-        } catch (error) {
-            console.error('Error:', error.response.data.error);
-            if (error.response.status === 401) {
-                if (error.response.data.error === 'User not found') {
-                    toast.error('Admin not found.');
-                } else if (error.response.data.error === 'Password doesn\'t match') {
-                    toast.error('Password doesn\'t match.');
-                } else {
-                    toast.error('An error occurred while logging in.');
-                }
-            } else {
-                toast.error('An error occurred while logging in.');
-            }
-        } finally {
+            setLoading(true);
+            const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/AdminLogin', { email, password });
             setLoading(false);
+            localStorage.setItem('token', response.data.token);
+            navigate('/Admin'); 
+        } catch (error) {
+            setLoading(false);
+            toast.error(error.response.data.error);
         }
     };
 
