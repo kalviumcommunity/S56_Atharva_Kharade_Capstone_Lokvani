@@ -43,7 +43,7 @@ const AdminLogin = () => {
             setLoading(true);
             const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/AdminLogin', { email, password });
             setLoading(false);
-            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('token', response.data);
             navigate('/Admin'); 
         } catch (error) {
             setLoading(false);

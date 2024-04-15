@@ -36,6 +36,24 @@ const AdminPage = () => {
     return description;
   };
 
+  const handleVerify = async (id) => {
+    try {
+      await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/VerifyComplaint/${id}`, { verified: true });
+      fetchAdminComplaints();
+    } catch (error) {
+      console.error('Error verifying complaint:', error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/DeleteComplaint/${id}`);
+      fetchAdminComplaints();
+    } catch (error) {
+      console.error('Error deleting complaint:', error);
+    }
+  };
+
   return (
     <div className='AdminPage-main-body'>
       <AdminDashboard />
@@ -85,8 +103,8 @@ const AdminPage = () => {
                       <h1>Comments - 4</h1>
                     </div>
                     <div className="Admin-Complaint-Functions">
-                      <button>Verify</button>
-                      <button>Delete</button>
+                      <button onClick={() => handleVerify(complaint._id)}>Verify</button>
+                      <button onClick={() => handleDelete(complaint._id)}>Delete</button>
                       <button>Re-Lodge</button>
                     </div>
                   </div>

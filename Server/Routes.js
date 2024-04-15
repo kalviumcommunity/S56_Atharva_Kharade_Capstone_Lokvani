@@ -283,5 +283,15 @@ router.post("/AdminLogin", async (req, res) => {
   }
 });
 
+router.get("/AdminComplaints", async (req, res) => {
+  try {
+    const complaints = await Complaint.find({ verified: false });
+    res.json(complaints);
+  } catch (error) {
+    console.error("Error fetching complaints:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };
