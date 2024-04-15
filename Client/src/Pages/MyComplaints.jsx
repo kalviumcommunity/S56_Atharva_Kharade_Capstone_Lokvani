@@ -4,6 +4,7 @@ import UserDashboard from '../Components/UserDashboard';
 import { BiUpvote } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
 import Chip from '@mui/material/Chip';
+import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const MyComplaints = () => {
@@ -13,8 +14,8 @@ const MyComplaints = () => {
     const username = Cookies.get('username');
     const fetchComplaints = async () => {
       try {
-        const response = await fetch(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint/${username}`);
-        const data = await response.json();
+        const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint/${username}`);
+        const data = response.data;
         setComplaints(data);
       } catch (error) {
         console.error('Error fetching complaints:', error);
@@ -40,7 +41,7 @@ const MyComplaints = () => {
                   <h1>{complaint.title}</h1>
                 </div>
                 <div className="MyComplaint-img">
-                  <img src={complaint.Image} alt="Complaint Image" className='complaint-img-size'/>
+                  <img src={complaint.Image} alt="Complaint Image" className='complaint-img-size' />
                 </div>
                 <div className="MyComplaint-descp">
                   <p>{complaint.description}</p>
@@ -48,12 +49,13 @@ const MyComplaints = () => {
                 <div className="MyComplaint-function">
                   <div className="MyComplaint-upvote">
                     <BiUpvote className="vote-arrows" />
+                    <h1>{((complaint.upvotedBy && complaint.upvotedBy.length) || 0) - ((complaint.downvotedBy && complaint.downvotedBy.length) || 0)}</h1>
                   </div>
                   <div className="MyComplaint-comment">
                     <FaRegComment className="vote-arrows" />
                   </div>
                   <div className="MyComplaint-status">
-                    <Chip label="Not Verified" color="warning" />
+                    <Chip label={complaint.verified ? "Verified" : "Not Verified"} color={complaint.verified ? "success" : "warning"} />
                   </div>
                 </div>
               </div>

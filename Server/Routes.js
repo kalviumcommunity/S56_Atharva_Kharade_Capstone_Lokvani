@@ -7,10 +7,28 @@ const User = require("./Models/userSchema");
 const Complaint = require("./Models/complaintSchema");
 const upload = require("./Multer");
 const cloudinary = require("./Cloudinary");
+const rateLimit = require("express-rate-limit");
+const { ObjectId } = require('mongoose').Types;
 
 router.get("/", (req, res) => {
   res.send("SERVER WORKING!");
 });
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: "Too many login attempts, please try again later.",
+});
+
+const validateObjectId = (req, res, next) => {
+  const { id } = req.params;
+
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid complaint ID format" });
+  }
+
+  next();
+};
 
 router.post("/Signup", async (req, res) => {
   try {
@@ -195,14 +213,19 @@ router.put("/Complaint/:username", async (req, res) => {
   }
 });
 
-router.put("/:id/upvote", async (req, res) => {
+router.put("/:id/upvote", validateObjectId, async (req, res) => {
   const { id } = req.params;
   const { userEmail } = req.body;
 
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
-    let complaint = await Complaint.findById(id);
+    let complaint = await Complaint.findById(id).session(session);
 
     if (!complaint) {
+      await session.abortTransaction();
+      session.endSession();
       return res.status(404).json({ message: "Complaint not found" });
     }
 
@@ -210,31 +233,45 @@ router.put("/:id/upvote", async (req, res) => {
       await Complaint.findByIdAndUpdate(id, {
         $pull: { upvotedBy: userEmail },
         $inc: { voteCount: -1 },
-      });
+      }).session(session);
     } else {
       await Complaint.findByIdAndUpdate(id, {
         $addToSet: { upvotedBy: userEmail },
         $pull: { downvotedBy: userEmail },
         $inc: { voteCount: 1 },
-      });
+      }).session(session);
     }
+
+    await session.commitTransaction();
+    session.endSession();
 
     complaint = await Complaint.findById(id);
     res.json(complaint);
   } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+
     console.error("Error upvoting complaint:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({
+      message: "Failed to upvote complaint due to an internal server error",
+      error: error.message,
+    });
   }
 });
 
-router.put("/:id/downvote", async (req, res) => {
+router.put("/:id/downvote", validateObjectId, async (req, res) => {
   const { id } = req.params;
   const { userEmail } = req.body;
 
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
-    let complaint = await Complaint.findById(id);
+    let complaint = await Complaint.findById(id).session(session);
 
     if (!complaint) {
+      await session.abortTransaction();
+      session.endSession();
       return res.status(404).json({ message: "Complaint not found" });
     }
 
@@ -242,24 +279,33 @@ router.put("/:id/downvote", async (req, res) => {
       await Complaint.findByIdAndUpdate(id, {
         $pull: { downvotedBy: userEmail },
         $inc: { voteCount: 1 },
-      });
+      }).session(session);
     } else {
       await Complaint.findByIdAndUpdate(id, {
         $addToSet: { downvotedBy: userEmail },
         $pull: { upvotedBy: userEmail },
         $inc: { voteCount: -1 },
-      });
+      }).session(session);
     }
+
+    await session.commitTransaction();
+    session.endSession();
 
     complaint = await Complaint.findById(id);
     res.json(complaint);
   } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+
     console.error("Error downvoting complaint:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({
+      message: "Failed to downvote complaint due to an internal server error",
+      error: error.message,
+    });
   }
 });
 
-router.post("/AdminLogin", async (req, res) => {
+router.post("/AdminLogin", loginLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -269,7 +315,8 @@ router.post("/AdminLogin", async (req, res) => {
       return res.status(401).json({ error: "User not found" });
     }
 
-    if (!(await bcrypt.compare(password, user.password))) {
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
       return res.status(401).json({ error: "Password doesn't match" });
     }
 
