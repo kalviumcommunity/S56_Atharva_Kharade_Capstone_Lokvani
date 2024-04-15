@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './CSS/AdminPage.css';
 import AdminDashboard from '../Components/AdminDashboard';
 import SortBySelect from '../Components/SortBy';
@@ -34,6 +36,26 @@ const AdminPage = () => {
       );
     }
     return description;
+  };
+
+  const handleVerify = async (id) => {
+    try {
+      await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/VerifyComplaint/${id}`, { verified: true });
+      fetchAdminComplaints();
+      toast.success('Complaint verified successfully');
+    } catch (error) {
+      console.error('Error verifying complaint:', error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/DeleteComplaint/${id}`);
+      fetchAdminComplaints();
+      toast.success('Complaint deleted successfully');
+    } catch (error) {
+      console.error('Error deleting complaint:', error);
+    }
   };
 
   return (
@@ -85,8 +107,8 @@ const AdminPage = () => {
                       <h1>Comments - 4</h1>
                     </div>
                     <div className="Admin-Complaint-Functions">
-                      <button>Verify</button>
-                      <button>Delete</button>
+                      <button onClick={() => handleVerify(complaint._id)}>Verify</button>
+                      <button onClick={() => handleDelete(complaint._id)}>Delete</button>
                       <button>Re-Lodge</button>
                     </div>
                   </div>
@@ -98,6 +120,7 @@ const AdminPage = () => {
           }
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

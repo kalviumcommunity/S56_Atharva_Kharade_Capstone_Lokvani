@@ -7,10 +7,30 @@ const User = require("./Models/userSchema");
 const Complaint = require("./Models/complaintSchema");
 const upload = require("./Multer");
 const cloudinary = require("./Cloudinary");
+const rateLimit = require("express-rate-limit");
+const { ObjectId } = require('mongoose').Types;
+const mongoose = require("mongoose");
+
 
 router.get("/", (req, res) => {
   res.send("SERVER WORKING!");
 });
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: "Too many login attempts, please try again later.",
+});
+
+const validateObjectId = (req, res, next) => {
+  const { id } = req.params;
+
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid complaint ID format" });
+  }
+
+  next();
+};
 
 router.post("/Signup", async (req, res) => {
   try {
@@ -195,7 +215,7 @@ router.put("/Complaint/:username", async (req, res) => {
   }
 });
 
-router.put("/:id/upvote", async (req, res) => {
+router.put("/:id/upvote", validateObjectId, async (req, res) => {
   const { id } = req.params;
   const { userEmail } = req.body;
 
@@ -234,15 +254,14 @@ router.put("/:id/upvote", async (req, res) => {
     session.endSession();
 
     console.error("Error upvoting complaint:", error);
-    res
-      .status(500)
-      .json({
-        message: "Failed to upvote complaint due to an internal server error",
-      });
+    res.status(500).json({
+      message: "Failed to upvote complaint due to an internal server error",
+      error: error.message,
+    });
   }
 });
 
-router.put("/:id/downvote", async (req, res) => {
+router.put("/:id/downvote", validateObjectId, async (req, res) => {
   const { id } = req.params;
   const { userEmail } = req.body;
 
@@ -281,21 +300,73 @@ router.put("/:id/downvote", async (req, res) => {
     session.endSession();
 
     console.error("Error downvoting complaint:", error);
-    res
-      .status(500)
-      .json({
-        message: "Failed to downvote complaint due to an internal server error",
-      });
+    res.status(500).json({
+      message: "Failed to downvote complaint due to an internal server error",
+      error: error.message,
+    });
+  }
+});
+
+router.post("/AdminLogin", loginLimiter, async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return res.status(401).json({ error: "Password doesn't match" });
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Login successful",
+      email: user.email,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
 router.get("/AdminComplaints", async (req, res) => {
   try {
-    const adminComplaints = await Complaint.find({ verified: false });
-    res.json(adminComplaints);
+    const complaints = await Complaint.find({ verified: false });
+    res.json(complaints);
   } catch (error) {
-    console.error("Error fetching admin complaints:", error);
-    res.status(500).json({ error: "Error fetching admin complaints" });
+    console.error("Error fetching complaints:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.put("/VerifyComplaint/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const complaint = await Complaint.findByIdAndUpdate(id, { verified: true });
+    if (!complaint) {
+      return res.status(404).json({ error: "Complaint not found" });
+    }
+    res.json({ message: "Complaint verified successfully" });
+  } catch (error) {
+    console.error("Error verifying complaint:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.delete("/DeleteComplaint/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const complaint = await Complaint.findByIdAndDelete(id);
+    if (!complaint) {
+      return res.status(404).json({ error: "Complaint not found" });
+    }
+    res.json({ message: "Complaint deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting complaint:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
