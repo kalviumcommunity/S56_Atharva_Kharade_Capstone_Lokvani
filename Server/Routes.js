@@ -369,7 +369,7 @@ router.delete("/DeleteComplaint/:id", async (req, res) => {
   }
 });
 
-router.get("/Complaint/:id", validateObjectId, async (req, res) => {
+router.get("/Complaint/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const complaint = await Complaint.findById(id);

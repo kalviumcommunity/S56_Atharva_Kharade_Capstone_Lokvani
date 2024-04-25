@@ -27,7 +27,7 @@ const App = () => {
       <Route path="/Community" element={<Community />} />
       <Route path="/AdminLogin" element={<AdminLogin />} />
       <Route path="/Admin" element={<AdminPage />} />
-      <Route path="/comment/:id" element={CommentPage} />
+      <Route path="/comment/:id" element={<CommentPage/>} />
     </Routes>
   );
 };
