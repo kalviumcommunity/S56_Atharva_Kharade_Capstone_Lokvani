@@ -228,17 +228,25 @@
   font-size: 150%;
   cursor: pointer;
 }
+.comment-arrows{
+  font-size: 150%;
+  cursor: pointer;
+}
 
 .Complaint-comment {
-  margin-left: 30px;
-  display: flex;
-  width: 8%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-left: 10px;
+  width: 13%;
   border: 2px solid grey;
-  border-radius: 105px;
-  padding: 0 5px;
+  border-radius: 20px;
+  padding: 0 10px;
+}
+
+.Complaint-comment h1 {
+  font-size: 3.5vh;
+  font-family: "Poppins", serif;
 }
 
 .Complaint-comment h1 {

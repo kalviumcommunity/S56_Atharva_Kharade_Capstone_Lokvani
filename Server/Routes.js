@@ -172,8 +172,6 @@ router.get("/Complaint", async (req, res) => {
   }
 });
 
-
-
 router.get("/Complaint/:username", async (req, res) => {
   try {
     const username = req.params.username;
@@ -367,6 +365,20 @@ router.delete("/DeleteComplaint/:id", async (req, res) => {
     res.json({ message: "Complaint deleted successfully" });
   } catch (error) {
     console.error("Error deleting complaint:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/Complaint/:id", validateObjectId, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const complaint = await Complaint.findById(id);
+    if (!complaint) {
+      return res.status(404).json({ error: "Complaint not found" });
+    }
+    res.json(complaint);
+  } catch (error) {
+    console.error("Error fetching complaint:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });

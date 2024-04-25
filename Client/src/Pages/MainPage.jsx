@@ -4,6 +4,7 @@ import SortBySelect from "../Components/SortBy";
 import SearchInput from "../Components/Search";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { Link } from "react-router-dom";
 
 import { BiUpvote, BiSolidUpvote, BiDownvote, BiSolidDownvote } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
@@ -160,7 +161,8 @@ const MainPage = () => {
                       )}
                     </div>
                     <div className="Complaint-comment">
-                      <FaRegComment className="vote-arrows" />
+                    <Link to={`/comment/${complaint._id}`}><FaRegComment className="comment-arrows" /></Link>
+                      
                       <h1>4</h1>
                     </div>
                     <div className="Complaint-report">
@@ -210,4 +212,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default MainPage; 

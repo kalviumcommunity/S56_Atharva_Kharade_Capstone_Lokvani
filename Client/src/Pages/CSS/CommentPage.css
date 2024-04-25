@@ -156,7 +156,7 @@
 .Comment-Complaint-post {
   position: absolute;
   bottom: 0;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   height: 200px;
   width: 85%;
 }
