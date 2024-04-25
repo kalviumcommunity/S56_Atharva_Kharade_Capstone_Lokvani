@@ -2,7 +2,7 @@
   width: calc(100vw - 250px);
   height: 100%;
   display: flex;
-  background-color: #F5F6FA;
+  background-color: #f5f6fa;
 }
 
 .MainPage-middle {
@@ -123,28 +123,28 @@
   grid-template-columns: 1fr;
 }
 
-.middle-Complaints::-webkit-scrollbar{
+.middle-Complaints::-webkit-scrollbar {
   width: 0.5vw;
 }
 
 .middle-Complaints::-webkit-scrollbar-track {
   border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	background-color: #F5F5F5;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
 }
 
-.middle-Complaints::-webkit-scrollbar-thumb
-{
-	border-radius: 10px;
-	background-color: rgba(80, 63, 205, 0.5);
+.middle-Complaints::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(80, 63, 205, 0.5);
 }
 
-.Complaint-Box{
+.Complaint-Box {
   width: 95%;
   height: 350px;
   justify-self: center;
   margin-top: 10px;
-  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
   border-radius: 8px;
   margin-bottom: 10px;
   display: flex;
@@ -153,12 +153,12 @@
   background-color: #fff;
 }
 
-.Complaint-Box-title{
+.Complaint-Box-title {
   width: 100%;
   height: 13%;
 }
 
-.Complaint-Box-title h1{
+.Complaint-Box-title h1 {
   font-family: "Poppins", serif;
   font-size: 4.5vh;
   font-weight: 500;
@@ -167,24 +167,24 @@
   justify-content: center;
 }
 
-.Complaint-lower{
+.Complaint-lower {
   width: 100%;
   height: calc(100% - 13%);
   display: flex;
 }
 
-.Complaint-lower-descp{
+.Complaint-lower-descp {
   height: 100%;
   width: 60%;
 }
 
-.Complaint-lower-right{
+.Complaint-lower-right {
   width: 40%;
   height: 100%;
   border-radius: 8px;
 }
 
-.lower-right-img{
+.lower-right-img {
   height: 50%;
   width: 100%;
   display: flex;
@@ -192,7 +192,7 @@
   justify-content: center;
 }
 
-.lower-right-tags{
+.lower-right-tags {
   height: 50%;
   width: 100%;
   display: flex;
@@ -201,14 +201,14 @@
   padding: 20px;
 }
 
-.lower-descp-funct{
+.lower-descp-funct {
   width: 100%;
   height: 20%;
   display: flex;
   align-items: center;
 }
 
-.Complaint-vote{
+.Complaint-vote {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -219,16 +219,17 @@
   padding: 0 5px;
 }
 
-.Complaint-vote h1{
+.Complaint-vote h1 {
   font-size: 3.5vh;
   font-family: "Poppins", serif;
 }
 
-.vote-arrows{
+.vote-arrows {
   font-size: 150%;
+  cursor: pointer;
 }
 
-.Complaint-comment{
+.Complaint-comment {
   margin-left: 30px;
   display: flex;
   width: 8%;
@@ -240,26 +241,25 @@
   padding: 0 5px;
 }
 
-.Complaint-comment h1{
+.Complaint-comment h1 {
   font-size: 3.5vh;
   font-family: "Poppins", serif;
 }
 
-.Complaint-report{
+.Complaint-report {
   margin-left: 30px;
   justify-self: flex-end;
 }
-.vote-report{
+.vote-report {
   font-size: 200%;
 }
 
-.Complaint-descp{
+.Complaint-descp {
   padding: 10px;
   height: 80%;
 }
 
-
-.Comaplaint-functionalities{
+.Comaplaint-functionalities {
   position: absolute;
   width: 65%;
   height: 40px;
@@ -268,7 +268,7 @@
   align-items: center;
 }
 
-.function-reviewTag{
+.function-reviewTag {
   margin: 10px;
   height: 30px;
   width: auto;
@@ -278,14 +278,14 @@
   justify-content: center;
   background-color: rgb(27, 228, 27);
 }
-.function-reviewTag h1{
+.function-reviewTag h1 {
   font-family: "Poppins", serif;
   font-size: 15px;
   font-weight: 500;
   margin: 0 10px;
 }
 
-.function-Type{
+.function-Type {
   margin: 10px;
   height: 30px;
   width: auto;
@@ -296,14 +296,14 @@
   justify-content: center;
 }
 
-.function-Type h1{
+.function-Type h1 {
   font-family: "Poppins", serif;
   font-size: 15px;
   font-weight: 500;
   margin: 0 10px;
 }
 
-.function-vote{
+.function-vote {
   display: flex;
   width: 100px;
   justify-content: space-between;
@@ -311,7 +311,10 @@
   height: 100%;
 }
 
-.complaint-img-size{
+.complaint-img-size {
   height: 100%;
 }
 
+.arrows-fill {
+  color: #2f60b9;
+}

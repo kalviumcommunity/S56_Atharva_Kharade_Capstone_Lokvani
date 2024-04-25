@@ -8,9 +8,8 @@ const Complaint = require("./Models/complaintSchema");
 const upload = require("./Multer");
 const cloudinary = require("./Cloudinary");
 const rateLimit = require("express-rate-limit");
-const { ObjectId } = require('mongoose').Types;
+const { ObjectId } = require("mongoose").Types;
 const mongoose = require("mongoose");
-
 
 router.get("/", (req, res) => {
   res.send("SERVER WORKING!");
@@ -172,6 +171,8 @@ router.get("/Complaint", async (req, res) => {
     res.status(500).json({ error: "Error fetching complaints" });
   }
 });
+
+
 
 router.get("/Complaint/:username", async (req, res) => {
   try {

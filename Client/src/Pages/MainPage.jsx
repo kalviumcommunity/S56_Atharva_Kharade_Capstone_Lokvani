@@ -5,8 +5,7 @@ import SearchInput from "../Components/Search";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-import { BiUpvote } from "react-icons/bi";
-import { BiDownvote } from "react-icons/bi";
+import { BiUpvote, BiSolidUpvote, BiDownvote, BiSolidDownvote } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
 import { MdOutlineReport } from "react-icons/md";
 import CustomPagination from "../Components/Pagination";
@@ -148,9 +147,17 @@ const MainPage = () => {
                   </div>
                   <div className="lower-descp-funct">
                     <div className="Complaint-vote">
-                      <BiUpvote className="vote-arrows" onClick={() => handleUpvote(index)} />
+                      {complaint.upvotedBy.includes(userEmail) ? (
+                        <BiSolidUpvote className="vote-arrows arrows-fill" onClick={() => handleUpvote(index)} />
+                      ) : (
+                        <BiUpvote className="vote-arrows" onClick={() => handleUpvote(index)} />
+                      )}
                       <h1>{((complaint.upvotedBy && complaint.upvotedBy.length) || 0) - ((complaint.downvotedBy && complaint.downvotedBy.length) || 0)}</h1>
-                      <BiDownvote className="vote-arrows" onClick={() => handleDownvote(index)} />
+                      {complaint.downvotedBy.includes(userEmail) ? (
+                        <BiSolidDownvote className="vote-arrows arrows-fill" onClick={() => handleDownvote(index)} />
+                      ) : (
+                        <BiDownvote className="vote-arrows" onClick={() => handleDownvote(index)} />
+                      )}
                     </div>
                     <div className="Complaint-comment">
                       <FaRegComment className="vote-arrows" />
