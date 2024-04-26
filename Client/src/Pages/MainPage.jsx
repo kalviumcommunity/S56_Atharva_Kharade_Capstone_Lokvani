@@ -5,7 +5,6 @@ import SearchInput from "../Components/Search";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
-
 import { BiUpvote, BiSolidUpvote, BiDownvote, BiSolidDownvote } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
 import { MdOutlineReport } from "react-icons/md";
@@ -15,17 +14,19 @@ const MainPage = () => {
   const [complaints, setComplaints] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [sortBy, setSortBy] = useState("");
 
   useEffect(() => {
     fetchComplaints();
-  }, [currentPage]);
+  }, [currentPage, sortBy]);
 
   const fetchComplaints = async () => {
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint`, {
         params: {
           page: currentPage,
-          limit: 3
+          limit: 3,
+          sortBy: sortBy
         }
       });
       setComplaints(response.data.complaints);
@@ -37,6 +38,10 @@ const MainPage = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+
+  const handleSortChange = (value) => {
+    setSortBy(value);
   };
 
   const userEmail = Cookies.get("email");
@@ -125,7 +130,7 @@ const MainPage = () => {
         <div className="middle-SearchBar">
           <div className="SearchBar-left">
             <div className="SearchBar-sort">
-              <SortBySelect />
+              <SortBySelect handleChange={handleSortChange} />
             </div>
             <div className="SearchBar-areaSelect">
               <SortBySelect />
@@ -161,8 +166,8 @@ const MainPage = () => {
                       )}
                     </div>
                     <div className="Complaint-comment">
-                    <Link to={`/comment/${complaint._id}`}><FaRegComment className="comment-arrows" /></Link>
-                      
+                      <Link to={`/comment/${complaint._id}`}><FaRegComment className="comment-arrows" /></Link>
+
                       <h1>4</h1>
                     </div>
                     <div className="Complaint-report">

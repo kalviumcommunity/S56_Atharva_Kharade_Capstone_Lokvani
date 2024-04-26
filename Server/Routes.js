@@ -142,17 +142,36 @@ router.post("/Complaint", upload.single("image"), async (req, res) => {
 
 router.get("/Complaint", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 3;
-
+  const limit = parseInt(req.query.limit) || 7;
+  const sortBy = req.query.sortBy || "";
   try {
-    const startIndex = (page - 1) * limit;
+    let complaints;
+    let totalDocuments;
 
-    const complaints = await Complaint.find()
-      .limit(limit)
-      .skip(startIndex)
-      .exec();
+    if (sortBy === "most-voted") {
+      complaints = await Complaint.find()
+        .sort({ voteCount: -1 })
+        .limit(limit)
+        .skip((page - 1) * limit)
+        .exec();
 
-    const totalDocuments = await Complaint.countDocuments();
+      totalDocuments = await Complaint.countDocuments();
+    } else if (sortBy === "most-downvoted") {
+      complaints = await Complaint.find()
+        .sort({ voteCount: 1 })
+        .limit(limit)
+        .skip((page - 1) * limit)
+        .exec();
+
+      totalDocuments = await Complaint.countDocuments();
+    } else {
+      complaints = await Complaint.find()
+        .limit(limit)
+        .skip((page - 1) * limit)
+        .exec();
+
+      totalDocuments = await Complaint.countDocuments();
+    }
 
     const totalPages = Math.ceil(totalDocuments / limit);
 
