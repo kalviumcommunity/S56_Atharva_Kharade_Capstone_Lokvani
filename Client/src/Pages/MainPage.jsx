@@ -15,21 +15,29 @@ const MainPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [sortBy, setSortBy] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     fetchComplaints();
-  }, [currentPage, sortBy]);
+  }, [currentPage, sortBy, searchQuery]);
 
   const fetchComplaints = async () => {
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint`, {
         params: {
           page: currentPage,
-          limit: 3,
+          limit: 7,
           sortBy: sortBy
         }
       });
-      setComplaints(response.data.complaints);
+      let filteredComplaints = response.data.complaints;
+      if (searchQuery) {
+        filteredComplaints = filteredComplaints.filter(complaint =>
+          complaint.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+
+      setComplaints(filteredComplaints);
       setTotalPages(response.data.pagination.totalPages);
     } catch (error) {
       console.error("Error fetching complaints:", error);
@@ -42,6 +50,20 @@ const MainPage = () => {
 
   const handleSortChange = (value) => {
     setSortBy(value);
+  };
+
+  const handleSearchChange = (event) => {
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    const keywords = query.trim().toLowerCase().split(/\s+/);
+
+    const filteredComplaints = complaints.filter((complaint) => {
+      const title = complaint.title.toLowerCase();
+      return keywords.every(keyword => title.includes(keyword));
+    });
+
+    setComplaints(filteredComplaints);
   };
 
   const userEmail = Cookies.get("email");
@@ -137,7 +159,7 @@ const MainPage = () => {
             </div>
           </div>
           <div className="SeachBar-searchInput">
-            <SearchInput />
+            <SearchInput value={searchQuery} onChange={handleSearchChange} />
           </div>
         </div>
         <div className="middle-Complaints">

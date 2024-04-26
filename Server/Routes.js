@@ -180,10 +180,6 @@ router.get("/Complaint", async (req, res) => {
       currentPage: page,
       totalDocuments: totalDocuments,
     };
-
-    console.log("Total Documents:", totalDocuments);
-    console.log("Total Pages:", totalPages);
-
     res.json({ complaints, pagination });
   } catch (error) {
     console.error("Error fetching complaints:", error);
