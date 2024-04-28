@@ -386,18 +386,20 @@ router.delete("/DeleteComplaint/:id", async (req, res) => {
 router.get("/Complaint/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    console.log("Fetching complaint with ID:", id);
     const complaint = await Complaint.findById(id);
     if (!complaint) {
+      console.log("Complaint not found:", id);
       return res.status(404).json({ error: "Complaint not found" });
     }
+    console.log("Complaint found:", complaint);
     res.json(complaint);
-    console.log(complaint);
   } catch (error) {
     console.error("Error fetching complaint:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-}
-);
+});
+
 
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };
