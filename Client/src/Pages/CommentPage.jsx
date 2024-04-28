@@ -9,6 +9,7 @@ import './CSS/CommentPage.css';
 const CommentPage = () => {
     const { id } = useParams();
     const [complaint, setComplaint] = useState(null);
+    console.log(id);
 
     useEffect(() => {
         const fetchComplaint = async () => {

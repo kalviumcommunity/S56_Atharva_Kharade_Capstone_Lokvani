@@ -27,7 +27,6 @@ const validateObjectId = (req, res, next) => {
   if (!ObjectId.isValid(id)) {
     return res.status(400).json({ message: "Invalid complaint ID format" });
   }
-
   next();
 };
 
@@ -392,11 +391,13 @@ router.get("/Complaint/:id", async (req, res) => {
       return res.status(404).json({ error: "Complaint not found" });
     }
     res.json(complaint);
+    console.log(complaint);
   } catch (error) {
     console.error("Error fetching complaint:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+}
+);
 
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };
