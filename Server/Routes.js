@@ -426,6 +426,5 @@ router.put("/comment/:id", async (req, res) => {
 });
 
 
-
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };

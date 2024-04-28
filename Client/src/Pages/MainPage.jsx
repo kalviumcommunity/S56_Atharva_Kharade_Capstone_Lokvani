@@ -189,7 +189,7 @@ const MainPage = () => {
                     </div>
                     <div className="Complaint-comment">
                     <Link to={`/comment/${complaint._id}`}><FaRegComment className="comment-arrows" /></Link>
-                      <h1>4</h1>
+                      <h1>{complaint.comments.length}</h1>
                     </div>
                     <div className="Complaint-report">
                       <MdOutlineReport className="vote-report" />

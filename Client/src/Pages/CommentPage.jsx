@@ -3,18 +3,22 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import UserDashboard from '../Components/UserDashboard';
 import img from './CSS/Image-Placeholder.png';
-import { BiUpvote, BiSolidUpvote, BiDownvote, BiSolidDownvote } from "react-icons/bi";
+import { BiSolidUpvote, BiSolidDownvote } from "react-icons/bi";
 import './CSS/CommentPage.css';
+import Cookies from 'js-cookie';
+import { FaRegUserCircle } from 'react-icons/fa';
+import { IconContext } from 'react-icons';
 
 const CommentPage = () => {
     const { id } = useParams();
     const [complaint, setComplaint] = useState(null);
-    console.log(id);
+    const [commentText, setCommentText] = useState("");
+    const userEmail = Cookies.get("email");
 
     useEffect(() => {
         const fetchComplaint = async () => {
             try {
-                const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint/${id}`);
+                const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/ComplaintComment/${id}`);
                 setComplaint(response.data);
             } catch (error) {
                 console.error("Error fetching complaint:", error);
@@ -23,6 +27,20 @@ const CommentPage = () => {
 
         fetchComplaint();
     }, [id]);
+
+    const handleCommentSubmit = async () => {
+        try {
+            await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/comment/${id}`, {
+                email: userEmail,
+                comment: commentText
+            });
+            const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/ComplaintComment/${id}`);
+            setComplaint(response.data);
+            setCommentText("");
+        } catch (error) {
+            console.error("Error adding comment:", error);
+        }
+    };
 
     if (!complaint) return <div>Loading...</div>;
 
@@ -59,17 +77,52 @@ const CommentPage = () => {
                             </div>
                         </div>
                         <div className="Comment-Complaint-post">
-                            <textarea name="" id="" rows="3" placeholder='write a comment..' className='Comment-input-box'></textarea>
+                            <textarea
+                                value={commentText}
+                                onChange={(e) => setCommentText(e.target.value)}
+                                rows="3"
+                                placeholder='write a comment..'
+                                className='Comment-input-box'
+                            ></textarea>
                             <div className='Comment-btn-flex'>
-                                <button className='comment-btn'>comment</button>
+                                <button
+                                    onClick={handleCommentSubmit}
+                                    className='comment-btn'
+                                >
+                                    comment
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="Community-descp-main">
-                    <div className="Community-descp-box">
-                        {/* Display comments */}
+                <div className="Comment-descp-main">
+                    <div className="Comment-descp-box">
+                        <h1 style={{ color: "black", fontSize: "30px" }}>Comments</h1>
+                        {complaint.comments.length > 0 ? (
+                            complaint.comments.map((comment, index) => (
+                                <div key={index} className="Comment-Box">
+                                    <div className="Comment-Box-title">
+                                        <div className="Comment-Box-logo">
+                                            <IconContext.Provider value={{ color: 'black', size: '40px' }}>
+                                                <FaRegUserCircle />
+                                            </IconContext.Provider>
+                                        </div>
+                                        <h1 style={{ color: "black", fontSize: "15px" }}>{comment.email}</h1>
+                                        <h1 style={{ color: "black", fontSize: "15px" }}>
+                                            {new Date(comment.timestamp).toLocaleString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </h1>
+
+                                    </div>
+                                    <div className="Comment-Box-descp">
+                                        <p style={{ color: "black", fontSize: "20px" }}>{comment.comment}</p>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No comments yet.</p>
+                        )}
                     </div>
+
                 </div>
             </div>
         </div>
