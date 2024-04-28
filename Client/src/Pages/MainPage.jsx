@@ -4,9 +4,8 @@ import SortBySelect from "../Components/SortBy";
 import SearchInput from "../Components/Search";
 import axios from "axios";
 import Cookies from "js-cookie";
-
-import { BiUpvote } from "react-icons/bi";
-import { BiDownvote } from "react-icons/bi";
+import { Link } from "react-router-dom";
+import { BiUpvote, BiSolidUpvote, BiDownvote, BiSolidDownvote } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
 import { MdOutlineReport } from "react-icons/md";
 import CustomPagination from "../Components/Pagination";
@@ -15,20 +14,30 @@ const MainPage = () => {
   const [complaints, setComplaints] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [sortBy, setSortBy] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     fetchComplaints();
-  }, [currentPage]);
+  }, [currentPage, sortBy, searchQuery]);
 
   const fetchComplaints = async () => {
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint`, {
         params: {
           page: currentPage,
-          limit: 3
+          limit: 7,
+          sortBy: sortBy
         }
       });
-      setComplaints(response.data.complaints);
+      let filteredComplaints = response.data.complaints;
+      if (searchQuery) {
+        filteredComplaints = filteredComplaints.filter(complaint =>
+          complaint.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+
+      setComplaints(filteredComplaints);
       setTotalPages(response.data.pagination.totalPages);
     } catch (error) {
       console.error("Error fetching complaints:", error);
@@ -37,6 +46,24 @@ const MainPage = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+
+  const handleSortChange = (value) => {
+    setSortBy(value);
+  };
+
+  const handleSearchChange = (event) => {
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    const keywords = query.trim().toLowerCase().split(/\s+/);
+
+    const filteredComplaints = complaints.filter((complaint) => {
+      const title = complaint.title.toLowerCase();
+      return keywords.every(keyword => title.includes(keyword));
+    });
+
+    setComplaints(filteredComplaints);
   };
 
   const userEmail = Cookies.get("email");
@@ -125,14 +152,14 @@ const MainPage = () => {
         <div className="middle-SearchBar">
           <div className="SearchBar-left">
             <div className="SearchBar-sort">
-              <SortBySelect />
+              <SortBySelect handleChange={handleSortChange} />
             </div>
             <div className="SearchBar-areaSelect">
               <SortBySelect />
             </div>
           </div>
           <div className="SeachBar-searchInput">
-            <SearchInput />
+            <SearchInput value={searchQuery} onChange={handleSearchChange} />
           </div>
         </div>
         <div className="middle-Complaints">
@@ -148,12 +175,21 @@ const MainPage = () => {
                   </div>
                   <div className="lower-descp-funct">
                     <div className="Complaint-vote">
-                      <BiUpvote className="vote-arrows" onClick={() => handleUpvote(index)} />
+                      {complaint.upvotedBy.includes(userEmail) ? (
+                        <BiSolidUpvote className="vote-arrows arrows-fill" onClick={() => handleUpvote(index)} />
+                      ) : (
+                        <BiUpvote className="vote-arrows" onClick={() => handleUpvote(index)} />
+                      )}
                       <h1>{((complaint.upvotedBy && complaint.upvotedBy.length) || 0) - ((complaint.downvotedBy && complaint.downvotedBy.length) || 0)}</h1>
-                      <BiDownvote className="vote-arrows" onClick={() => handleDownvote(index)} />
+                      {complaint.downvotedBy.includes(userEmail) ? (
+                        <BiSolidDownvote className="vote-arrows arrows-fill" onClick={() => handleDownvote(index)} />
+                      ) : (
+                        <BiDownvote className="vote-arrows" onClick={() => handleDownvote(index)} />
+                      )}
                     </div>
                     <div className="Complaint-comment">
-                      <FaRegComment className="vote-arrows" />
+                      <Link to={`/comment/${complaint._id}`}><FaRegComment className="comment-arrows" /></Link>
+
                       <h1>4</h1>
                     </div>
                     <div className="Complaint-report">
@@ -203,4 +239,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default MainPage; 

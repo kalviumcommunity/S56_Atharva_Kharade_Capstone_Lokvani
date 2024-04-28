@@ -39,33 +39,41 @@ const AdminDashboard = () => {
                         </div>
                     </div>
 
-                    <Link to={'/ProfileEdit'}>
-                        <div className="userDetail">
-                            <IconContext.Provider value={{ color: 'black', size: '40px' }}>
-                                <FaRegUserCircle />
-                            </IconContext.Provider>
-                            <div>
-                                <h1>Admin</h1>
-                            </div>
+                    <div className="userDetail">
+                        <IconContext.Provider value={{ color: 'black', size: '40px' }}>
+                            <FaRegUserCircle />
+                        </IconContext.Provider>
+                        <div>
+                            <h1>Admin</h1>
                         </div>
-                    </Link>
+                    </div>
 
                     <div style={{ marginTop: '15px' }}>
 
-                        {/* <Link to={'/MyComplaints'}> */}
-                            <div className="AdminOptions">
-                                <div className="UserIcon">
-                                    <IconContext.Provider value={{ color: 'black', size: '35px' }}>
-                                        <GrDocumentUser />
-                                    </IconContext.Provider>
-                                </div>
-                                <div>
-                                    <h1>Complaints</h1>
-                                </div>
+                        <div className="AdminOptions">
+                            <div className="UserIcon">
+                                <IconContext.Provider value={{ color: 'black', size: '35px' }}>
+                                    <GrDocumentUser />
+                                </IconContext.Provider>
                             </div>
-                        {/* </Link> */}
+                            <div>
+                                <h1>Verification</h1>
+                            </div>
+                        </div>
+                        <Link to={'/AdminComplaints'}>
+                        <div className="AdminOptions">
+                            <div className="UserIcon">
+                                <IconContext.Provider value={{ color: 'black', size: '35px' }}>
+                                    <GrDocumentUser />
+                                </IconContext.Provider>
+                            </div>
+                            <div>
+                                <h1>Complaints</h1>
+                            </div>
+                        </div>
+                        </Link>
 
-                        <Link to={'/Communities'}>
+                        {/* <Link to={'/Communities'}> */}
                             <div className="AdminOptions">
                                 <div className="UserIcon">
                                     <IconContext.Provider value={{ color: 'black', size: '35px' }}>
@@ -76,7 +84,7 @@ const AdminDashboard = () => {
                                     <h1>Profiles</h1>
                                 </div>
                             </div>
-                        </Link>
+                        {/* </Link> */}
 
                         <div className="AdminOptions">
                             <div className="UserIcon">

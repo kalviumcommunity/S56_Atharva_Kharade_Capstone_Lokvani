@@ -8,9 +8,8 @@ const Complaint = require("./Models/complaintSchema");
 const upload = require("./Multer");
 const cloudinary = require("./Cloudinary");
 const rateLimit = require("express-rate-limit");
-const { ObjectId } = require('mongoose').Types;
+const { ObjectId } = require("mongoose").Types;
 const mongoose = require("mongoose");
-
 
 router.get("/", (req, res) => {
   res.send("SERVER WORKING!");
@@ -143,17 +142,36 @@ router.post("/Complaint", upload.single("image"), async (req, res) => {
 
 router.get("/Complaint", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 3;
-
+  const limit = parseInt(req.query.limit) || 7;
+  const sortBy = req.query.sortBy || "";
   try {
-    const startIndex = (page - 1) * limit;
+    let complaints;
+    let totalDocuments;
 
-    const complaints = await Complaint.find()
-      .limit(limit)
-      .skip(startIndex)
-      .exec();
+    if (sortBy === "most-voted") {
+      complaints = await Complaint.find()
+        .sort({ voteCount: -1 })
+        .limit(limit)
+        .skip((page - 1) * limit)
+        .exec();
 
-    const totalDocuments = await Complaint.countDocuments();
+      totalDocuments = await Complaint.countDocuments();
+    } else if (sortBy === "most-downvoted") {
+      complaints = await Complaint.find()
+        .sort({ voteCount: 1 })
+        .limit(limit)
+        .skip((page - 1) * limit)
+        .exec();
+
+      totalDocuments = await Complaint.countDocuments();
+    } else {
+      complaints = await Complaint.find()
+        .limit(limit)
+        .skip((page - 1) * limit)
+        .exec();
+
+      totalDocuments = await Complaint.countDocuments();
+    }
 
     const totalPages = Math.ceil(totalDocuments / limit);
 
@@ -162,10 +180,6 @@ router.get("/Complaint", async (req, res) => {
       currentPage: page,
       totalDocuments: totalDocuments,
     };
-
-    console.log("Total Documents:", totalDocuments);
-    console.log("Total Pages:", totalPages);
-
     res.json({ complaints, pagination });
   } catch (error) {
     console.error("Error fetching complaints:", error);
@@ -366,6 +380,20 @@ router.delete("/DeleteComplaint/:id", async (req, res) => {
     res.json({ message: "Complaint deleted successfully" });
   } catch (error) {
     console.error("Error deleting complaint:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/Complaint/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const complaint = await Complaint.findById(id);
+    if (!complaint) {
+      return res.status(404).json({ error: "Complaint not found" });
+    }
+    res.json(complaint);
+  } catch (error) {
+    console.error("Error fetching complaint:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
