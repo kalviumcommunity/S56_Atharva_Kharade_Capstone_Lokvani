@@ -11,6 +11,7 @@ import Community from './Pages/Community';
 import AdminPage from './Pages/AdminPage';
 import AdminLogin from './Pages/AdminLogin';
 import CommentPage from './Pages/CommentPage';
+import AdminComplaintPage from './Pages/AdminComplaintPage';
 import { Routes, Route } from 'react-router-dom';
 
 const App = () => {
@@ -27,7 +28,9 @@ const App = () => {
       <Route path="/Community" element={<Community />} />
       <Route path="/AdminLogin" element={<AdminLogin />} />
       <Route path="/Admin" element={<AdminPage />} />
+      <Route path="/AdminComplaints" element={<AdminComplaintPage />} />
       <Route path="/comment/:id" element={<CommentPage/>} />
+
     </Routes>
   );
 };
