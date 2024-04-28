@@ -188,8 +188,7 @@ const MainPage = () => {
                       )}
                     </div>
                     <div className="Complaint-comment">
-                      <Link to={`/comment/${complaint._id}`}><FaRegComment className="comment-arrows" /></Link>
-
+                      <FaRegComment className="comment-arrows" />
                       <h1>4</h1>
                     </div>
                     <div className="Complaint-report">
