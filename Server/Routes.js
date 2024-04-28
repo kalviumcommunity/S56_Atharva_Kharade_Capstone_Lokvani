@@ -383,22 +383,48 @@ router.delete("/DeleteComplaint/:id", async (req, res) => {
   }
 });
 
-router.get("/Complaint/:id", async (req, res) => {
-  const { id } = req.params;
+router.get("/ComplaintComment/:id", async (req, res) => {
   try {
-    console.log("Fetching complaint with ID:", id);
+    const id = req.params.id;
     const complaint = await Complaint.findById(id);
+
     if (!complaint) {
-      console.log("Complaint not found:", id);
       return res.status(404).json({ error: "Complaint not found" });
     }
-    console.log("Complaint found:", complaint);
+
     res.json(complaint);
-  } catch (error) {
-    console.error("Error fetching complaint:", error);
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+router.put("/comment/:id", async (req, res) => {
+  try {
+    const complaintId = req.params.id;
+    const { email, comment } = req.body;
+
+    const updatedComplaint = await Complaint.findByIdAndUpdate(
+      complaintId,
+      {
+        $push: {
+          comments: { email, comment }
+        }
+      },
+      { new: true }
+    );
+
+    if (!updatedComplaint) {
+      return res.status(404).json({ error: "Complaint not found" });
+    }
+
+    res.json(updatedComplaint);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 
 router.get("*", (req, res) => res.status(404).send("Page not found"));

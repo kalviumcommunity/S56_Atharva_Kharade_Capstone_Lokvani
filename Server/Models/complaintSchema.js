@@ -2,26 +2,20 @@ const mongoose = require("mongoose");
 
 const commentSchema = new mongoose.Schema(
   {
-    createdBy: {
+    email: {
       type: String,
       required: true,
     },
-    commentText: {
+    comment: {
       type: String,
       required: true,
     },
-    upvotedBy: [
-      {
-        type: String,
-      },
-    ],
-    downvotedBy: [
-      {
-        type: String,
-      },
-    ],
+    timestamp: {
+      type: Date,
+      default: Date.now,
+    },
   },
-  { versionKey: false }
+  { _id: false }
 );
 
 const complaintSchema = new mongoose.Schema(
@@ -71,12 +65,11 @@ const complaintSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    comments: [commentSchema],
+    comments: [commentSchema], 
   },
   { versionKey: false }
 );
 
 const Complaint = mongoose.model("complaint", complaintSchema);
-const Comment = mongoose.model("comment", commentSchema);
 
 module.exports = Complaint;
