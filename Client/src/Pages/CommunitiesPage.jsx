@@ -1,148 +1,47 @@
 import React from 'react'
 import './CSS/CommunitiesPage.css'
 import UserDashboard from '../Components/UserDashboard'
-import { Link } from 'react-router-dom'
 
-const CommunitiesPage = () => {
+const CommunitiesPage = async () => {
+
+    const [communities, setCommunities] = useState([])
+
+    useEffect(() => {
+        const fetchCommunities = async () => {
+            try {
+                const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community`);
+                setCommunities(response.data);
+            } catch (error) {
+                console.error("Error fetching communities:", error);
+            }
+        };
+        fetchCommunities();
+    }, []);
+
     return (
         <div className='Communities-main-body'>
             <UserDashboard />
             <div className="Communities-body">
-                <div className="CommunityPage-box">
-                    <div className="Community-box-img">
-
-                    </div>
-                    <div className="Community-box-title">
-                        <h1>Swacch Pune</h1>
-                    </div>
-                    <div className="Community-box-desc">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta facilis aspernatur voluptas maiores quia nobis perspiciatis corporis, architecto nihil eligendi?</p>
-                    </div>
-                    <div className="Community-box-function">
-                        <div className="Community-box-joinbtn">
-                            <button class="joinbtn" role="button">Join</button>
-                        </div>
-                        <div className="Community-box-members">
-                            <h1>Members - 10</h1>
-                        </div>
-                    </div>
-                </div>
-                <Link to={'/Community'}>
-                    <div className="CommunityPage-box">
+                {communities.map((community) => (
+                    <div className="CommunityPage-box" key={community.id || community._id}>
                         <div className="Community-box-img">
-
                         </div>
                         <div className="Community-box-title">
-                            <h1>Swacch Pune</h1>
+                            <h1>{community.title}</h1>
                         </div>
                         <div className="Community-box-desc">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta facilis aspernatur voluptas maiores quia nobis perspiciatis corporis, architecto nihil eligendi?</p>
+                            <p>{community.description}</p>
                         </div>
                         <div className="Community-box-function">
                             <div className="Community-box-joinbtn">
                                 <button class="joinbtn" role="button">Join</button>
                             </div>
                             <div className="Community-box-members">
-                                <h1>Members - 10</h1>
+                                <h1>Members - {community.members || 0}</h1>
                             </div>
                         </div>
                     </div>
-                </Link>
-                <div className="CommunityPage-box">
-                    <div className="Community-box-img">
-
-                    </div>
-                    <div className="Community-box-title">
-                        <h1>Swacch Pune</h1>
-                    </div>
-                    <div className="Community-box-desc">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta facilis aspernatur voluptas maiores quia nobis perspiciatis corporis, architecto nihil eligendi?</p>
-                    </div>
-                    <div className="Community-box-function">
-                        <div className="Community-box-joinbtn">
-                            <button class="joinbtn" role="button">Join</button>
-                        </div>
-                        <div className="Community-box-members">
-                            <h1>Members - 10</h1>
-                        </div>
-                    </div>
-                </div>
-                <div className="CommunityPage-box">
-                    <div className="Community-box-img">
-
-                    </div>
-                    <div className="Community-box-title">
-                        <h1>Swacch Pune</h1>
-                    </div>
-                    <div className="Community-box-desc">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta facilis aspernatur voluptas maiores quia nobis perspiciatis corporis, architecto nihil eligendi?</p>
-                    </div>
-                    <div className="Community-box-function">
-                        <div className="Community-box-joinbtn">
-                            <button class="joinbtn" role="button">Join</button>
-                        </div>
-                        <div className="Community-box-members">
-                            <h1>Members - 10</h1>
-                        </div>
-                    </div>
-                </div>
-                <div className="CommunityPage-box">
-                    <div className="Community-box-img">
-
-                    </div>
-                    <div className="Community-box-title">
-                        <h1>Swacch Pune</h1>
-                    </div>
-                    <div className="Community-box-desc">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta facilis aspernatur voluptas maiores quia nobis perspiciatis corporis, architecto nihil eligendi?</p>
-                    </div>
-                    <div className="Community-box-function">
-                        <div className="Community-box-joinbtn">
-                            <button class="joinbtn" role="button">Join</button>
-                        </div>
-                        <div className="Community-box-members">
-                            <h1>Members - 10</h1>
-                        </div>
-                    </div>
-                </div>
-                <div className="CommunityPage-box">
-                    <div className="Community-box-img">
-
-                    </div>
-                    <div className="Community-box-title">
-                        <h1>Swacch Pune</h1>
-                    </div>
-                    <div className="Community-box-desc">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta facilis aspernatur voluptas maiores quia nobis perspiciatis corporis, architecto nihil eligendi?</p>
-                    </div>
-                    <div className="Community-box-function">
-                        <div className="Community-box-joinbtn">
-                            <button class="joinbtn" role="button">Join</button>
-                        </div>
-                        <div className="Community-box-members">
-                            <h1>Members - 10</h1>
-                        </div>
-                    </div>
-                </div>
-                <div className="CommunityPage-box">
-                    <div className="Community-box-img">
-
-                    </div>
-                    <div className="Community-box-title">
-                        <h1>Swacch Pune</h1>
-                    </div>
-                    <div className="Community-box-desc">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta facilis aspernatur voluptas maiores quia nobis perspiciatis corporis, architecto nihil eligendi?</p>
-                    </div>
-                    <div className="Community-box-function">
-                        <div className="Community-box-joinbtn">
-                            <button class="joinbtn" role="button">Join</button>
-                        </div>
-                        <div className="Community-box-members">
-                            <h1>Members - 10</h1>
-                        </div>
-                    </div>
-                </div>
+                ))}
             </div>
         </div>
     )

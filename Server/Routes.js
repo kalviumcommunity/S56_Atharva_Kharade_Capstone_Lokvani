@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const User = require("./Models/userSchema");
 const Complaint = require("./Models/complaintSchema");
+const Community = require("./Models/CommunitySchema");
 const upload = require("./Multer");
 const cloudinary = require("./Cloudinary");
 const rateLimit = require("express-rate-limit");
@@ -408,8 +409,8 @@ router.put("/comment/:id", async (req, res) => {
       complaintId,
       {
         $push: {
-          comments: { email, comment }
-        }
+          comments: { email, comment },
+        },
       },
       { new: true }
     );
@@ -425,6 +426,29 @@ router.put("/comment/:id", async (req, res) => {
   }
 });
 
+router.get("/community", async (req, res) => {
+  try {
+    const communities = await Community.find();
+    res.json(communities);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("community/:name", async (req, res) => {
+  try {
+    const name = req.params.name;
+    const community = await Community.findOne({ name });
+    if (!community) {
+      return res.status(404).json({ error: "Community not found" });
+    }
+    res.json(community);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };
