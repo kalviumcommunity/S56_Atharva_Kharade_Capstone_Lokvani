@@ -436,24 +436,20 @@ router.get("/community", async (req, res) => {
   }
 });
 
-router.get("community/:name", async (req, res) => {
+router.get("/community/:name", async (req, res) => {
   try {
-    const decodedName = decodeURIComponent(req.params.name);
-
-    if (!isValidCommunityName(decodedName)) {
-      return res.status(400).json({ error: "Invalid community name" });
-    }
-    const community = await Community.findOne({ name: decodedName });
-
-    if (!community) {
-      return res.status(404).json({ error: "Community not found" });
-    }
-    res.json(community);
+      const name = decodeURIComponent(req.params.name); 
+      const community = await Community.findOne({ name });
+      if (!community) {
+          return res.status(404).json({ error: "Community not found" });
+      }
+      res.json(community);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Internal server error" });
+      console.error(err);
+      res.status(500).json({ error: "Internal server error" });
   }
 });
+
 
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };

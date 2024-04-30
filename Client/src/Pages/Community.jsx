@@ -7,8 +7,33 @@ import InputLabel from "@mui/material/InputLabel";
 import { BiUpvote } from "react-icons/bi";
 import { BiDownvote } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Community = () => {
+    const [Community, setCommuntiy] = useState([]);
+
+    const { name } = useParams();
+    useEffect(() => {
+      
+        const fetchCommunity = async () => {
+          try {
+            const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}`);
+            if (response.status === 200 && response.data) {
+              setCommuntiy(response.data);
+            } else {
+              console.error("Error fetching community:", response.statusText);
+            }
+          } catch (error) {
+            console.error("Error fetching community:", error);
+          }
+        };
+        if (name) {
+          fetchCommunity();
+        }
+      }, []);
+      
     return (
         <div className='Community-main'>
             <UserDashboard />
@@ -82,13 +107,13 @@ const Community = () => {
                 <div className="Community-descp-main">
                     <div className="Community-descp-box">
                         <div className="Community-descp-box-title">
-                            <h1>Swacch Pune</h1>
+                            <h1>{Community.name}</h1>
                         </div>
                         <div className="Community-descp-img">
                             <img src={img} alt="community-img" />
                         </div>
                         <div className='Community-descp-box-desc'>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure dolor deleniti soluta, itaque dolorem quo nam labore placeat necessitatibus eius.</p>
+                            <p>{Community.description}</p>
                         </div>
                         <div className="Community-descp-box-rules">
                             <h1>Rules</h1>
