@@ -1,10 +1,10 @@
-import React from 'react'
-import './CSS/CommunitiesPage.css'
-import UserDashboard from '../Components/UserDashboard'
+import React, { useState, useEffect } from 'react';
+import './CSS/CommunitiesPage.css';
+import UserDashboard from '../Components/UserDashboard';
+import axios from 'axios';
 
-const CommunitiesPage = async () => {
-
-    const [communities, setCommunities] = useState([])
+const CommunitiesPage = () => {
+    const [communities, setCommunities] = useState([]);
 
     useEffect(() => {
         const fetchCommunities = async () => {
@@ -15,8 +15,9 @@ const CommunitiesPage = async () => {
                 console.error("Error fetching communities:", error);
             }
         };
-        fetchCommunities();
-    }, []);
+
+        fetchCommunities(); 
+    }, []); 
 
     return (
         <div className='Communities-main-body'>
@@ -34,7 +35,7 @@ const CommunitiesPage = async () => {
                         </div>
                         <div className="Community-box-function">
                             <div className="Community-box-joinbtn">
-                                <button class="joinbtn" role="button">Join</button>
+                                <button className="joinbtn" role="button">Join</button>
                             </div>
                             <div className="Community-box-members">
                                 <h1>Members - {community.members || 0}</h1>
@@ -44,7 +45,7 @@ const CommunitiesPage = async () => {
                 ))}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default CommunitiesPage
+export default CommunitiesPage;
