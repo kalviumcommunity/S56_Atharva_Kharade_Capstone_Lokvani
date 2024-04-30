@@ -438,8 +438,13 @@ router.get("/community", async (req, res) => {
 
 router.get("community/:name", async (req, res) => {
   try {
-    const name = req.params.name;
-    const community = await Community.findOne({ name });
+    const decodedName = decodeURIComponent(req.params.name);
+
+    if (!isValidCommunityName(decodedName)) {
+      return res.status(400).json({ error: "Invalid community name" });
+    }
+    const community = await Community.findOne({ name: decodedName });
+
     if (!community) {
       return res.status(404).json({ error: "Community not found" });
     }
