@@ -186,3 +186,19 @@
 .post-comment{
   margin-left: 20px;
 }
+
+.Community-join-btn{
+  width: 150px;
+  height: 40px;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  margin-top: 20px;
+  border: 1px solid black;
+  transition: 0.3s;
+}
+
+.Community-join-btn:hover{
+  background-color: #bdbdbd;
+  color: white;
+}

@@ -438,18 +438,46 @@ router.get("/community", async (req, res) => {
 
 router.get("/community/:name", async (req, res) => {
   try {
-      const name = decodeURIComponent(req.params.name); 
-      const community = await Community.findOne({ name });
-      if (!community) {
-          return res.status(404).json({ error: "Community not found" });
-      }
-      res.json(community);
+    const name = decodeURIComponent(req.params.name);
+    const community = await Community.findOne({ name });
+    if (!community) {
+      return res.status(404).json({ error: "Community not found" });
+    }
+    res.json(community);
   } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: "Internal server error" });
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
+router.post("/community/:name/posts", async (req, res) => {
+  const communityName = decodeURIComponent(req.params.name);
+
+  try {
+    const community = await Community.findOne({ name: communityName });
+    if (!community) {
+      return res.status(404).json({ error: "Community not found" });
+    }
+
+    const { description, createdBy } = req.body;
+
+    const newPost = {
+      description,
+      createdBy,
+      comments: [],
+    };
+
+    community.posts.push(newPost);
+    await community.save();
+
+    res
+      .status(201)
+      .json({ message: "Post created successfully", post: newPost });
+  } catch (error) {
+    console.error("Error creating post:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };

@@ -1,39 +1,56 @@
-import React from 'react'
-import './CSS/Community.css'
-import UserDashboard from '../Components/UserDashboard'
-import img from './CSS/Image-Placeholder.png'
+import React, { useState, useEffect } from 'react';
+import './CSS/Community.css';
+import UserDashboard from '../Components/UserDashboard';
+import img from './CSS/Image-Placeholder.png';
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import { BiUpvote } from "react-icons/bi";
 import { BiDownvote } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const Community = () => {
-    const [Community, setCommuntiy] = useState([]);
+    const [Community, setCommunity] = useState({});
+    const [description, setDescription] = useState('');
 
     const { name } = useParams();
+
     useEffect(() => {
-      
         const fetchCommunity = async () => {
-          try {
-            const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}`);
-            if (response.status === 200 && response.data) {
-              setCommuntiy(response.data);
-            } else {
-              console.error("Error fetching community:", response.statusText);
+            try {
+                const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}`);
+                if (response.status === 200 && response.data) {
+                    setCommunity(response.data);
+                } else {
+                    console.error("Error fetching community:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Error fetching community:", error);
             }
-          } catch (error) {
-            console.error("Error fetching community:", error);
-          }
         };
         if (name) {
-          fetchCommunity();
+            fetchCommunity();
         }
-      }, []);
-      
+    }, [name]);
+
+    const handlePostSubmit = async () => {
+        const email = Cookies.get('email');
+        const postData = {
+            description,
+            createdBy: email
+        };
+
+        try {
+            const response = await axios.post(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}/posts`, postData);
+            console.log('Post created successfully:', response.data);
+            setDescription('');
+        } catch (error) {
+            console.error('Error creating post:', error.response.data);
+        }
+    };
+
     return (
         <div className='Community-main'>
             <UserDashboard />
@@ -56,6 +73,8 @@ const Community = () => {
                                     Share something with your community:
                                 </InputLabel>
                                 <TextField
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
                                     variant="outlined"
                                     fullWidth
                                     margin="normal"
@@ -69,10 +88,7 @@ const Community = () => {
                                         },
                                     }}
                                 />
-                            </div>
-                            <div className="User-post-upload">
-                                <h1>Upload Image</h1>
-                                <input type="file" />
+                                <button onClick={handlePostSubmit} style={{border:"1px solid black",padding:"5px 10px",margin:"5px",borderRadius:"5px"}}>Submit Post</button>
                             </div>
                         </div>
                         <div className="Posts-list">
@@ -112,21 +128,24 @@ const Community = () => {
                         <div className="Community-descp-img">
                             <img src={img} alt="community-img" />
                         </div>
+                        <div>
+                            <button className='Community-join-btn'>Join Community</button>
+                        </div>
                         <div className='Community-descp-box-desc'>
                             <p>{Community.description}</p>
                         </div>
                         <div className="Community-descp-box-rules">
                             <h1>Rules</h1>
                             <ul>
-                                <li>Be Respectful:  Treat all users with courtesy and avoid offensive language, personal attacks, or discriminatory remarks.
+                                <li><b>1. Be Respectful:</b>  Treat all users with courtesy and avoid offensive language, personal attacks, or discriminatory remarks.
                                 </li>
-                                <li>Stay on Topic:  Focus discussions on issues relevant to the specific community and avoid irrelevant posts or commercial promotions.
+                                <li><b>2. Stay on Topic:</b>  Focus discussions on issues relevant to the specific community and avoid irrelevant posts or commercial promotions.
                                 </li>
-                                <li>Accuracy Matters:  Provide accurate and truthful information when reporting complaints or sharing experiences.
+                                <li><b>3. Accuracy Matters:</b>  Provide accurate and truthful information when reporting complaints or sharing experiences.
                                 </li>
-                                <li>Constructive Communication:  Engage in discussions with a positive and solution-oriented approach. Focus on proposing solutions and collaborating with others.
+                                <li><b>4. Constructive Communication:</b>  Engage in discussions with a positive and solution-oriented approach. Focus on proposing solutions and collaborating with others.
                                 </li>
-                                <li>Report Abuse:  If you encounter any inappropriate content or behavior, report it to the moderators immediately for review and action.
+                                <li><b>5. Report Abuse:</b>  If you encounter any inappropriate content or behavior, report it to the moderators immediately for review and action.
                                 </li>
                             </ul>
                         </div>
