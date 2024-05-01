@@ -20,7 +20,7 @@ nav{
 .logoImg{
     height: 60px;
     width: 60px;
-    background-image: url(../Assets/Logo.png);
+    background-image: url(./Logo.png);
     background-size: cover;
 }
 

@@ -4,17 +4,17 @@ import UserDashboard from '../Components/UserDashboard';
 import img from './CSS/Image-Placeholder.png';
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
-import { BiUpvote } from "react-icons/bi";
-import { BiDownvote } from "react-icons/bi";
+import { BiUpvote, BiSolidUpvote, BiDownvote, BiSolidDownvote } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const Community = () => {
-    const [Community, setCommunity] = useState({});
+    const [community, setCommunity] = useState({});
     const [description, setDescription] = useState('');
-
+    const [posts, setPosts] = useState([]);
+    const userEmail = Cookies.get("email");
     const { name } = useParams();
 
     useEffect(() => {
@@ -23,6 +23,7 @@ const Community = () => {
                 const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}`);
                 if (response.status === 200 && response.data) {
                     setCommunity(response.data);
+                    setPosts(response.data.posts);
                 } else {
                     console.error("Error fetching community:", response.statusText);
                 }
@@ -50,6 +51,62 @@ const Community = () => {
             console.error('Error creating post:', error.response.data);
         }
     };
+
+    const handleClick = (_id) => {
+        const post = posts.find(post => post._id === _id);
+        if (post) {
+            console.log(userEmail);
+        } else {
+            console.log("Post not found");
+        }
+    }
+
+    const handleUpvote = async (_id) => {
+        try {
+            const postIndex = posts.findIndex(post => post._id === _id);
+            if (postIndex === -1) {
+                console.error("Post not found");
+                return;
+            }
+
+            const updatedPosts = [...posts];
+            const post = updatedPosts[postIndex];
+
+            if (!post.upvotedBy || !post.downvotedBy) {
+                console.error("UpvotedBy or downvotedBy is undefined");
+                return;
+            }
+
+            if (post.upvotedBy.includes(userEmail)) {
+                const emailIndex = post.upvotedBy.indexOf(userEmail);
+                post.upvotedBy.splice(emailIndex, 1);
+                post.voteCount -= 1;
+            } else {
+                if (post.downvotedBy.includes(userEmail)) {
+                    const downvotedIndex = post.downvotedBy.indexOf(userEmail);
+                    post.downvotedBy.splice(downvotedIndex, 1);
+                    post.voteCount += 1;
+                }
+                post.upvotedBy.push(userEmail);
+                post.voteCount += 1;
+            }
+
+            const response = await axios.put(
+                `https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}/posts/${_id}/upvote`,
+                { userEmail }
+            );
+
+            if (response.status === 200) {
+                updatedPosts[postIndex] = post;
+                setPosts(updatedPosts);
+            } else {
+                console.error("Error upvoting post:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error upvoting post:", error);
+        }
+    }
+
 
     return (
         <div className='Community-main'>
@@ -91,8 +148,8 @@ const Community = () => {
                         </div>
                     </div>
                     <div className="Posts-render">
-                        {Community.posts && Community.posts.map((post) => (
-                            <div className="Posts-list-item">
+                        {posts.map((post) => (
+                            <div key={post._id} className="Posts-list-item">
                                 <div className="Post-user-detail">
                                     <div className="user-detail-profile">
 
@@ -105,13 +162,17 @@ const Community = () => {
                                     <p>{post.description}</p>
                                 </div>
                                 <div className="Post-list-function">
-                                    <div className="post-upvote">
-                                        <BiUpvote className="Post-vote-arrows" />
-                                    </div>
-                                    <h1>5</h1>
-                                    <div className="post-upvote">
-                                        <BiDownvote className="Post-vote-arrows" />
-                                    </div>
+                                    {post.upvotedBy && post.upvotedBy.includes(userEmail) ? (
+                                        <BiSolidUpvote className="vote-arrows arrows-fill" onClick={() => handleUpvote(post._id)} />
+                                    ) : (
+                                        <BiUpvote className="vote-arrows" onClick={() => handleUpvote(post._id)} />
+                                    )}
+                                    <h1>{((post.upvotedBy && post.upvotedBy.length) || 0) - ((post.downvotedBy && post.downvotedBy.length) || 0)}</h1>
+                                    {post.downvotedBy && post.downvotedBy.includes(userEmail) ? (
+                                        <BiSolidDownvote className="vote-arrows arrows-fill" onClick={() => handleDownvote(post._id)} />
+                                    ) : (
+                                        <BiDownvote className="vote-arrows" onClick={() => handleDownvote(post._id)} />
+                                    )}
                                     <div className="post-comment">
                                         <FaRegComment className="Post-vote-arrows" />
                                     </div>
@@ -124,16 +185,16 @@ const Community = () => {
             <div className="Community-Comment-Page">
                 <div className="Community-descp-box">
                     <div className="Community-descp-box-title">
-                        <h1>{Community.name}</h1>
+                        <h1>{community.name}</h1>
                     </div>
                     <div className="Community-descp-img">
-                        <img src={img} alt="community-img" />
+                        <img src={img} alt="community-img" onClick={() => handleClick("66308db0523c7a2afedbdd27")} />
                     </div>
                     <div>
                         <button className='Community-join-btn'>Join Community</button>
                     </div>
                     <div className='Community-descp-box-desc'>
-                        <p>{Community.description}</p>
+                        <p>{community.description}</p>
                     </div>
                     <div className="Community-descp-box-rules">
                         <h1>Rules</h1>
