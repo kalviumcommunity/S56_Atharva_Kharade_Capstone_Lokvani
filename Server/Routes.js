@@ -581,6 +581,32 @@ router.get("/community/:name/posts/:postId", async (req, res) => {
   }
 });
 
+router.put("/community/:name/posts/:postId/comment", async (req, res) => {
+  const name = decodeURIComponent(req.params.name);
+  const { postId } = req.params;
+  const { comment, email } = req.body;
+
+  try {
+      const community = await Community.findOne({ name });
+      if (!community) {
+          return res.status(404).json({ message: "Community not found" });
+      }
+
+      const post = community.posts.find((post) => post._id.equals(postId));
+      if (!post) {
+          return res.status(404).json({ message: "Post not found" });
+      }
+
+      post.comments.push({ comment, email });
+      await community.save();
+
+      res.json(post);
+  } catch (error) {
+      console.error("Error adding comment:", error);
+      res.status(500).json({ error: "Internal server error" });
+  }
+})
+
 
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };
