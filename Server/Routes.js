@@ -559,5 +559,28 @@ router.put("/community/:name/posts/:postId/downvote", async (req, res) => {
   }
 });
 
+router.get("/community/:name/posts/:postId", async (req, res) => {
+  const name = decodeURIComponent(req.params.name);
+  const { postId } = req.params;
+
+  try {
+      const community = await Community.findOne({ name });
+      if (!community) {
+          return res.status(404).json({ message: "Community not found" });
+      }
+
+      const post = community.posts.find((post) => post._id.equals(postId));
+      if (!post) {
+          return res.status(404).json({ message: "Post not found" });
+      }
+
+      res.json(post);
+  } catch (error) {
+      console.error("Error fetching post:", error);
+      res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };

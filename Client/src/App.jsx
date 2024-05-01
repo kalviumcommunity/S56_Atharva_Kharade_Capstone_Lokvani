@@ -12,6 +12,7 @@ import AdminPage from './Pages/AdminPage';
 import AdminLogin from './Pages/AdminLogin';
 import CommentPage from './Pages/CommentPage';
 import AdminComplaintPage from './Pages/AdminComplaintPage';
+import Post from './Pages/Post';
 import { Routes, Route } from 'react-router-dom';
 
 const App = () => {
@@ -30,7 +31,7 @@ const App = () => {
       <Route path="/Admin" element={<AdminPage />} />
       <Route path="/AdminComplaints" element={<AdminComplaintPage />} />
       <Route path="/comment/:id" element={<CommentPage/>} />
-
+      <Route path="/community/:name/posts/:id" element={<Post />} />
     </Routes>
   );
 };

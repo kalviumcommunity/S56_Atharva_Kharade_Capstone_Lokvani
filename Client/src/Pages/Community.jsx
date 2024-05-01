@@ -9,6 +9,7 @@ import { FaRegComment } from "react-icons/fa";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
 
 const Community = () => {
     const [community, setCommunity] = useState({});
@@ -220,7 +221,7 @@ const Community = () => {
                                         <BiDownvote className="vote-arrows" onClick={() => handleDownvote(post._id)} />
                                     )}
                                     <div className="post-comment">
-                                        <FaRegComment className="Post-vote-arrows" />
+                                        <Link to={`/community/${name}/posts/${post._id}`}><FaRegComment className="Post-vote-arrows" /></Link>
                                     </div>
                                 </div>
                             </div>
