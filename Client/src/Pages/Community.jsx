@@ -107,6 +107,52 @@ const Community = () => {
         }
     }
 
+    const handleDownvote = async (_id) => {
+        try {
+            const postIndex = posts.findIndex(post => post._id === _id);
+            if (postIndex === -1) {
+                console.error("Post not found");
+                return;
+            }
+
+            const updatedPosts = [...posts];
+            const post = updatedPosts[postIndex];
+
+            if (!post.upvotedBy || !post.downvotedBy) {
+                console.error("UpvotedBy or downvotedBy is undefined");
+                return;
+            }
+
+            if (post.downvotedBy.includes(userEmail)) {
+                const emailIndex = post.downvotedBy.indexOf(userEmail);
+                post.downvotedBy.splice(emailIndex, 1);
+                post.voteCount += 1;
+            } else {
+                if (post.upvotedBy.includes(userEmail)) {
+                    const upvotedIndex = post.upvotedBy.indexOf(userEmail);
+                    post.upvotedBy.splice(upvotedIndex, 1);
+                    post.voteCount -= 1;
+                }
+                post.downvotedBy.push(userEmail);
+                post.voteCount -= 1;
+            }
+
+            const response = await axios.put(
+                `https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}/posts/${_id}/downvote`,
+                { userEmail }
+            );
+
+            if (response.status === 200) {
+                updatedPosts[postIndex] = post;
+                setPosts(updatedPosts);
+            } else {
+                console.error("Error downvoting post:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error downvoting post:", error);
+        }
+    }
+
 
     return (
         <div className='Community-main'>

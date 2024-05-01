@@ -520,7 +520,8 @@ router.put("/community/:name/posts/:postId/upvote", async (req, res) => {
 });
 
 router.put("/community/:name/posts/:postId/downvote", async (req, res) => {
-  const { name, postId } = req.params;
+  const name = decodeURIComponent(req.params.name);
+  const { postId } = req.params;
   const { userEmail } = req.body;
 
   try {
