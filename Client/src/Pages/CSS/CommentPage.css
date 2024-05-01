@@ -96,15 +96,6 @@
   height: 100%;
 }
 
-.User-post {
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-bottom: 2px solid #bdbdbd;
-}
-
 .Comment-Complaint-descp {
   padding: 10px;
 }
@@ -158,16 +149,6 @@
   bottom: 0;
   height: 200px;
   width: 85%;
-}
-
-.User-post-descp {
-  width: 90%;
-  margin-top: 20px;
-}
-
-.User-post-upload {
-  width: 90%;
-  margin-bottom: 20px;
 }
 
 .Comment-Complaint-post {
@@ -238,78 +219,6 @@
 
 .comment-btn:active {
   background-color: rgb(18, 24, 65);
-}
-
-.Posts-list {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
-.Posts-list-item {
-  width: 80%;
-  height: 300px;
-  border-radius: 5px;
-  margin: 20px;
-  position: relative;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-}
-
-.Post-user-detail {
-  width: 100%;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.user-detail-profile {
-  height: 60px;
-  width: 60px;
-  border: 1px solid black;
-  border-radius: 50%;
-  margin-left: 20px;
-}
-
-.user-detail-name {
-  color: black;
-  margin-left: 20px;
-}
-
-.user-detail-name h1 {
-  font-size: 30px;
-  font-family: "Poppins", sans-serif;
-}
-
-.Post-list-descp {
-  padding: 10px;
-}
-
-.Post-list-descp p {
-  font-size: 20px;
-  font-family: "Poppins", sans-serif;
-}
-
-.Post-list-function {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-}
-
-.Post-list-function h1 {
-  font-size: 25px;
-  font-weight: 600;
-  font-family: "Poppins", sans-serif;
-  margin: 0 5px;
-}
-
-.Post-vote-arrows {
-  font-size: 30px;
-}
-
-.post-comment {
-  margin-left: 20px;
 }
 
 .Comment-Box{
