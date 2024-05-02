@@ -479,5 +479,134 @@ router.post("/community/:name/posts", async (req, res) => {
   }
 });
 
+router.put("/community/:name/posts/:postId/upvote", async (req, res) => {
+  const name = decodeURIComponent(req.params.name);
+  const { postId } = req.params;
+  const { userEmail } = req.body;
+
+  try {
+    const community = await Community.findOne({ name });
+    if (!community) {
+      return res.status(404).json({ message: "Community not found" });
+    }
+
+    const post = community.posts.find((post) => post._id.equals(postId));
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (post.upvotedBy.includes(userEmail)) {
+      post.upvotedBy.pull(userEmail);
+      post.voteCount -= 1;
+    } else {
+      post.upvotedBy.push(userEmail);
+      if (post.downvotedBy.includes(userEmail)) {
+        post.downvotedBy.pull(userEmail);
+        post.voteCount += 2;
+      } else {
+        post.voteCount += 1;
+      }
+    }
+
+    await community.save();
+    res.json(post);
+  } catch (error) {
+    console.error("Error upvoting post:", error);
+    res.status(500).json({
+      message: "Failed to upvote post due to an internal server error",
+      error: error.message,
+    });
+  }
+});
+
+router.put("/community/:name/posts/:postId/downvote", async (req, res) => {
+  const name = decodeURIComponent(req.params.name);
+  const { postId } = req.params;
+  const { userEmail } = req.body;
+
+  try {
+    const community = await Community.findOne({ name });
+    if (!community) {
+      return res.status(404).json({ message: "Community not found" });
+    }
+
+    const post = community.posts.find((post) => post._id.equals(postId));
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (post.downvotedBy.includes(userEmail)) {
+      post.downvotedBy.pull(userEmail);
+      post.voteCount += 1;
+    } else {
+      post.downvotedBy.push(userEmail);
+      if (post.upvotedBy.includes(userEmail)) {
+        post.upvotedBy.pull(userEmail);
+        post.voteCount -= 2;
+      } else {
+        post.voteCount -= 1;
+      }
+    }
+
+    await community.save();
+    res.json(post);
+  } catch (error) {
+    console.error("Error downvoting post:", error);
+    res.status(500).json({
+      message: "Failed to downvote post due to an internal server error",
+      error: error.message,
+    });
+  }
+});
+
+router.get("/community/:name/posts/:postId", async (req, res) => {
+  const name = decodeURIComponent(req.params.name);
+  const { postId } = req.params;
+
+  try {
+      const community = await Community.findOne({ name });
+      if (!community) {
+          return res.status(404).json({ message: "Community not found" });
+      }
+
+      const post = community.posts.find((post) => post._id.equals(postId));
+      if (!post) {
+          return res.status(404).json({ message: "Post not found" });
+      }
+
+      res.json(post);
+  } catch (error) {
+      console.error("Error fetching post:", error);
+      res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.put("/community/:name/posts/:postId/comment", async (req, res) => {
+  const name = decodeURIComponent(req.params.name);
+  const { postId } = req.params;
+  const { comment, email } = req.body;
+
+  try {
+      const community = await Community.findOne({ name });
+      if (!community) {
+          return res.status(404).json({ message: "Community not found" });
+      }
+
+      const post = community.posts.find((post) => post._id.equals(postId));
+      if (!post) {
+          return res.status(404).json({ message: "Post not found" });
+      }
+
+      post.comments.push({ comment, email });
+      await community.save();
+
+      res.json(post);
+  } catch (error) {
+      console.error("Error adding comment:", error);
+      res.status(500).json({ error: "Internal server error" });
+  }
+})
+
+
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };

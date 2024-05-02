@@ -30,6 +30,20 @@ const PostsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  upvotedBy: [
+    {
+      type: String,
+    },
+  ],
+  downvotedBy: [
+    {
+      type: String,
+    },
+  ],
+  voteCount: {
+    type: Number,
+    default: 0,
+  },
   comments: [commentSchema],
 });
 
@@ -47,10 +61,6 @@ const CommunitySchema = new mongoose.Schema({
       type: String,
     },
   ],
-  // image: {
-  //     type: String,
-  //     required: true,
-  // },
   posts: [PostsSchema],
 });
 
