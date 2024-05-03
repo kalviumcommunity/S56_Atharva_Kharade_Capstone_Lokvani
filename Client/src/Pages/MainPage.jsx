@@ -9,6 +9,8 @@ import { BiUpvote, BiSolidUpvote, BiDownvote, BiSolidDownvote } from "react-icon
 import { FaRegComment } from "react-icons/fa";
 import { MdOutlineReport } from "react-icons/md";
 import CustomPagination from "../Components/Pagination";
+import { MdGroupAdd } from "react-icons/md";
+import { MdGroups } from "react-icons/md";
 
 const MainPage = () => {
   const [complaints, setComplaints] = useState([]);
@@ -16,9 +18,11 @@ const MainPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [sortBy, setSortBy] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [communities, setCommunities] = useState([]);
 
   useEffect(() => {
     fetchComplaints();
+    fetchCommunities();
   }, [currentPage, sortBy, searchQuery]);
 
   const fetchComplaints = async () => {
@@ -146,6 +150,16 @@ const MainPage = () => {
     }
   };
 
+  const fetchCommunities = async () => {
+    try {
+      const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/email`, { userEmail });
+      setCommunities(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching communities:", error);
+    }
+  };
+
   return (
     <div className="MainPage-body">
       <div className="MainPage-middle">
@@ -188,7 +202,7 @@ const MainPage = () => {
                       )}
                     </div>
                     <div className="Complaint-comment">
-                    <Link to={`/comment/${complaint._id}`}><FaRegComment className="comment-arrows" /></Link>
+                      <Link to={`/comment/${complaint._id}`}><FaRegComment className="comment-arrows" /></Link>
                       <h1>{complaint.comments.length}</h1>
                     </div>
                     <div className="Complaint-report">
@@ -232,7 +246,26 @@ const MainPage = () => {
         </div>
       </div>
       <div className="MainPage-side">
-        <div className="MainPage-side-Navbar"></div>
+        <div className="MainPage-side-Navbar">
+          <div className="MainPage-side">
+            <div className="MainPage-side-Navbar">
+              <h1>Suggested Communities</h1>
+              {communities.map((community, index) => (
+                <div className="MainPage-community-name" key={index}>
+                  <h1>{community.name}</h1>
+                  <div className="MainPage-community-name-function">
+                    <div className="community-function-members">
+                      <MdGroups className="community-btn-img" />
+                      <h1>{community.membersCount}</h1>
+                    </div>
+                    <button><MdGroupAdd className="Join-community-btn-img" /> Join</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   );
