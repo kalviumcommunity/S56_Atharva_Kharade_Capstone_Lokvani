@@ -10,7 +10,10 @@ import { FaRegUserCircle } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
 
 const CommentPage = () => {
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState(() => {
+        const savedPosts = localStorage.getItem('posts');
+        return savedPosts ? JSON.parse(savedPosts) : [];
+    });
     const [commentText, setCommentText] = useState('');
     const { id, name } = useParams();
 
@@ -26,22 +29,13 @@ const CommentPage = () => {
         fetchPosts();
     }, [id, name]);
 
-    const handleCommentSubmit = async (postId) => {
+    const handleCommentSubmit = async () => {
         try {
-            const response = await axios.post(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${id}/posts/${postId}/comment`, {
+            const response = await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}/posts/${id}/comment`, {
                 comment: commentText,
                 email: Cookies.get("email")
             });
-            const updatedPosts = posts.map(post => {
-                if (post._id === postId) {
-                    return {
-                        ...post,
-                        comments: [...post.comments, response.data]
-                    };
-                }
-                return post;
-            });
-            setPosts(updatedPosts);
+            setPosts(response.data);
             setCommentText('');
         } catch (error) {
             console.error("Error submitting comment:", error);
@@ -88,7 +82,7 @@ const CommentPage = () => {
                 <div className="Comment-descp-main">
                     <div className="Comment-descp-box">
                         <h1 style={{ color: "black", fontSize: "30px" }}>Comments</h1>
-                        {posts.comments.length > 0 ? (
+                        {posts.comments && posts.comments.length > 0 ? (
                             posts.comments.map((comment, index) => (
                                 <div key={index} className="Comment-Box">
                                     <div className="Comment-Box-title">
