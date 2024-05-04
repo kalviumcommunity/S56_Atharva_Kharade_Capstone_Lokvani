@@ -151,15 +151,17 @@ const MainPage = () => {
   };
 
   const fetchCommunities = async () => {
-    const userEmail = Cookies.get("email");
+    const email = Cookies.get("email");
     try {
-      const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/getCommunity`, { userEmail });
+      const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/getCommunity`, {
+        params: { email } 
+      });
       setCommunities(response.data);
       console.log(response.data);
     } catch (error) {
       console.error("Error fetching communities:", error);
     }
-    console.log(userEmail)
+    console.log(email)
   };
 
   const handleJoinCommunity = async (communityId) => {
@@ -277,7 +279,7 @@ const MainPage = () => {
                     <MdGroups className="community-btn-img" />
                     <h1>{community.membersCount}</h1>
                   </div>
-                  <button onClick={()=>handleJoinCommunity(community._id)}><MdGroupAdd className="Join-community-btn-img" /> Join</button>
+                  <button onClick={() => handleJoinCommunity(community._id)}><MdGroupAdd className="Join-community-btn-img" /> Join</button>
                 </div>
               </div>
             ))}

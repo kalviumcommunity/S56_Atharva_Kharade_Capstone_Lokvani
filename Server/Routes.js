@@ -608,8 +608,8 @@ router.put("/community/:name/posts/:postId/comment", async (req, res) => {
 });
 
 router.get("/getCommunity", async (req, res) => {
-  const { email } = req.body;
-
+  const { email } = req.query;
+  console.log(email);
   try {
     const complaints = await Community.find({
       members: { $nin: email },
