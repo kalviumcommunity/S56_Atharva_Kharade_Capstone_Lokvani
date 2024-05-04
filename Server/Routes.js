@@ -427,9 +427,12 @@ router.put("/comment/:id", async (req, res) => {
 });
 
 router.get("/community", async (req, res) => {
+  const { email } = req.query;
   try {
-    const communities = await Community.find();
-    res.json(communities);
+    const community = await Community.find({
+      members: { $in: email },
+    });
+    res.json(community);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal server error" });
@@ -609,12 +612,11 @@ router.put("/community/:name/posts/:postId/comment", async (req, res) => {
 
 router.get("/getCommunity", async (req, res) => {
   const { email } = req.query;
-  console.log(email);
   try {
-    const complaints = await Community.find({
+    const community = await Community.find({
       members: { $nin: email },
     });
-    res.json(complaints);
+    res.json(community);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
