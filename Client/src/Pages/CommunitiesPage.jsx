@@ -12,7 +12,7 @@ const CommunitiesPage = () => {
         const fetchCommunities = async () => {
             const email = Cookies.get("email");
             try {
-                const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/getCommunity`, {
+                const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community`, {
                     params: { email }
                 });
                 setCommunities(response.data);

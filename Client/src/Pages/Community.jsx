@@ -238,7 +238,7 @@ const Community = () => {
                         <img src={img} alt="community-img" onClick={() => handleClick("66308db0523c7a2afedbdd27")} />
                     </div>
                     <div>
-                        <button className='Community-join-btn'>Join Community</button>
+                        <button className='Community-join-btn'>Leave Community</button>
                     </div>
                     <div className='Community-descp-box-desc'>
                         <p>{community.description}</p>

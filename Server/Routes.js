@@ -656,5 +656,32 @@ router.post("/addMember", async (req, res) => {
   }
 });
 
+router.put("/removeMember", async (req, res) => {
+  const { communityId, email } = req.body;
+
+  try {
+    if (!ObjectId.isValid(communityId)) {
+      return res.status(400).json({ error: "Invalid community ID" });
+    }
+    const community = await Community.findById(communityId);
+    if (!community) {
+      return res.status(404).json({ error: "Community not found" });
+    }
+    if (!community.members.includes(email)) {
+      return res
+        .status(400)
+        .json({ error: "Email does not exist in members array" });
+    }
+    community.members.pull(email);
+    await community.save();
+    return res
+      .status(200)
+      .json({ message: "Member removed successfully", community });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
+
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };
