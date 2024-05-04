@@ -21,11 +21,26 @@
 .MainPage-side-Navbar {
   width: 100%;
   border-radius: 10px;
-  height: 80%;
   border: 1px solid black;
   display: flex;
   align-items: center;
   flex-direction: column;
+  overflow-y: auto;
+}
+
+.MainPage-side-Navbar::-webkit-scrollbar {
+  width: 0.3vw;
+}
+
+.MainPage-side-Navbar::-webkit-scrollbar-track {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
+}
+
+.MainPage-side-Navbar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(80, 63, 205, 0.5);
 }
 
 .side-community-title {
@@ -228,7 +243,7 @@
   font-size: 150%;
   cursor: pointer;
 }
-.comment-arrows{
+.comment-arrows {
   font-size: 150%;
   cursor: pointer;
 }
@@ -327,22 +342,24 @@
   color: #2f60b9;
 }
 
-.MainPage-community-name{
+.MainPage-community-name {
   width: 90%;
   height: auto;
   border-radius: 5px;
   padding: 0 5px;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    margin: 10px 0px;
 }
 
-.MainPage-community-name h1{
+.MainPage-community-name h1 {
   font-size: 20px;
   font-family: "Poppins", sans-serif;
   font-weight: 500;
   text-align: center;
 }
 
-.MainPage-community-name button{
+.MainPage-community-name button {
   width: 40%;
   height: 30px;
   background-color: #f5f6fa;
@@ -356,16 +373,16 @@
   align-items: center;
   justify-content: space-around;
   color: #2f60b9;
-  transition: .3s;
+  transition: 0.3s;
 }
 
-.MainPage-community-name button:hover{
+.MainPage-community-name button:hover {
   background-color: #2f60b9;
   color: #f5f6fa;
   border: #2f60b9 3px solid;
 }
 
-.Join-community-btn-img{
+.Join-community-btn-img {
   width: 20px;
   height: 100%;
   display: flex;
@@ -373,7 +390,7 @@
   justify-content: center;
 }
 
-.community-btn-img{
+.community-btn-img {
   width: 30px;
   height: 100%;
   display: flex;
@@ -382,7 +399,7 @@
   color: #2f60b9;
 }
 
-.MainPage-community-name-function{
+.MainPage-community-name-function {
   width: 100%;
   height: 50px;
   display: flex;
@@ -391,7 +408,7 @@
   align-items: center;
 }
 
-.community-function-members{
+.community-function-members {
   width: 30%;
   display: flex;
   justify-content: space-around;

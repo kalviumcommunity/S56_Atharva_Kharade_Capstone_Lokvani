@@ -151,6 +151,7 @@ const MainPage = () => {
   };
 
   const fetchCommunities = async () => {
+    const userEmail = Cookies.get("email");
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/getCommunity`, { userEmail });
       setCommunities(response.data);
@@ -160,6 +161,24 @@ const MainPage = () => {
     }
     console.log(userEmail)
   };
+
+  const handleJoinCommunity = async (communityId) => {
+    const email = Cookies.get("email");
+    try {
+      const response = await axios.post(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/addMember`, {
+        communityId,
+        email
+      });
+
+      if (response.status === 200) {
+        fetchCommunities();
+        console.log(response.data)
+      }
+    } catch (error) {
+      console.error("Error joining community:", error);
+    }
+    // console.log(communityId)
+  }
 
   return (
     <div className="MainPage-body">
@@ -247,25 +266,22 @@ const MainPage = () => {
         </div>
       </div>
       <div className="MainPage-side">
-        <div className="MainPage-side-Navbar">
-          <div className="MainPage-side">
-            <div className="MainPage-side-Navbar">
-              <h1>Suggested Communities</h1>
-              {communities.map((community, index) => (
-                <div className="MainPage-community-name" key={index}>
-                  <h1>{community.name}</h1>
-                  <div className="MainPage-community-name-function">
-                    <div className="community-function-members">
-                      <MdGroups className="community-btn-img" />
-                      <h1>{community.membersCount}</h1>
-                    </div>
-                    <button><MdGroupAdd className="Join-community-btn-img" /> Join</button>
+        <div className="MainPage-side">
+          <div className="MainPage-side-Navbar">
+            <h1>Suggested Communities</h1>
+            {communities.map((community, index) => (
+              <div className="MainPage-community-name" key={index}>
+                <h1>{community.name}</h1>
+                <div className="MainPage-community-name-function">
+                  <div className="community-function-members">
+                    <MdGroups className="community-btn-img" />
+                    <h1>{community.membersCount}</h1>
                   </div>
+                  <button onClick={()=>handleJoinCommunity(community._id)}><MdGroupAdd className="Join-community-btn-img" /> Join</button>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-
         </div>
       </div>
     </div>

@@ -612,9 +612,8 @@ router.get("/getCommunity", async (req, res) => {
 
   try {
     const complaints = await Community.find({
-      members: { $ne: email },
+      members: { $nin: email },
     });
-
     res.json(complaints);
   } catch (error) {
     console.error(error);
@@ -622,32 +621,36 @@ router.get("/getCommunity", async (req, res) => {
   }
 });
 
-router.post('/addMember', async (req, res) => {
+router.post("/addMember", async (req, res) => {
   const { communityId, email } = req.body;
 
   try {
     if (!ObjectId.isValid(communityId)) {
-      return res.status(400).json({ error: 'Invalid community ID' });
+      return res.status(400).json({ error: "Invalid community ID" });
     }
 
     const community = await Community.findById(communityId);
 
     if (!community) {
-      return res.status(404).json({ error: 'Community not found' });
+      return res.status(404).json({ error: "Community not found" });
     }
 
     if (community.members.includes(email)) {
-      return res.status(400).json({ error: 'Email already exists in members array' });
+      return res
+        .status(400)
+        .json({ error: "Email already exists in members array" });
     }
 
     community.members.push(email);
 
     await community.save();
 
-    return res.status(200).json({ message: 'Member added successfully', community });
+    return res
+      .status(200)
+      .json({ message: "Member added successfully", community });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: 'Server error' });
+    return res.status(500).json({ error: "Server error" });
   }
 });
 
