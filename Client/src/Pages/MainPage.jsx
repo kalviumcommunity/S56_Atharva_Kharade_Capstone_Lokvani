@@ -152,12 +152,13 @@ const MainPage = () => {
 
   const fetchCommunities = async () => {
     try {
-      const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/email`, { userEmail });
+      const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/getCommunity`, { userEmail });
       setCommunities(response.data);
       console.log(response.data);
     } catch (error) {
       console.error("Error fetching communities:", error);
     }
+    console.log(userEmail)
   };
 
   return (

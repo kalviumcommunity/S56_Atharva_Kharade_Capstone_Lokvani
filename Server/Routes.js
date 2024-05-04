@@ -607,7 +607,7 @@ router.put("/community/:name/posts/:postId/comment", async (req, res) => {
   }
 });
 
-router.get("/community/email", async (req, res) => {
+router.get("/getCommunity", async (req, res) => {
   const { email } = req.body;
 
   try {
@@ -622,7 +622,7 @@ router.get("/community/email", async (req, res) => {
   }
 });
 
-router.post('/communities/addmember', async (req, res) => {
+router.post('/addMember', async (req, res) => {
   const { communityId, email } = req.body;
 
   try {
