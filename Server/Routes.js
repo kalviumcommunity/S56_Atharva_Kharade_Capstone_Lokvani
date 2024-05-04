@@ -427,9 +427,12 @@ router.put("/comment/:id", async (req, res) => {
 });
 
 router.get("/community", async (req, res) => {
+  const { email } = req.query;
   try {
-    const communities = await Community.find();
-    res.json(communities);
+    const community = await Community.find({
+      members: { $in: email },
+    });
+    res.json(community);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal server error" });
@@ -564,20 +567,20 @@ router.get("/community/:name/posts/:postId", async (req, res) => {
   const { postId } = req.params;
 
   try {
-      const community = await Community.findOne({ name });
-      if (!community) {
-          return res.status(404).json({ message: "Community not found" });
-      }
+    const community = await Community.findOne({ name });
+    if (!community) {
+      return res.status(404).json({ message: "Community not found" });
+    }
 
-      const post = community.posts.find((post) => post._id.equals(postId));
-      if (!post) {
-          return res.status(404).json({ message: "Post not found" });
-      }
+    const post = community.posts.find((post) => post._id.equals(postId));
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
 
-      res.json(post);
+    res.json(post);
   } catch (error) {
-      console.error("Error fetching post:", error);
-      res.status(500).json({ error: "Internal server error" });
+    console.error("Error fetching post:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -587,26 +590,98 @@ router.put("/community/:name/posts/:postId/comment", async (req, res) => {
   const { comment, email } = req.body;
 
   try {
-      const community = await Community.findOne({ name });
-      if (!community) {
-          return res.status(404).json({ message: "Community not found" });
-      }
+    const community = await Community.findOne({ name });
+    if (!community) {
+      return res.status(404).json({ message: "Community not found" });
+    }
 
-      const post = community.posts.find((post) => post._id.equals(postId));
-      if (!post) {
-          return res.status(404).json({ message: "Post not found" });
-      }
+    const post = community.posts.find((post) => post._id.equals(postId));
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
 
-      post.comments.push({ comment, email });
-      await community.save();
+    post.comments.push({ comment, email });
+    await community.save();
 
-      res.json(post);
+    res.json(post);
   } catch (error) {
-      console.error("Error adding comment:", error);
-      res.status(500).json({ error: "Internal server error" });
+    console.error("Error adding comment:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
-})
+});
 
+router.get("/getCommunity", async (req, res) => {
+  const { email } = req.query;
+  try {
+    const community = await Community.find({
+      members: { $nin: email },
+    });
+    res.json(community);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.post("/addMember", async (req, res) => {
+  const { communityId, email } = req.body;
+
+  try {
+    if (!ObjectId.isValid(communityId)) {
+      return res.status(400).json({ error: "Invalid community ID" });
+    }
+
+    const community = await Community.findById(communityId);
+
+    if (!community) {
+      return res.status(404).json({ error: "Community not found" });
+    }
+
+    if (community.members.includes(email)) {
+      return res
+        .status(400)
+        .json({ error: "Email already exists in members array" });
+    }
+
+    community.members.push(email);
+
+    await community.save();
+
+    return res
+      .status(200)
+      .json({ message: "Member added successfully", community });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.put("/removeMember", async (req, res) => {
+  const { communityId, email } = req.body;
+
+  try {
+    if (!ObjectId.isValid(communityId)) {
+      return res.status(400).json({ error: "Invalid community ID" });
+    }
+    const community = await Community.findById(communityId);
+    if (!community) {
+      return res.status(404).json({ error: "Community not found" });
+    }
+    if (!community.members.includes(email)) {
+      return res
+        .status(400)
+        .json({ error: "Email does not exist in members array" });
+    }
+    community.members.pull(email);
+    await community.save();
+    return res
+      .status(200)
+      .json({ message: "Member removed successfully", community });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
 
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };
