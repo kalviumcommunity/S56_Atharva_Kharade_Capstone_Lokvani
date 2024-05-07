@@ -108,6 +108,23 @@ router.post("/UsernameCheck", async (req, res) => {
   }
 });
 
+router.post("/GoogleLogin", async (req, res) => {
+  try {
+    const { email } = req.body;
+    const Data = await User.findOne({ email: email });
+    if (!Data) {
+      return res.status(401).json({ error: "User not found" });
+    }
+    res.status(200).json({
+      status: "success",
+      message: "Login successful",
+      username: Data.username,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.post("/Login", async (req, res) => {
   try {
     const { username, password } = req.body;

@@ -88,17 +88,16 @@ const LoginPage = () => {
   };
   const handleGoogleLoginSuccess = async (credentialResponse) => {
     const decoded = jwtDecode(credentialResponse.credential);
-    const password = "google"
 
-    const { name, email } = decoded;
+    const { email } = decoded;
 
     try {
       const response = await axios.post(
-        'https://s56-atharva-kharade-capstone-lokvani.onrender.com/login',
-        { username: name, password }
+        'https://s56-atharva-kharade-capstone-lokvani.onrender.com/GoogleLogin',
+        { email: email }
       );
       console.log("Success:", response.data);
-      Cookies.set('username', name);
+      Cookies.set('username', response.data.username);
       Cookies.set('email', email);
       navigate('/User');
     } catch (error) {
