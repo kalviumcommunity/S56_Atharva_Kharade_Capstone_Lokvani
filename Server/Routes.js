@@ -69,6 +69,23 @@ router.post("/Signup", async (req, res) => {
   }
 });
 
+router.get("/GoogleSignup", async (req, res) => {
+  try {
+    const { email } = req.query;
+
+    const existingUserEmail = await User.findOne({ email });
+    if (existingUserEmail) {
+      return res.status(400).json({ error: "Email already exists!" });
+    }
+    else{
+      return res.status(200).json({ message: "Email does not exist" });
+    }
+
+  } catch(error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.post("/Login", async (req, res) => {
   try {
     const { username, password } = req.body;

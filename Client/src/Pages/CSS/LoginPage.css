@@ -85,16 +85,18 @@
   color: rgba(0, 0, 0, 0.3);
 }
 
-.google-btn{
-    height: 50px;
+.google-login-button{
+    height: 60px;
     width: 100%;
-    border:1px solid black ;
     border-radius: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 15px;
-    cursor: pointer;
+}
+
+.GoogleLoginPage-Body{
+  width: 470px;
 }
 
 .google-btn:hover{
