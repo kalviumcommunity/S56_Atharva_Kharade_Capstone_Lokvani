@@ -76,12 +76,34 @@ router.get("/GoogleSignup", async (req, res) => {
     const existingUserEmail = await User.findOne({ email });
     if (existingUserEmail) {
       return res.status(400).json({ error: "Email already exists!" });
-    }
-    else{
+    } else {
       return res.status(200).json({ message: "Email does not exist" });
     }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
-  } catch(error) {
+router.post("/UsernameCheck", async (req, res) => {
+  try {
+    const existingUsername = await User.findOne({
+      username: req.body.username,
+    });
+    if (existingUsername) {
+      return res.status(400).json({
+        error: "Username already exists! Please choose a different username.",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+    const newUser = await User.create({
+      email: req.body.email,
+      password: hashedPassword,
+      username: req.body.username,
+    });
+    res.status(201).json({ newUser });
+  } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });

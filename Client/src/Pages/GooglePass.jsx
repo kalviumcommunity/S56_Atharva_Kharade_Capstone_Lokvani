@@ -13,14 +13,20 @@ import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
 import { MdOutlineEditOff, MdOutlineModeEdit } from "react-icons/md";
 
-const GooglePass = ({ GoogleUsername }) => {
+const GooglePass = () => {
     const [usernameEditable, setUsernameEditable] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState(false);
     const [username, setUsername] = useState('');
     const [usernameError, setUsernameError] = useState(false);
+    const navigate = useNavigate();
 
+    const initialUsername = Cookies.get('username');
+
+    useEffect(() => {
+        setUsername(initialUsername);
+    }, [initialUsername]);
 
     const handlePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -48,6 +54,42 @@ const GooglePass = ({ GoogleUsername }) => {
 
     const handleEditUsername = () => {
         setUsernameEditable(!usernameEditable);
+    };
+
+    const handleSignUp = async () => {
+        const email = Cookies.get('email');
+        if (!username || !email || !password) {
+            toast.warn("Please fill all input boxes.");
+            return;
+        }
+
+        if (usernameError || passwordError) {
+            toast.error("Please correct the errors before proceeding.");
+            return;
+        }
+
+        try {
+            const response = await axios.post(
+                "https://s56-atharva-kharade-capstone-lokvani.onrender.com/UsernameCheck",
+                { email, password, username }
+            );
+
+            console.log("Success:", response.data);
+            Cookies.set('username', username);
+            navigate('/User');
+        } catch (error) {
+            if (error.response.status === 400) {
+                if (error.response.data.error === "Email already exists!") {
+                    toast.warning("Email already exists. Please log in instead.");
+                } else if (error.response.data.error === "Username already exists! Please choose a different username.") {
+                    toast.warning("Username already exists. Please choose a different username.");
+                } else {
+                    toast.error("An error occurred while registering User.");
+                }
+            } else {
+                toast.error("An error occurred while registering User.");
+            }
+        }
     };
 
     return (
@@ -88,10 +130,9 @@ const GooglePass = ({ GoogleUsername }) => {
                             margin="normal"
                             disabled={!usernameEditable}
                             value={username}
-                            onChange={(event) => {
-                                handleUsernameChange(event);
-                            }}
+                            onChange={handleUsernameChange}
                             error={usernameError}
+                            placeholder="Enter your username"
                             helperText={
                                 usernameError
                                     ? 'Username should be at least 4 characters long.'
@@ -163,8 +204,8 @@ const GooglePass = ({ GoogleUsername }) => {
                         }}
                     />
                     <div className="LoginPage-btn">
-                        <button className="Login-btn">
-                            LOGIN
+                        <button className="Login-btn" onClick={handleSignUp}>
+                            Signup
                         </button>
                     </div>
 

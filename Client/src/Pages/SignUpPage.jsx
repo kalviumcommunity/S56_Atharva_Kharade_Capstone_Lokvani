@@ -97,14 +97,14 @@ const SignUpPage = () => {
 
         const { email, name } = decoded;
         try {
-            const response = await axios.post(
+            const response = await axios.get(
                 "https://s56-atharva-kharade-capstone-lokvani.onrender.com/GoogleSignup",
-                { email }
+                { params: { email } }
             );
             console.log("Success:", response.data);
             Cookies.set("username", name);
             Cookies.set("email", email);
-            navigate("/GooglePassword", { state: { username: name } });
+            navigate("/GooglePassword");
         } catch (error) {
             console.error("Error:", error.response.data);
             toast.error(`${error.response.data.error}`);
