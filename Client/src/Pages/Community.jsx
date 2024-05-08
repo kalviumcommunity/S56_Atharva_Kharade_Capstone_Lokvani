@@ -29,7 +29,7 @@ const Community = () => {
         try {
           const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
             headers: {
-              Authorization: `Bearer ${token}`
+              Authorization: token
             }
           });
           console.log(response.data);
@@ -60,10 +60,9 @@ const Community = () => {
     }, [name]);
 
     const handlePostSubmit = async () => {
-        const email = Cookies.get('email');
         const postData = {
             description,
-            createdBy: email
+            createdBy: userEmail
         };
 
         try {

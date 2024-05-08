@@ -75,7 +75,6 @@ const GooglePass = () => {
             );
 
             console.log("Success:", response.data);
-            Cookies.set('username', username);
             navigate('/User');
         } catch (error) {
             if (error.response.status === 400) {

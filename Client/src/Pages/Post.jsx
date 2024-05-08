@@ -29,7 +29,7 @@ const CommentPage = () => {
         try {
           const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
             headers: {
-              Authorization: `Bearer ${token}`
+              Authorization: token
             }
           });
           console.log(response.data);

@@ -26,7 +26,7 @@ const CommentPage = () => {
         try {
           const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
             headers: {
-              Authorization: `Bearer ${token}`
+              Authorization: token
             }
           });
           console.log(response.data);
@@ -53,7 +53,7 @@ const CommentPage = () => {
     const handleCommentSubmit = async () => {
         try {
             await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/comment/${id}`, {
-                email: userEmail,
+                email: email,
                 comment: commentText
             });
             const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/ComplaintComment/${id}`);

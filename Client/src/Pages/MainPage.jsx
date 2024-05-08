@@ -20,6 +20,7 @@ const MainPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [communities, setCommunities] = useState([]);
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     fetchComplaints();
@@ -84,9 +85,9 @@ const MainPage = () => {
           Authorization: token
         }
       });
-      console.log(response.data);
       setEmail(response.data.email);
       setUsername(response.data.username);
+      fetchCommunities(response.data.email);
     } catch (error) {
       console.error("Error fetching user details:", error);
     }
@@ -170,7 +171,7 @@ const MainPage = () => {
     }
   };
 
-  const fetchCommunities = async () => {
+  const fetchCommunities = async (email) => {
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/getCommunity`, {
         params: { email }
@@ -180,8 +181,9 @@ const MainPage = () => {
     } catch (error) {
       console.error("Error fetching communities:", error);
     }
-    console.log(email)
+    console.log(email);
   };
+
 
   const handleJoinCommunity = async (communityId) => {
     try {

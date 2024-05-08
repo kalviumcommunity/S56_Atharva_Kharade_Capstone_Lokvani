@@ -27,10 +27,9 @@ const UserDashboard = () => {
         try {
           const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
             headers: {
-              Authorization: `Bearer ${token}`
+              Authorization: token
             }
           });
-          console.log(response.data);
           setEmail(response.data.email);
           setUsername(response.data.username);
         } catch (error) {

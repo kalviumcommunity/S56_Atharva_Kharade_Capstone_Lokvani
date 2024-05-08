@@ -10,6 +10,7 @@ import Cookies from 'js-cookie';
 const MyComplaints = () => {
   const [complaints, setComplaints] = useState([]);
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     handleUserDetails();
@@ -20,7 +21,7 @@ const MyComplaints = () => {
     try {
       const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: token
         }
       });
       console.log(response.data);
@@ -29,21 +30,22 @@ const MyComplaints = () => {
     } catch (error) {
       console.error("Error fetching user details:", error);
     }
+    fetchComplaints();
   };
 
   useEffect(() => {
-    const fetchComplaints = async () => {
-      try {
-        const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint/${username}`);
-        const data = response.data;
-        setComplaints(data);
-      } catch (error) {
-        console.error('Error fetching complaints:', error);
-      }
-    };
-
     fetchComplaints();
   }, []);
+  
+  const fetchComplaints = async () => {
+    try {
+      const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint/${username}`);
+      const data = response.data;
+      setComplaints(data);
+    } catch (error) {
+      console.error('Error fetching complaints:', error);
+    }
+  };
 
   return (
     <>
@@ -55,7 +57,7 @@ const MyComplaints = () => {
               <p>No complaints logged by you.</p>
             </div>
           ) : (
-            complaints.map(complaint => (
+            complaints.complaints.map(complaint => (
               <div key={complaint._id} className="MyComplaint-complaint-box">
                 <div className="MyComplaint-box-title">
                   <h1>{complaint.title}</h1>

@@ -20,31 +20,31 @@ const CommunitiesPage = () => {
         try {
           const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
             headers: {
-              Authorization: `Bearer ${token}`
+              Authorization: token
             }
           });
-          console.log(response.data);
           setEmail(response.data.email);
           setUsername(response.data.username);
+          fetchCommunities(response.data.email);
         } catch (error) {
           console.error("Error fetching user details:", error);
         }
       };
 
-    useEffect(() => {
-        const fetchCommunities = async () => {
-            try {
-                const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community`, {
-                    params: { email }
-                });
-                setCommunities(response.data);
-            } catch (error) {
-                console.error("Error fetching communities:", error);
-            }
-        };
 
-        fetchCommunities();
-    }, []);
+      const fetchCommunities = async (email) => {
+        try {
+          const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community`, {
+            params: { email }
+          });
+          setCommunities(response.data);
+          console.log(response.data);
+        } catch (error) {
+          console.error("Error fetching communities:", error);
+        }
+        console.log(email);
+      };
+
 
     const renderDescription = (description) => {
         if (description.split(' ').length > 25) {

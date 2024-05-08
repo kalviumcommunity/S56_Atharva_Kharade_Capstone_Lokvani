@@ -61,8 +61,8 @@ const LoginPage = () => {
         'https://s56-atharva-kharade-capstone-lokvani.onrender.com/login',
         { username, password }
       );
-
-      console.log('Logged in as:', response.data);
+      
+      Cookies.set('token', response.data.token);
       toast.success('Successfully logged in!');
       navigate('/User');
     } catch (error) {
