@@ -75,6 +75,8 @@ const SignUpPage = () => {
             );
 
             console.log("Success:", response.data);
+            Cookies.set("token", response.data.token);
+            navigate("/user");
             toast.success("User has been registered successfully.");
         } catch (error) {
             if (error.response.status === 400) {

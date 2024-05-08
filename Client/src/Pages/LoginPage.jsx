@@ -64,10 +64,6 @@ const LoginPage = () => {
 
       console.log('Logged in as:', response.data);
       toast.success('Successfully logged in!');
-
-      Cookies.set('username', username);
-      Cookies.set('email', response.data.email);
-
       navigate('/User');
     } catch (error) {
       console.error('Error:', error.response.data.error);

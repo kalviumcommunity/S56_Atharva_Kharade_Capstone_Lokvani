@@ -31,7 +31,7 @@ const validateObjectId = (req, res, next) => {
   next();
 };
 
-router.post("/Signup", loginLimiter, async (req, res) => {
+router.post("/Signup", async (req, res) => {
   try {
     const existingUserEmail = await User.findOne({ email: req.body.email });
     if (existingUserEmail) {
@@ -79,7 +79,7 @@ router.get("/GoogleSignup", async (req, res) => {
   }
 });
 
-router.post("/UsernameCheck", loginLimiter, async (req, res) => {
+router.post("/UsernameCheck", async (req, res) => {
   try {
     const existingUsername = await User.findOne({
       username: req.body.username,
@@ -105,7 +105,7 @@ router.post("/UsernameCheck", loginLimiter, async (req, res) => {
   }
 });
 
-router.post("/GoogleLogin", loginLimiter, async (req, res) => {
+router.post("/GoogleLogin", async (req, res) => {
   try {
     const { email } = req.body;
     const Data = await User.findOne({ email: email });
@@ -122,7 +122,7 @@ router.post("/GoogleLogin", loginLimiter, async (req, res) => {
   }
 });
 
-router.post("/Login", loginLimiter, async (req, res) => {
+router.post("/Login", async (req, res) => {
   try {
     const { username, password } = req.body;
 
