@@ -296,7 +296,7 @@ const MainPage = () => {
                 <div className="MainPage-community-name-function">
                   <div className="community-function-members">
                     <MdGroups className="community-btn-img" />
-                    <h1>{community.membersCount}</h1>
+                    <h1>{community.members.length}</h1>
                   </div>
                   <button onClick={() => handleJoinCommunity(community._id)}><MdGroupAdd className="Join-community-btn-img" /> Join</button>
                 </div>
