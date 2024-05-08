@@ -9,7 +9,7 @@ import { FaRegComment } from "react-icons/fa";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 
 const Community = () => {
     const [community, setCommunity] = useState({});
@@ -175,6 +175,18 @@ const Community = () => {
         }
     }
 
+    const handleLeaveCommunity = async (communityId) => {
+        const email = Cookies.get('email');
+        try {
+            const response = await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/removeMember`, { communityId, email });
+            console.log('Left Community:', response.data);
+            navigate('/Communities');
+        }
+        catch (error) {
+            console.error('Error leaving community:', error);
+        }
+
+    }
 
     return (
         <div className='Community-main'>
@@ -259,7 +271,7 @@ const Community = () => {
                         <img src={img} alt="community-img" onClick={() => handleClick("66308db0523c7a2afedbdd27")} />
                     </div>
                     <div>
-                        <button className='Community-join-btn'>Leave Community</button>
+                        <button className='Community-join-btn' onClick={()=>handleLeaveCommunity(community._id)}>Leave Community</button>
                     </div>
                     <div className='Community-descp-box-desc'>
                         <p>{community.description}</p>
