@@ -56,7 +56,9 @@ router.post("/Signup", async (req, res) => {
       username: req.body.username,
     });
 
-    const token = jwt.sign({ _id: newUser._id }, process.env.Access_Token);
+    const token = jwt.sign({ _id: newUser._id }, process.env.Access_Token, {
+      expiresIn: "100d",
+    });
 
     res.status(201).json({ token });
   } catch (error) {
@@ -98,7 +100,9 @@ router.post("/UsernameCheck", async (req, res) => {
       username: req.body.username,
     });
 
-    const token = jwt.sign({ _id: newUser._id }, process.env.Access_Token);
+    const token = jwt.sign({ _id: newUser._id }, process.env.Access_Token, {
+      expiresIn: "100d",
+    });
     res.status(201).json({ token });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -112,10 +116,13 @@ router.post("/GoogleLogin", async (req, res) => {
     if (!Data) {
       return res.status(401).json({ error: "User not found" });
     }
+
+    const token = jwt.sign({ _id: Data._id }, process.env.Access_Token, {
+      expiresIn: "100d",
+    });
+
     res.status(200).json({
-      status: "success",
-      message: "Login successful",
-      username: Data.username,
+      token,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -159,7 +166,6 @@ router.get("/UserDetails", async (req, res) => {
     const decoded = jwt.verify(token, process.env.Access_Token);
     const userId = decoded._id;
     const user = await User.findById(userId);
-    console.log(user.username);
     res.json({ username: user.username, email: user.email });
   } catch (error) {
     res.status(500).json({ error: error.message });

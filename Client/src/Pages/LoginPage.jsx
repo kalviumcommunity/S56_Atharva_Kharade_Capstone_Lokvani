@@ -93,8 +93,7 @@ const LoginPage = () => {
         { email: email }
       );
       console.log("Success:", response.data);
-      Cookies.set('username', response.data.username);
-      Cookies.set('email', email);
+      Cookies.set('token', response.data.token);
       navigate('/User');
     } catch (error) {
       console.error("Error:", error.response.data);
