@@ -158,7 +158,9 @@ router.get("/UserDetails", async (req, res) => {
   try {
     const decoded = jwt.verify(token, process.env.Access_Token);
     const userId = decoded._id;
+    console.log(userId);
     const user = await User.findById(userId);
+    console.log(user);
     res.json({ username: user.username, email: user.email });
   } catch (error) {
     res.status(500).json({ error: error.message });
