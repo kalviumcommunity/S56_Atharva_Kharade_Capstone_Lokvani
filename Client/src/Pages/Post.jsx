@@ -10,12 +10,35 @@ import { FaRegUserCircle } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
 
 const CommentPage = () => {
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [posts, setPosts] = useState(() => {
         const savedPosts = localStorage.getItem('posts');
         return savedPosts ? JSON.parse(savedPosts) : [];
     });
     const [commentText, setCommentText] = useState('');
     const { id, name } = useParams();
+
+    useEffect(() => {
+        handleUserDetails();
+    }, []);
+
+
+    const handleUserDetails = async () => {
+        const token = Cookies.get("token");
+        try {
+          const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
+            headers: {
+              Authorization: token
+            }
+          });
+          console.log(response.data);
+          setEmail(response.data.email);
+          setUsername(response.data.username);
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+        }
+      };
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -33,7 +56,7 @@ const CommentPage = () => {
         try {
             const response = await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}/posts/${id}/comment`, {
                 comment: commentText,
-                email: Cookies.get("email")
+                email: email
             });
             setPosts(response.data);
             setCommentText('');

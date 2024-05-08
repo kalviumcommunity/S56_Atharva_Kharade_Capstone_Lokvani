@@ -12,6 +12,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -58,13 +61,9 @@ const LoginPage = () => {
         'https://s56-atharva-kharade-capstone-lokvani.onrender.com/login',
         { username, password }
       );
-
-      console.log('Logged in as:', response.data);
+      
+      Cookies.set('token', response.data.token);
       toast.success('Successfully logged in!');
-
-      Cookies.set('username', username);
-      Cookies.set('email', response.data.email);
-
       navigate('/User');
     } catch (error) {
       console.error('Error:', error.response.data.error);
@@ -83,6 +82,25 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
+  const handleGoogleLoginSuccess = async (credentialResponse) => {
+    const decoded = jwtDecode(credentialResponse.credential);
+
+    const { email } = decoded;
+
+    try {
+      const response = await axios.post(
+        'https://s56-atharva-kharade-capstone-lokvani.onrender.com/GoogleLogin',
+        { email: email }
+      );
+      console.log("Success:", response.data);
+      Cookies.set('token', response.data.token);
+      navigate('/User');
+    } catch (error) {
+      console.error("Error:", error.response.data);
+      toast.error(`${error.response.data.error}`);
+    }
+  };
+
 
   return (
     <div className="Login-main">
@@ -208,11 +226,20 @@ const LoginPage = () => {
             <p>OR</p>
           </div>
           <div>
-            <div className="google-btn">
-              <div className="google-img"></div>
-              <div>
-                <p>Sign-in with Google</p>
-              </div>
+            <div className="google-login-button">
+              <GoogleOAuthProvider clientId="722611360376-mt0evhdhlt6jr55qmk92dumipmdg5khv.apps.googleusercontent.com">
+                <GoogleLogin
+                  text='continue_with'
+                  theme='outline'
+                  size='large'
+                  shape='pill'
+                  width='800px'
+                  onSuccess={handleGoogleLoginSuccess}
+                  onError={() => {
+                    console.log('Login Failed')
+                  }}
+                />
+              </GoogleOAuthProvider>
             </div>
             <div className='LoginPage-admin'>
               <div>

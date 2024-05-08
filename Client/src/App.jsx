@@ -13,7 +13,9 @@ import AdminLogin from './Pages/AdminLogin';
 import CommentPage from './Pages/CommentPage';
 import AdminComplaintPage from './Pages/AdminComplaintPage';
 import Post from './Pages/Post';
+import GooglePass from './Pages/GooglePass';
 import { Routes, Route } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const App = () => {
   return (
@@ -22,6 +24,7 @@ const App = () => {
       <Route path="/Login" element={<LoginPage />} />
       <Route path="/SignUp" element={<SignUpPage />} />
       <Route path="/User/*" element={<UserPage />} />
+      <Route path="/GooglePassword" element={<GooglePass />} />
       <Route path="/Complaint" element={<LogComplaint />} />
       <Route path="/ProfileEdit" element={<ProfileEdit />} />
       <Route path="/MyComplaints" element={<MyComplaints />} />
@@ -30,7 +33,7 @@ const App = () => {
       <Route path="/AdminLogin" element={<AdminLogin />} />
       <Route path="/Admin" element={<AdminPage />} />
       <Route path="/AdminComplaints" element={<AdminComplaintPage />} />
-      <Route path="/comment/:id" element={<CommentPage/>} />
+      <Route path="/comment/:id" element={<CommentPage />} />
       <Route path="/community/:name/posts/:id" element={<Post />} />
     </Routes>
   );

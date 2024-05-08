@@ -2,13 +2,18 @@ import React, { useState } from "react";
 import "./CSS/SignUpPage.css";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import eyeIconVisible from "../Assets/visibility.png";
 import eyeIconHidden from "../Assets/hide.png";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
+
 
 const SignUpPage = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -18,6 +23,7 @@ const SignUpPage = () => {
     const [emailError, setEmailError] = useState(false);
     const [usernameError, setUsernameError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
+    const navigate = useNavigate();
 
     const handlePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -56,22 +62,23 @@ const SignUpPage = () => {
             toast.warn("Please fill all input boxes.");
             return;
         }
-    
+
         if (emailError || usernameError || passwordError) {
             toast.error("Please correct the errors before proceeding.");
             return;
         }
-    
+
         try {
             const response = await axios.post(
                 "https://s56-atharva-kharade-capstone-lokvani.onrender.com/Signup",
                 { email, password, username }
             );
-    
+
             console.log("Success:", response.data);
+            Cookies.set("token", response.data.token);
+            navigate("/user");
             toast.success("User has been registered successfully.");
         } catch (error) {
-            // console.error("Error:", error.response.data);
             if (error.response.status === 400) {
                 if (error.response.data.error === "Email already exists!") {
                     toast.warning("Email already exists. Please log in instead.");
@@ -85,7 +92,25 @@ const SignUpPage = () => {
             }
         }
     };
-    
+
+    const handleGoogleLoginSuccess = async (credentialResponse) => {
+        const decoded = jwtDecode(credentialResponse.credential);
+
+        const { email, name } = decoded;
+        try {
+            const response = await axios.get(
+                "https://s56-atharva-kharade-capstone-lokvani.onrender.com/GoogleSignup",
+                { params: { email } }
+            );
+            console.log("Success:", response.data);
+            Cookies.set("username", name);
+            Cookies.set("email", email);
+            navigate("/GooglePassword");
+        } catch (error) {
+            console.error("Error:", error.response.data);
+            toast.error(`${error.response.data.error}`);
+        }
+    };
 
     return (
         <div className="Signup-main">
@@ -248,12 +273,14 @@ const SignUpPage = () => {
                         <p>OR</p>
                     </div>
                     <div>
-                        <div className="google-btn">
-                            <div className="google-img"></div>
-                            <div>
-                                <p>Sign-Up with Google</p>
-                            </div>
-                        </div>
+                        <GoogleOAuthProvider clientId="722611360376-mt0evhdhlt6jr55qmk92dumipmdg5khv.apps.googleusercontent.com">
+                            <GoogleLogin
+                                onSuccess={handleGoogleLoginSuccess}
+                                onError={() => {
+                                    console.log('Login Failed')
+                                }}
+                            />
+                        </GoogleOAuthProvider>
                     </div>
                 </div>
             </div>

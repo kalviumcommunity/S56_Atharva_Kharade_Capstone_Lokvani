@@ -7,22 +7,44 @@ import Cookies from "js-cookie";
 
 const CommunitiesPage = () => {
     const [communities, setCommunities] = useState([]);
+    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
 
     useEffect(() => {
-        const fetchCommunities = async () => {
-            const email = Cookies.get("email");
-            try {
-                const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community`, {
-                    params: { email }
-                });
-                setCommunities(response.data);
-            } catch (error) {
-                console.error("Error fetching communities:", error);
-            }
-        };
-
-        fetchCommunities();
+        handleUserDetails();
     }, []);
+
+
+    const handleUserDetails = async () => {
+        const token = Cookies.get("token");
+        try {
+          const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
+            headers: {
+              Authorization: token
+            }
+          });
+          setEmail(response.data.email);
+          setUsername(response.data.username);
+          fetchCommunities(response.data.email);
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+        }
+      };
+
+
+      const fetchCommunities = async (email) => {
+        try {
+          const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community`, {
+            params: { email }
+          });
+          setCommunities(response.data);
+          console.log(response.data);
+        } catch (error) {
+          console.error("Error fetching communities:", error);
+        }
+        console.log(email);
+      };
+
 
     const renderDescription = (description) => {
         if (description.split(' ').length > 25) {

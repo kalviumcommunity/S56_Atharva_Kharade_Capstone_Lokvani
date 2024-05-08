@@ -13,7 +13,29 @@ const CommentPage = () => {
     const { id } = useParams();
     const [complaint, setComplaint] = useState(null);
     const [commentText, setCommentText] = useState("");
-    const userEmail = Cookies.get("email");
+    const [userEmail, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+
+    useEffect(() => {
+        handleUserDetails();
+    }, []);
+
+
+    const handleUserDetails = async () => {
+        const token = Cookies.get("token");
+        try {
+          const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
+            headers: {
+              Authorization: token
+            }
+          });
+          console.log(response.data);
+          setEmail(response.data.email);
+          setUsername(response.data.username);
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+        }
+      };
 
     useEffect(() => {
         const fetchComplaint = async () => {
@@ -31,7 +53,7 @@ const CommentPage = () => {
     const handleCommentSubmit = async () => {
         try {
             await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/comment/${id}`, {
-                email: userEmail,
+                email: email,
                 comment: commentText
             });
             const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/ComplaintComment/${id}`);
