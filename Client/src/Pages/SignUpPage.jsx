@@ -77,7 +77,6 @@ const SignUpPage = () => {
             console.log("Success:", response.data);
             toast.success("User has been registered successfully.");
         } catch (error) {
-            // console.error("Error:", error.response.data);
             if (error.response.status === 400) {
                 if (error.response.data.error === "Email already exists!") {
                     toast.warning("Email already exists. Please log in instead.");

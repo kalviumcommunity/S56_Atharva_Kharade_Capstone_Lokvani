@@ -7,10 +7,32 @@ import Cookies from "js-cookie";
 
 const CommunitiesPage = () => {
     const [communities, setCommunities] = useState([]);
+    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
+
+    useEffect(() => {
+        handleUserDetails();
+    }, []);
+
+
+    const handleUserDetails = async () => {
+        const token = Cookies.get("token");
+        try {
+          const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          console.log(response.data);
+          setEmail(response.data.email);
+          setUsername(response.data.username);
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+        }
+      };
 
     useEffect(() => {
         const fetchCommunities = async () => {
-            const email = Cookies.get("email");
             try {
                 const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community`, {
                     params: { email }

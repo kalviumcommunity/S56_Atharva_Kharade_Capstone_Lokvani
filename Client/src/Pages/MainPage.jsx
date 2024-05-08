@@ -19,11 +19,16 @@ const MainPage = () => {
   const [sortBy, setSortBy] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [communities, setCommunities] = useState([]);
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     fetchComplaints();
     fetchCommunities();
   }, [currentPage, sortBy, searchQuery]);
+
+  useEffect(() => {
+    handleUserDetails();
+  }, []);
 
   const fetchComplaints = async () => {
     try {
@@ -70,37 +75,52 @@ const MainPage = () => {
     setComplaints(filteredComplaints);
   };
 
-  const userEmail = Cookies.get("email");
+
+  const handleUserDetails = async () => {
+    const token = Cookies.get("token");
+    try {
+      const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log(response.data);
+      setEmail(response.data.email);
+      setUsername(response.data.username);
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
+  };
 
   const handleUpvote = async (index) => {
     try {
       const updatedComplaints = [...complaints];
       const complaint = updatedComplaints[index];
 
-      if (complaint.upvotedBy.includes(userEmail)) {
-        const emailIndex = complaint.upvotedBy.indexOf(userEmail);
+      if (complaint.upvotedBy.includes(email)) {
+        const emailIndex = complaint.upvotedBy.indexOf(email);
         complaint.upvotedBy.splice(emailIndex, 1);
         complaint.voteCount -= 1;
       } else {
-        if (complaint.downvotedBy.includes(userEmail)) {
-          const downvotedIndex = complaint.downvotedBy.indexOf(userEmail);
+        if (complaint.downvotedBy.includes(email)) {
+          const downvotedIndex = complaint.downvotedBy.indexOf(email);
           complaint.downvotedBy.splice(downvotedIndex, 1);
           complaint.voteCount += 1;
         }
-        complaint.upvotedBy.push(userEmail);
+        complaint.upvotedBy.push(email);
         complaint.voteCount += 1;
       }
 
       const response = await axios.put(
         `https://s56-atharva-kharade-capstone-lokvani.onrender.com/${complaint._id}/upvote`,
-        { userEmail }
+        { email }
       );
 
       if (response.status === 200) {
         setComplaints(updatedComplaints);
       } else {
-        if (complaint.upvotedBy.includes(userEmail)) {
-          const emailIndex = complaint.upvotedBy.indexOf(userEmail);
+        if (complaint.upvotedBy.includes(email)) {
+          const emailIndex = complaint.upvotedBy.indexOf(email);
           complaint.upvotedBy.splice(emailIndex, 1);
           complaint.voteCount -= 1;
         }
@@ -116,30 +136,30 @@ const MainPage = () => {
       const updatedComplaints = [...complaints];
       const complaint = updatedComplaints[index];
 
-      if (complaint.downvotedBy.includes(userEmail)) {
-        const emailIndex = complaint.downvotedBy.indexOf(userEmail);
+      if (complaint.downvotedBy.includes(email)) {
+        const emailIndex = complaint.downvotedBy.indexOf(email);
         complaint.downvotedBy.splice(emailIndex, 1);
         complaint.voteCount += 1;
       } else {
-        if (complaint.upvotedBy.includes(userEmail)) {
-          const upvotedIndex = complaint.upvotedBy.indexOf(userEmail);
+        if (complaint.upvotedBy.includes(email)) {
+          const upvotedIndex = complaint.upvotedBy.indexOf(email);
           complaint.upvotedBy.splice(upvotedIndex, 1);
           complaint.voteCount -= 1;
         }
-        complaint.downvotedBy.push(userEmail);
+        complaint.downvotedBy.push(email);
         complaint.voteCount -= 1;
       }
 
       const response = await axios.put(
         `https://s56-atharva-kharade-capstone-lokvani.onrender.com/${complaint._id}/downvote`,
-        { userEmail }
+        { email }
       );
 
       if (response.status === 200) {
         setComplaints(updatedComplaints);
       } else {
-        if (complaint.downvotedBy.includes(userEmail)) {
-          const emailIndex = complaint.downvotedBy.indexOf(userEmail);
+        if (complaint.downvotedBy.includes(email)) {
+          const emailIndex = complaint.downvotedBy.indexOf(email);
           complaint.downvotedBy.splice(emailIndex, 1);
           complaint.voteCount += 1;
         }
@@ -151,10 +171,9 @@ const MainPage = () => {
   };
 
   const fetchCommunities = async () => {
-    const email = Cookies.get("email");
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/getCommunity`, {
-        params: { email } 
+        params: { email }
       });
       setCommunities(response.data);
       console.log(response.data);
@@ -165,7 +184,6 @@ const MainPage = () => {
   };
 
   const handleJoinCommunity = async (communityId) => {
-    const email = Cookies.get("email");
     try {
       const response = await axios.post(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/addMember`, {
         communityId,
@@ -179,7 +197,6 @@ const MainPage = () => {
     } catch (error) {
       console.error("Error joining community:", error);
     }
-    // console.log(communityId)
   }
 
   return (
@@ -211,13 +228,13 @@ const MainPage = () => {
                   </div>
                   <div className="lower-descp-funct">
                     <div className="Complaint-vote">
-                      {complaint.upvotedBy.includes(userEmail) ? (
+                      {complaint.upvotedBy.includes(email) ? (
                         <BiSolidUpvote className="vote-arrows arrows-fill" onClick={() => handleUpvote(index)} />
                       ) : (
                         <BiUpvote className="vote-arrows" onClick={() => handleUpvote(index)} />
                       )}
                       <h1>{((complaint.upvotedBy && complaint.upvotedBy.length) || 0) - ((complaint.downvotedBy && complaint.downvotedBy.length) || 0)}</h1>
-                      {complaint.downvotedBy.includes(userEmail) ? (
+                      {complaint.downvotedBy.includes(email) ? (
                         <BiSolidDownvote className="vote-arrows arrows-fill" onClick={() => handleDownvote(index)} />
                       ) : (
                         <BiDownvote className="vote-arrows" onClick={() => handleDownvote(index)} />

@@ -31,7 +31,7 @@ const validateObjectId = (req, res, next) => {
   next();
 };
 
-router.post("/Signup", async (req, res) => {
+router.post("/Signup", loginLimiter, async (req, res) => {
   try {
     const existingUserEmail = await User.findOne({ email: req.body.email });
     if (existingUserEmail) {
@@ -41,6 +41,7 @@ router.post("/Signup", async (req, res) => {
     const existingUsername = await User.findOne({
       username: req.body.username,
     });
+
     if (existingUsername) {
       return res.status(400).json({
         error: "Username already exists! Please choose a different username.",
@@ -55,15 +56,9 @@ router.post("/Signup", async (req, res) => {
       username: req.body.username,
     });
 
-    const token = jwt.sign({ _id: newUser._id }, process.env.Access_Token, {
-      expiresIn: "100d",
-    });
+    const token = jwt.sign({ _id: newUser._id }, process.env.Access_Token);
 
-    res.status(201).json({
-      status: "success",
-      message: "User registered successfully",
-      token,
-    });
+    res.status(201).json({ token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -84,7 +79,7 @@ router.get("/GoogleSignup", async (req, res) => {
   }
 });
 
-router.post("/UsernameCheck", async (req, res) => {
+router.post("/UsernameCheck", loginLimiter, async (req, res) => {
   try {
     const existingUsername = await User.findOne({
       username: req.body.username,
@@ -102,13 +97,15 @@ router.post("/UsernameCheck", async (req, res) => {
       password: hashedPassword,
       username: req.body.username,
     });
-    res.status(201).json({ newUser });
+
+    const token = jwt.sign({ _id: newUser._id }, process.env.Access_Token);
+    res.status(201).json({ token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-router.post("/GoogleLogin", async (req, res) => {
+router.post("/GoogleLogin", loginLimiter, async (req, res) => {
   try {
     const { email } = req.body;
     const Data = await User.findOne({ email: email });
@@ -125,7 +122,7 @@ router.post("/GoogleLogin", async (req, res) => {
   }
 });
 
-router.post("/Login", async (req, res) => {
+router.post("/Login", loginLimiter, async (req, res) => {
   try {
     const { username, password } = req.body;
 
@@ -144,11 +141,25 @@ router.post("/Login", async (req, res) => {
     });
 
     res.status(200).json({
-      status: "success",
-      message: "Login successful",
       token,
-      email: user.email,
     });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get("/UserDetails", async (req, res) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.Access_Token);
+    const userId = decoded._id;
+    const user = await User.findById(userId);
+    res.json({ username: user.username, email: user.email });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

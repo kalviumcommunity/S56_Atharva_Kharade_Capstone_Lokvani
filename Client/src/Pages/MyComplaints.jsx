@@ -9,9 +9,29 @@ import Cookies from 'js-cookie';
 
 const MyComplaints = () => {
   const [complaints, setComplaints] = useState([]);
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
-    const username = Cookies.get('username');
+    handleUserDetails();
+  }, []);
+
+  const handleUserDetails = async () => {
+    const token = Cookies.get("token");
+    try {
+      const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log(response.data);
+      setEmail(response.data.email);
+      setUsername(response.data.username);
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
+  };
+
+  useEffect(() => {
     const fetchComplaints = async () => {
       try {
         const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint/${username}`);

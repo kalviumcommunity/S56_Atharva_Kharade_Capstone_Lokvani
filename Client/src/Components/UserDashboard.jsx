@@ -1,8 +1,6 @@
 import React from 'react';
 import './CSS/UserDashboard.css';
-
 import { Link, useNavigate } from 'react-router-dom';
-
 import { FaRegUserCircle } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
 import { GoHome } from 'react-icons/go';
@@ -12,12 +10,33 @@ import { BsFillPeopleFill } from 'react-icons/bs';
 import { FaBuildingNgo } from 'react-icons/fa6';
 import { TbLogout } from 'react-icons/tb';
 import Cookies from 'js-cookie';
+import { useState,useEffect } from 'react';
+import axios from 'axios';
 
 const UserDashboard = () => {
     const navigate = useNavigate();
+    let [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
 
-    const username = Cookies.get('username');
-    let email = Cookies.get('email');
+    useEffect(() => {
+        handleUserDetails();
+    }, []);
+
+    const handleUserDetails = async () => {
+        const token = Cookies.get("token");
+        try {
+          const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          console.log(response.data);
+          setEmail(response.data.email);
+          setUsername(response.data.username);
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+        }
+      };
 
     const maxEmailLength = 20;
     if (email && email.length > maxEmailLength) {
@@ -25,8 +44,7 @@ const UserDashboard = () => {
     }
 
     const handleLogout = () => {
-        Cookies.remove('username');
-        Cookies.remove('email');
+        Cookies.remove('token');
         navigate('/');
     };
 

@@ -9,11 +9,7 @@ import UserDashboard from '../Components/UserDashboard';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-const getCookie = (name) => {
-    const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-    return cookieValue ? cookieValue.pop() : null;
-};
+import Cookies from 'js-cookie';
 
 const LogComplaint = () => {
     const navigate = useNavigate();
@@ -26,6 +22,12 @@ const LogComplaint = () => {
     const [descriptionError, setDescriptionError] = useState('');
     const [file, setFile] = useState(null);
 
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+
+    useEffect(() => {
+        handleUserDetails();
+    }, []);
 
     const handleCancel = () => {
         setTitle('');
@@ -70,6 +72,22 @@ const LogComplaint = () => {
         setFile(e.target.files[0]);
     };
 
+    const handleUserDetails = async () => {
+        const token = Cookies.get("token");
+        try {
+          const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          console.log(response.data);
+          setEmail(response.data.email);
+          setUsername(response.data.username);
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+        }
+      };
+
     const handleSubmit = async () => {
         if (!title || !description || !area || !complaintType || !file) {
             toast.error('Please fill out all fields.');
@@ -82,7 +100,6 @@ const LogComplaint = () => {
         }
 
         try {
-            const username = getCookie('username');
             const formData = new FormData();
             formData.append('title', title);
             formData.append('description', description);
@@ -90,7 +107,7 @@ const LogComplaint = () => {
             formData.append('complaintType', complaintType);
             formData.append('location', location);
             formData.append('image', file);
-            formData.append('createdBy', username);
+            formData.append('createdBy', email);
 
             const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint', formData, {
                 headers: {
