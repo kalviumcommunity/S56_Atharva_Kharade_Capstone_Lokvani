@@ -1,41 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import UserDashboard from '../Components/UserDashboard';
-import img from './CSS/Image-Placeholder.png';
+// import img from './CSS/Image-Placeholder.png';
 import { BiSolidUpvote, BiSolidDownvote } from "react-icons/bi";
 import './CSS/CommentPage.css';
 import Cookies from 'js-cookie';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
+import { UserContext } from '../UserContext';
 
 const CommentPage = () => {
+    const { user } = useContext(UserContext);
+    const { email, username } = user;
+
     const { id } = useParams();
     const [complaint, setComplaint] = useState(null);
     const [commentText, setCommentText] = useState("");
-    const [userEmail, setEmail] = useState('');
-    const [username, setUsername] = useState('');
-
-    useEffect(() => {
-        handleUserDetails();
-    }, []);
-
-
-    const handleUserDetails = async () => {
-        const token = Cookies.get("token");
-        try {
-          const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
-            headers: {
-              Authorization: token
-            }
-          });
-          console.log(response.data);
-          setEmail(response.data.email);
-          setUsername(response.data.username);
-        } catch (error) {
-          console.error("Error fetching user details:", error);
-        }
-      };
 
     useEffect(() => {
         const fetchComplaint = async () => {

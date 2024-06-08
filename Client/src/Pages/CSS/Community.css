@@ -150,7 +150,8 @@
   margin: 20px;
   justify-self: center;
   position: relative;
-  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
   border-radius: 10px;
 }
 
@@ -182,7 +183,6 @@
   padding: 10px;
   position: absolute;
   bottom: 0;
-  /* border: 1px solid red; */
   width: 100%;
 }
 
@@ -190,10 +190,10 @@
   font-size: 30px;
 }
 
-.post-comment{
+.post-comment {
   margin-left: 10px;
 }
 
-.Post-list-descp{
+.Post-list-descp {
   padding: 10px;
 }

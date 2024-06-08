@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './CSS/Community.css';
 import UserDashboard from '../Components/UserDashboard';
-import img from './CSS/Image-Placeholder.png';
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import { BiUpvote, BiSolidUpvote, BiDownvote, BiSolidDownvote } from "react-icons/bi";
@@ -9,36 +8,20 @@ import { FaRegComment } from "react-icons/fa";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { Link,useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { UserContext } from '../UserContext';
 
 const Community = () => {
     const [community, setCommunity] = useState({});
     const [description, setDescription] = useState('');
     const [posts, setPosts] = useState([]);
     const { name } = useParams();
-    const [userEmail, setEmail] = useState("");
-    const [username, setUsername] = useState("");
+    const { user } = useContext(UserContext);
+    const { email } = user;
+    const userEmail = email;
 
-    useEffect(() => {
-        handleUserDetails();
-    }, []);
-
-
-    const handleUserDetails = async () => {
-        const token = Cookies.get("token");
-        try {
-          const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
-            headers: {
-              Authorization: token
-            }
-          });
-          console.log(response.data);
-          setEmail(response.data.email);
-          setUsername(response.data.username);
-        } catch (error) {
-          console.error("Error fetching user details:", error);
-        }
-      };
+    const img = 'https://images.unsplash.com/photo-1612838320302-4b3b3b3b3b3b';
 
     useEffect(() => {
         const fetchCommunity = async () => {
@@ -271,7 +254,7 @@ const Community = () => {
                         <img src={img} alt="community-img" onClick={() => handleClick("66308db0523c7a2afedbdd27")} />
                     </div>
                     <div>
-                        <button className='Community-join-btn' onClick={()=>handleLeaveCommunity(community._id)}>Leave Community</button>
+                        <button className='Community-join-btn' onClick={() => handleLeaveCommunity(community._id)}>Leave Community</button>
                     </div>
                     <div className='Community-descp-box-desc'>
                         <p>{community.description}</p>

@@ -85,85 +85,83 @@
   color: rgba(0, 0, 0, 0.3);
 }
 
-.google-login-button{
-    height: 60px;
-    width: 100%;
-    border-radius: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 15px;
+.google-login-button {
+  height: 60px;
+  width: 100%;
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
 }
 
-.GoogleLoginPage-Body{
+.GoogleLoginPage-Body {
   width: 470px;
 }
 
-.google-btn:hover{
-    background-color: rgb(235, 235, 235);
-    /* color: #000000; */
+.google-btn:hover {
+  background-color: rgb(235, 235, 235);
+  /* color: #000000; */
 }
 
-.google-btn:active{
+.google-btn:active {
   background-color: #ffffff;
 }
 
-.google-img{
+.google-img {
   height: 20px;
   width: 30px;
   background-image: url(../Assets/kisspng-google-logo-google-search-google-images-g-suite-google-adwords-5b5695e501bbf6.0297111215324011250071.png);
   background-size: cover;
 }
 
-p{
+p {
   font-family: "Poppins", sans-serif;
 }
 
-.LoginPage-admin{
+.LoginPage-admin {
   margin-top: 15px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.Admin-logo{
+.Admin-logo {
   font-size: 30px;
 }
 
-.LoginPage-Admin-Logo{
+.LoginPage-Admin-Logo {
   display: flex;
   align-items: center;
 }
 
-.LoginPage-Admin-Logo:hover{
+.LoginPage-Admin-Logo:hover {
   cursor: pointer;
   color: #2f60b9;
 }
 
-.LoginPage-Admin-Logo h1{
+.LoginPage-Admin-Logo h1 {
   font-family: "Poppins", sans-serif;
   font-size: 20px;
   margin-left: 2px;
   font-weight: 500;
 }
 
-.LoginPage-admin p{
+.LoginPage-admin p {
   font-family: "Poppins", sans-serif;
   font-size: 18px;
 }
 
-.LoginPage-admin u{
+.LoginPage-admin u {
   margin-left: 5px;
   color: #f46416;
 }
 
-.LoginPage-admin u:hover{
+.LoginPage-admin u:hover {
   color: #2f60b9;
 }
 
-
-/* Admin Login Page */
-.AdminLogin-Page{
+.AdminLogin-Page {
   display: flex;
   align-items: center;
   justify-content: center;

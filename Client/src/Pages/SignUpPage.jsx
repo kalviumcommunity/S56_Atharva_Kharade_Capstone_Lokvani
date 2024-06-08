@@ -103,8 +103,6 @@ const SignUpPage = () => {
                 { params: { email } }
             );
             console.log("Success:", response.data);
-            Cookies.set("username", name);
-            Cookies.set("email", email);
             navigate("/GooglePassword");
         } catch (error) {
             console.error("Error:", error.response.data);

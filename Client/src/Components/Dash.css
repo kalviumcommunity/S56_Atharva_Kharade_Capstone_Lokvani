@@ -1,0 +1,128 @@
+.Dashboard {
+  height: 100%;
+  width: 50px;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.UserOption {
+  border-radius: 5px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  width: 90%;
+  height: 40px;
+  border: 1px solid red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.A {
+  size: 60px;
+}
+
+.DB-UserOptionP {
+  width: 100%;
+  border: 1px solid red;
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.DB-Logo {
+  width: 90%;
+  height: 60px;
+  /* border: 1px solid black; */
+  display: flex;
+  margin-top: 10px;
+  border-radius: 5px;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.DB-Logo h1 {
+  font-size: 35px;
+  font-family: "Marcellus SC", serif;
+}
+
+.DB-logoImg {
+  height: 50px;
+  width: 50px;
+}
+
+.UserD-icon {
+  height: 30px;
+}
+
+.userDetail-1 {
+  width: 240px;
+  height: 70px;
+  border-radius: 5px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  background-color: #e4edff;
+  cursor: pointer;
+}
+
+.userDetail h1 {
+  font-size: 22px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+}
+
+.userDetail p {
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+  color: #3d3d3d;
+}
+
+.userDetail-name {
+  margin: 20px;
+}
+
+.DB-UserOption {
+  width: 240px;
+  height: 40px;
+  border-radius: 5px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  border: 1px solid black;
+}
+.DB-UserIcon {
+  width: 20%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.DB-Name {
+  font-size: 22px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.DB-UserIco {
+  height: auto;
+  width: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.DB-HomeIcon {
+  height: 30px;
+  width: 30px;
+}

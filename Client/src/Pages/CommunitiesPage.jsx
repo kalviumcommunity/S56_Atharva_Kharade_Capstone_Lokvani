@@ -6,83 +6,83 @@ import { Link } from 'react-router-dom';
 import Cookies from "js-cookie";
 
 const CommunitiesPage = () => {
-    const [communities, setCommunities] = useState([]);
-    const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
+  const [communities, setCommunities] = useState([]);
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
 
-    useEffect(() => {
-        handleUserDetails();
-    }, []);
+  useEffect(() => {
+    handleUserDetails();
+  }, []);
 
 
-    const handleUserDetails = async () => {
-        const token = Cookies.get("token");
-        try {
-          const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
-            headers: {
-              Authorization: token
-            }
-          });
-          setEmail(response.data.email);
-          setUsername(response.data.username);
-          fetchCommunities(response.data.email);
-        } catch (error) {
-          console.error("Error fetching user details:", error);
+  const handleUserDetails = async () => {
+    const token = Cookies.get("token");
+    try {
+      const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
+        headers: {
+          Authorization: token
         }
-      };
+      });
+      setEmail(response.data.email);
+      setUsername(response.data.username);
+      fetchCommunities(response.data.email);
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
+  };
 
 
-      const fetchCommunities = async (email) => {
-        try {
-          const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community`, {
-            params: { email }
-          });
-          setCommunities(response.data);
-          console.log(response.data);
-        } catch (error) {
-          console.error("Error fetching communities:", error);
-        }
-        console.log(email);
-      };
+  const fetchCommunities = async (email) => {
+    try {
+      const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community`, {
+        params: { email }
+      });
+      setCommunities(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching communities:", error);
+    }
+    console.log(email);
+  };
 
 
-    const renderDescription = (description) => {
-        if (description.split(' ').length > 25) {
-            const shortenedDescription = description.split(' ').slice(0, 25).join(' ');
-            return (
-                <p>
-                    {shortenedDescription}{' '}
-                    <button className="viewMoreBtn">View More</button>
-                </p>
-            );
-        }
-        return <p>{description}</p>;
-    };
+  const renderDescription = (description) => {
+    if (description.split(' ').length > 25) {
+      const shortenedDescription = description.split(' ').slice(0, 25).join(' ');
+      return (
+        <p>
+          {shortenedDescription}{' '}
+          <button className="viewMoreBtn">View More</button>
+        </p>
+      );
+    }
+    return <p>{description}</p>;
+  };
 
-    return (
-        <div className='Communities-main-body'>
-            <UserDashboard />
-            <div className="Communities-body">
-                {communities.map((community) => (
-                    <Link to={`/community/${encodeURIComponent(community.name)}`} key={community.id || community._id} className="CommunityPage-box">
-                        <div className="Community-box-img">
-                        </div>
-                        <div className="Community-box-title">
-                            <h1>{community.name}</h1>
-                        </div>
-                        <div className="Community-box-desc">
-                            {renderDescription(community.description)}
-                        </div>
-                        <div className="Community-box-function">
-                            <div className="Community-box-members">
-                                <h1>Members - {community.members.length || 0}</h1>
-                            </div>
-                        </div>
-                    </Link>
-                ))}
+  return (
+    <div className='Communities-main-body'>
+      <UserDashboard />
+      <div className="Communities-body">
+        {communities.map((community) => (
+          <Link to={`/community/${encodeURIComponent(community.name)}`} key={community.id || community._id} className="CommunityPage-box">
+            <div className="Community-box-img">
             </div>
-        </div>
-    );
+            <div className="Community-box-title">
+              <h1>{community.name}</h1>
+            </div>
+            <div className="Community-box-desc">
+              {renderDescription(community.description)}
+            </div>
+            <div className="Community-box-function">
+              <div className="Community-box-members">
+                <h1>Members - {community.members.length || 0}</h1>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default CommunitiesPage;

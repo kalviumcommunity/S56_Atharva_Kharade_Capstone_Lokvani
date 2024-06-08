@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 const SortBySelect = ({ handleChange }) => {
-  const [value, setValue] = useState(""); // Initialize the value state
-
+  const [value, setValue] = useState("");
   const handleSelectChange = (event) => {
     const selectedValue = event.target.value;
     setValue(selectedValue);
@@ -17,7 +16,7 @@ const SortBySelect = ({ handleChange }) => {
         labelId="sort-by-select-label"
         id="sort-by-select"
         label="Sort By"
-        value={value} // Set the value prop
+        value={value}
         onChange={handleSelectChange}
       >
         <MenuItem value="">None</MenuItem>
