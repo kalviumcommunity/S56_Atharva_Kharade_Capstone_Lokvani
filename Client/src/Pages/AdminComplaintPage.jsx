@@ -62,7 +62,7 @@ const AdminComplaintPage = () => {
             console.error("Error deleting complaint:", error);
         }
     };
-    
+
 
     return (
         <>
@@ -75,7 +75,7 @@ const AdminComplaintPage = () => {
                                 <SortBySelect onChange={handleSortChange} />
                             </div>
                             <div className="SearchBar-areaSelect">
-                                
+
                             </div>
                         </div>
                         <div className="SearchBar-searchInput">
@@ -109,7 +109,7 @@ const AdminComplaintPage = () => {
                                     </div>
                                 </div>
                                 <div>
-                                <button onClick={() => handleDelete(complaint._id)}>Delete</button>
+                                    <button onClick={() => handleDelete(complaint._id)}>Delete</button>
                                 </div>
                             </div>
                         ))}

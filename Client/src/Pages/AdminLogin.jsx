@@ -44,7 +44,7 @@ const AdminLogin = () => {
             const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/AdminLogin', { email, password });
             setLoading(false);
             localStorage.setItem('token', response.data);
-            navigate('/Admin'); 
+            navigate('/Admin');
         } catch (error) {
             setLoading(false);
             toast.error(error.response.data.error);

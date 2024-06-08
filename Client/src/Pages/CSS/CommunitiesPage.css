@@ -27,7 +27,6 @@
   background-color: rgba(80, 63, 205, 0.5);
 }
 
-
 .CommunityPage-box {
   width: 22vw;
   height: 470px;
@@ -123,7 +122,7 @@
   justify-content: center;
 }
 
-.viewMoreBtn{
+.viewMoreBtn {
   font-size: 13px;
   font-family: "Poppins", sans-serif;
   color: #06f;

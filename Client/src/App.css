@@ -1,7 +1,10 @@
+* {
+  height: 0;
+  width: 0;
+  box-sizing: border-box;
+}
 
-
-*{
-    height: 0;
-    width: 0;
-    box-sizing: border-box;
+.main-content {
+  height: 100vh;
+  width: calc(100vw - 250px);
 }

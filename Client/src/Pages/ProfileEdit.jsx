@@ -41,7 +41,7 @@ function ProfileEdit() {
 
       Cookies.set('username', userNameInput, { expires: 365 });
       Cookies.set('email', emailInput, { expires: 365 });
-      
+
       setUsername(userNameInput);
       setEmail(emailInput);
     } catch (error) {
@@ -53,7 +53,6 @@ function ProfileEdit() {
       }
     }
   };
-  
 
   return (
     <div className='ProfileEdit-main'>

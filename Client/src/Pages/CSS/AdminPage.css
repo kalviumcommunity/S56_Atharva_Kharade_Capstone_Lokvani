@@ -90,7 +90,7 @@
   margin-left: 5px;
 }
 
-.Admin-Complaint-descp{
+.Admin-Complaint-descp {
   padding: 5px;
 }
 
@@ -99,18 +99,18 @@
   font-family: "Poppins", serif;
 }
 
-.Admin-Complaint-box-right{
+.Admin-Complaint-box-right {
   width: 40%;
 }
 
-.Admin-Complaint-Functions{
+.Admin-Complaint-Functions {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
 
-.Admin-Complaint-Functions button{
+.Admin-Complaint-Functions button {
   font-size: 20px;
   border: 1px solid black;
   border-radius: 5px;
@@ -119,11 +119,11 @@
   width: 100px;
 }
 
-.complaint-img-size{
+.complaint-img-size {
   height: 100%;
 }
 
-.Admin-Complaint-box-right h1{
+.Admin-Complaint-box-right h1 {
   font-size: 18px;
   font-family: "Poppins", serif;
   margin-left: 5px;

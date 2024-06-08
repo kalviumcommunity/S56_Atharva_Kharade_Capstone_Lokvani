@@ -155,23 +155,6 @@ router.post("/Login", async (req, res) => {
   }
 });
 
-router.get("/UserDetails", async (req, res) => {
-  const token = req.headers.authorization;
-
-  if (!token) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.Access_Token);
-    const userId = decoded._id;
-    const user = await User.findById(userId);
-    res.json({ username: user.username, email: user.email });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
 router.post("/Complaint", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {

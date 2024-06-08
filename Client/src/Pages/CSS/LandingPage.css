@@ -1,76 +1,198 @@
-@import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&family=Marcellus+SC&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&family=Marcellus+SC&display=swap");
 
-.Landing-main{
-    height: 88vh;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-direction: column;
-
+.landingMain {
+  height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: baseline;
+  flex-direction: column;
+  position: relative;
+  background-color: #f1e8e3ab;
 }
 
-.Landing-Heading{
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 2vh;
+.landingMainTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.Landing-Heading h1{
-    font-family: "Frank Ruhl Libre", serif;
-    font-weight: 500;
-    font-size: 8vh;
-    color: #F36416;
-
+.landingMainTitle h1 {
+  font-family: "Frank Ruhl Libre", serif;
+  font-weight: 500;
+  font-size: 65px;
+  color: #f36416;
+  margin-top: 30px;
+  text-align: center;
 }
 
-.Landing-subHeading{
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 700px;
-    text-align: center;
-    margin-bottom: 2vh;
+.landingMainTitle p {
+  font-family: "Frank Ruhl Libre", serif;
+  font-weight: normal;
+  font-size: 35px;
+  color: #000000;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  text-align: center;
 }
 
-.Landing-subHeading h1{
-    font-family: "Frank Ruhl Libre", serif;
-    font-weight: normal;
-    font-size: 25px;
+.landingMainImg1 {
+  width: 400px;
+  position: absolute;
+  bottom: 0;
+  left: 50px;
 }
 
-.Landing-Img{
-    width: 690px;
-    height: 350px;
-    background-image: url(../Assets/Landing-low.png);
-    background-size: cover;
+.landingMainImg2 {
+  width: 360px;
+  position: absolute;
+  bottom: 0;
+  right: 50px;
 }
 
-.explore-btn {
+.exploreBtn {
   background-color: #2f60b9;
   border-radius: 5px;
-  color: #FFFFFF;
+  color: #ffffff;
   cursor: pointer;
   display: inline-block;
-  margin-top: 2vh;
-  height: 50px;
+  margin-top: 10px;
+  height: 55px;
   width: 150px;
   outline: none;
   text-align: center;
   text-decoration: none;
-  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+  transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
   font-family: "Frank Ruhl Libre", serif;
-  font-size: 30px;
+  font-size: 35px;
 }
 
-.explore-btn:hover {
+.exploreBtn:hover {
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
 
-.explore-btn:active {
+.exploreBtn:active {
   box-shadow: none;
   transform: translateY(0);
+}
+
+@media (max-width: 1400px) {
+  .landingMainTitle h1 {
+    font-size: 62px;
+    margin-top: 60px;
+  }
+
+  .landingMainTitle p {
+    font-size: 32px;
+  }
+
+  .landingMainImg1 {
+    width: 350px;
+    position: absolute;
+    bottom: 0;
+    left: 50px;
+  }
+
+  .landingMainImg2 {
+    width: 300px;
+    position: absolute;
+    bottom: 0;
+    right: 50px;
+  }
+}
+
+@media (max-width: 1120px) {
+  .landingMainTitle h1 {
+    font-size: 55px;
+    margin-top: 70px;
+  }
+
+  .landingMainTitle p {
+    font-size: 32px;
+  }
+
+  .landingMainImg1 {
+    width: 300px;
+    position: absolute;
+    bottom: 0;
+    left: 50px;
+  }
+
+  .landingMainImg2 {
+    width: 280px;
+    position: absolute;
+    bottom: 0;
+    right: 50px;
+  }
+
+  .exploreBtn {
+    margin-top: 10px;
+    height: 50px;
+    width: 140px;
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 985px) {
+  .landingMainTitle h1 {
+    font-size: 50px;
+    margin: 70px 20px 0;
+  }
+
+  .landingMainTitle p {
+    font-size: 28px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .landingMainImg1 {
+    width: 250px;
+    position: absolute;
+    bottom: 0;
+    left: 50px;
+  }
+
+  .landingMainImg2 {
+    width: 220px;
+    position: absolute;
+    bottom: 0;
+    right: 50px;
+  }
+
+  .exploreBtn {
+    margin-top: 10px;
+    height: 40px;
+    width: 120px;
+    font-size: 25px;
+  }
+}
+
+@media (max-width: 450px) {
+  .landingMainTitle h1 {
+    font-size: 6vh;
+    margin: 8vh 2vh 0;
+  }
+
+  .landingMainTitle p {
+    font-size: 3.5vh;
+    margin-left: 2vh;
+    margin-right: 2vh;
+  }
+
+  .exploreBtn {
+    margin-top: 1vh;
+    height: 6vh;
+    width: 18vh;
+    font-size: 4vh;
+  }
+}
+
+@media (max-width: 680px) {
+  .landingMainImg1 {
+    display: none;
+  }
+
+  .landingMainImg2 {
+    display: none;
+  }
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ring2 } from 'ldrs'
 import "./CSS/MainPage.css";
 import SortBySelect from "../Components/SortBy";
 import SearchInput from "../Components/Search";
@@ -11,6 +12,7 @@ import { MdOutlineReport } from "react-icons/md";
 import CustomPagination from "../Components/Pagination";
 import { MdGroupAdd } from "react-icons/md";
 import { MdGroups } from "react-icons/md";
+ring2.register()
 
 const MainPage = () => {
   const [complaints, setComplaints] = useState([]);
@@ -20,16 +22,20 @@ const MainPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [communities, setCommunities] = useState([]);
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+  const [loadingCommunities, setLoadingCommunities] = useState(false); 
+  const token = Cookies.get("token");
 
   useEffect(() => {
     fetchComplaints();
-    fetchCommunities();
+  }, [email]);
+
+  useEffect(() => {
+    fetchComplaints();
   }, [currentPage, sortBy, searchQuery]);
 
   useEffect(() => {
     handleUserDetails();
-  }, []);
+  }, [token]);
 
   const fetchComplaints = async () => {
     try {
@@ -76,9 +82,7 @@ const MainPage = () => {
     setComplaints(filteredComplaints);
   };
 
-
   const handleUserDetails = async () => {
-    const token = Cookies.get("token");
     try {
       const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
         headers: {
@@ -86,7 +90,6 @@ const MainPage = () => {
         }
       });
       setEmail(response.data.email);
-      setUsername(response.data.username);
       fetchCommunities(response.data.email);
     } catch (error) {
       console.error("Error fetching user details:", error);
@@ -94,34 +97,35 @@ const MainPage = () => {
   };
 
   const handleUpvote = async (index) => {
+    let userEmail = email;
     try {
       const updatedComplaints = [...complaints];
       const complaint = updatedComplaints[index];
 
-      if (complaint.upvotedBy.includes(email)) {
-        const emailIndex = complaint.upvotedBy.indexOf(email);
+      if (complaint.upvotedBy.includes(userEmail)) {
+        const emailIndex = complaint.upvotedBy.indexOf(userEmail);
         complaint.upvotedBy.splice(emailIndex, 1);
         complaint.voteCount -= 1;
       } else {
-        if (complaint.downvotedBy.includes(email)) {
-          const downvotedIndex = complaint.downvotedBy.indexOf(email);
+        if (complaint.downvotedBy.includes(userEmail)) {
+          const downvotedIndex = complaint.downvotedBy.indexOf(userEmail);
           complaint.downvotedBy.splice(downvotedIndex, 1);
           complaint.voteCount += 1;
         }
-        complaint.upvotedBy.push(email);
+        complaint.upvotedBy.push(userEmail);
         complaint.voteCount += 1;
       }
 
       const response = await axios.put(
         `https://s56-atharva-kharade-capstone-lokvani.onrender.com/${complaint._id}/upvote`,
-        { email }
+        { userEmail }
       );
 
       if (response.status === 200) {
         setComplaints(updatedComplaints);
       } else {
-        if (complaint.upvotedBy.includes(email)) {
-          const emailIndex = complaint.upvotedBy.indexOf(email);
+        if (complaint.upvotedBy.includes(userEmail)) {
+          const emailIndex = complaint.upvotedBy.indexOf(userEmail);
           complaint.upvotedBy.splice(emailIndex, 1);
           complaint.voteCount -= 1;
         }
@@ -133,34 +137,35 @@ const MainPage = () => {
   };
 
   const handleDownvote = async (index) => {
+    let userEmail = email;
     try {
       const updatedComplaints = [...complaints];
       const complaint = updatedComplaints[index];
 
-      if (complaint.downvotedBy.includes(email)) {
-        const emailIndex = complaint.downvotedBy.indexOf(email);
+      if (complaint.downvotedBy.includes(userEmail)) {
+        const emailIndex = complaint.downvotedBy.indexOf(userEmail);
         complaint.downvotedBy.splice(emailIndex, 1);
         complaint.voteCount += 1;
       } else {
-        if (complaint.upvotedBy.includes(email)) {
-          const upvotedIndex = complaint.upvotedBy.indexOf(email);
+        if (complaint.upvotedBy.includes(userEmail)) {
+          const upvotedIndex = complaint.upvotedBy.indexOf(userEmail);
           complaint.upvotedBy.splice(upvotedIndex, 1);
           complaint.voteCount -= 1;
         }
-        complaint.downvotedBy.push(email);
+        complaint.downvotedBy.push(userEmail);
         complaint.voteCount -= 1;
       }
 
       const response = await axios.put(
         `https://s56-atharva-kharade-capstone-lokvani.onrender.com/${complaint._id}/downvote`,
-        { email }
+        { userEmail }
       );
 
       if (response.status === 200) {
         setComplaints(updatedComplaints);
       } else {
-        if (complaint.downvotedBy.includes(email)) {
-          const emailIndex = complaint.downvotedBy.indexOf(email);
+        if (complaint.downvotedBy.includes(userEmail)) {
+          const emailIndex = complaint.downvotedBy.indexOf(userEmail);
           complaint.downvotedBy.splice(emailIndex, 1);
           complaint.voteCount += 1;
         }
@@ -172,18 +177,20 @@ const MainPage = () => {
   };
 
   const fetchCommunities = async (email) => {
+    setLoadingCommunities(true);
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/getCommunity`, {
         params: { email }
       });
       setCommunities(response.data);
-      console.log(response.data);
+      setLoadingCommunities(false);
+      // console.log(response.data);
     } catch (error) {
       console.error("Error fetching communities:", error);
+      setLoadingCommunities(false);
     }
-    console.log(email);
+    // console.log(email);
   };
-
 
   const handleJoinCommunity = async (communityId) => {
     try {
@@ -193,13 +200,13 @@ const MainPage = () => {
       });
 
       if (response.status === 200) {
-        fetchCommunities();
-        console.log(response.data)
+        fetchCommunities(email);
+        console.log(response.data);
       }
     } catch (error) {
       console.error("Error joining community:", error);
     }
-  }
+  };
 
   return (
     <div className="MainPage-body">
@@ -287,10 +294,19 @@ const MainPage = () => {
         </div>
       </div>
       <div className="MainPage-side">
-        <div className="MainPage-side">
-          <div className="MainPage-side-Navbar">
-            <h1>Suggested Communities</h1>
-            {communities.map((community, index) => (
+        <div className="MainPage-side-Navbar">
+          <h1>Suggested Communities</h1>
+          {loadingCommunities ? (
+            <l-ring-2
+              size="40"
+              stroke="5"
+              stroke-length="0.25"
+              bg-opacity="0.1"
+              speed="0.8"
+              color="black"
+            ></l-ring-2>
+          ) : (
+            communities.map((community, index) => (
               <div className="MainPage-community-name" key={index}>
                 <h1>{community.name}</h1>
                 <div className="MainPage-community-name-function">
@@ -301,12 +317,12 @@ const MainPage = () => {
                   <button onClick={() => handleJoinCommunity(community._id)}><MdGroupAdd className="Join-community-btn-img" /> Join</button>
                 </div>
               </div>
-            ))}
-          </div>
+            ))
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default MainPage; 
+export default MainPage;

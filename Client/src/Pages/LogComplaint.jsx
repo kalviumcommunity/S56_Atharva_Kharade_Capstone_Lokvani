@@ -75,18 +75,18 @@ const LogComplaint = () => {
     const handleUserDetails = async () => {
         const token = Cookies.get("token");
         try {
-          const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
-            headers: {
-              Authorization: token
-            }
-          });
-          console.log(response.data);
-          setEmail(response.data.email);
-          setUsername(response.data.username);
+            const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
+                headers: {
+                    Authorization: token
+                }
+            });
+            console.log(response.data);
+            setEmail(response.data.email);
+            setUsername(response.data.username);
         } catch (error) {
-          console.error("Error fetching user details:", error);
+            console.error("Error fetching user details:", error);
         }
-      };
+    };
 
     const handleSubmit = async () => {
         if (!title || !description || !area || !complaintType || !file) {

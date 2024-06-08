@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './CSS/LoginPage.css';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
@@ -11,10 +11,11 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
-import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import { MdOutlineAdminPanelSettings } from 'react-icons/md';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from "jwt-decode";
+import { UserContext } from '../UserContext';
+// import jwtDecode from 'jwt-decode';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,6 +25,7 @@ const LoginPage = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   const handlePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -61,17 +63,22 @@ const LoginPage = () => {
         'https://s56-atharva-kharade-capstone-lokvani.onrender.com/login',
         { username, password }
       );
-      
+
       Cookies.set('token', response.data.token);
-      toast.success('Successfully logged in!');
+      const userDataResponse = await axios.get('https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails', {
+        headers: {
+          Authorization: response.data.token,
+        },
+      });
+      setUser(userDataResponse.data);
       navigate('/User');
     } catch (error) {
       console.error('Error:', error.response.data.error);
       if (error.response.status === 401) {
         if (error.response.data.error === 'User not found') {
           toast.error('User not found.');
-        } else if (error.response.data.error === 'Password doesn\'t match') {
-          toast.error('Password doesn\'t match.');
+        } else if (error.response.data.error === "Password doesn't match") {
+          toast.error("Password doesn't match.");
         } else {
           toast.error('An error occurred while logging in.');
         }
@@ -82,25 +89,25 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
-  const handleGoogleLoginSuccess = async (credentialResponse) => {
-    const decoded = jwtDecode(credentialResponse.credential);
 
-    const { email } = decoded;
+  // const handleGoogleLoginSuccess = async (credentialResponse) => {
+  //   const decoded = jwtDecode(credentialResponse.credential);
 
-    try {
-      const response = await axios.post(
-        'https://s56-atharva-kharade-capstone-lokvani.onrender.com/GoogleLogin',
-        { email: email }
-      );
-      console.log("Success:", response.data);
-      Cookies.set('token', response.data.token);
-      navigate('/User');
-    } catch (error) {
-      console.error("Error:", error.response.data);
-      toast.error(`${error.response.data.error}`);
-    }
-  };
+  //   const { email } = decoded;
 
+  //   try {
+  //     const response = await axios.post(
+  //       'https://s56-atharva-kharade-capstone-lokvani.onrender.com/GoogleLogin',
+  //       { email: email }
+  //     );
+  //     console.log("Success:", response.data);
+  //     Cookies.set('token', response.data.token);
+  //     navigate('/User');
+  //   } catch (error) {
+  //     console.error("Error:", error.response.data);
+  //     toast.error(`${error.response.data.error}`);
+  //   }
+  // }
 
   return (
     <div className="Login-main">
@@ -226,7 +233,7 @@ const LoginPage = () => {
             <p>OR</p>
           </div>
           <div>
-            <div className="google-login-button">
+            {/* <div className="google-login-button">
               <GoogleOAuthProvider clientId="722611360376-mt0evhdhlt6jr55qmk92dumipmdg5khv.apps.googleusercontent.com">
                 <GoogleLogin
                   text='continue_with'
@@ -240,7 +247,7 @@ const LoginPage = () => {
                   }}
                 />
               </GoogleOAuthProvider>
-            </div>
+            </div> */}
             <div className='LoginPage-admin'>
               <div>
                 <p>
