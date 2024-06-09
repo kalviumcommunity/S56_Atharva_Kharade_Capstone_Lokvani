@@ -11,16 +11,39 @@ import { UserContext } from '../UserContext';
 
 const MyComplaints = () => {
   const [complaints, setComplaints] = useState([]);
-  const { user } = useContext(UserContext);
-  const { email, username } = user;
+  // const { user } = useContext(UserContext);
+  // const { email, username } = user;
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const token = Cookies.get("token");
+
+  useEffect(() => {
+    handleUserDetails();
+    console.log(token);
+  }, []);
+
+
+  const handleUserDetails = async () => {
+    try {
+      const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
+        headers: {
+          Authorization: token
+        }
+      });
+      setEmail(response.data.email);
+      setUsername(response.data.username);
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
+  };
 
   useEffect(() => {
     fetchComplaints();
-  }, []);
+  }, [email]);
 
   const fetchComplaints = async () => {
     try {
-      const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint/${username}`);
+      const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint/${email}`);
       const data = response.data;
       setComplaints(data);
     } catch (error) {
