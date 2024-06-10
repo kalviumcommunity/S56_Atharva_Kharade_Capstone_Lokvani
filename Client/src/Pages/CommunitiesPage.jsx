@@ -12,7 +12,7 @@ const CommunitiesPage = () => {
 
   useEffect(() => {
     handleUserDetails();
-  }, []);
+  }, [email]);
 
 
   const handleUserDetails = async () => {
@@ -32,17 +32,15 @@ const CommunitiesPage = () => {
   };
 
 
-  const fetchCommunities = async (email) => {
+  const fetchCommunities = async () => {
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community`, {
         params: { email }
       });
       setCommunities(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Error fetching communities:", error);
     }
-    console.log(email);
   };
 
 

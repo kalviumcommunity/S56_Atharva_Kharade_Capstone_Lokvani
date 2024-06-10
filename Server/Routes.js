@@ -244,10 +244,10 @@ router.get("/Complaint", async (req, res) => {
   }
 });
 
-router.get("/Complaint/:username", async (req, res) => {
+router.get("/Complaint/:email", async (req, res) => {
   try {
-    const username = req.params.username;
-    const complaints = await Complaint.find({ createdBy: username });
+    const email = req.params.email;
+    const complaints = await Complaint.find({ createdBy: email });
     res.json(complaints);
   } catch (error) {
     res.status(500).json({ message: error.message });

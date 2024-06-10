@@ -20,6 +20,7 @@ const Community = () => {
     const { user } = useContext(UserContext);
     const { email } = user;
     const userEmail = email;
+    const navigate = useNavigate();
 
     const img = 'https://images.unsplash.com/photo-1612838320302-4b3b3b3b3b3b';
 
@@ -159,10 +160,9 @@ const Community = () => {
     }
 
     const handleLeaveCommunity = async (communityId) => {
-        const email = Cookies.get('email');
+        let email = userEmail;
         try {
             const response = await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/removeMember`, { communityId, email });
-            console.log('Left Community:', response.data);
             navigate('/Communities');
         }
         catch (error) {
