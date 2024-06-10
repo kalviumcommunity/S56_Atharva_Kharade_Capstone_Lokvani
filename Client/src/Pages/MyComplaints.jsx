@@ -46,6 +46,7 @@ const MyComplaints = () => {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint/${email}`);
       const data = response.data;
       setComplaints(data);
+      console.log(data);
     } catch (error) {
       console.error('Error fetching complaints:', error);
     }
