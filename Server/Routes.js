@@ -207,7 +207,7 @@ router.get("/Complaint", async (req, res) => {
 
     if (sortBy === "most-voted") {
       complaints = await Complaint.find()
-        .sort({ voteCount: -1 })
+        .sort({ $expr: { $subtract: ["$upvotedBy", "$downvotedBy"] } })
         .limit(limit)
         .skip((page - 1) * limit)
         .exec();
@@ -215,7 +215,7 @@ router.get("/Complaint", async (req, res) => {
       totalDocuments = await Complaint.countDocuments();
     } else if (sortBy === "most-downvoted") {
       complaints = await Complaint.find()
-        .sort({ voteCount: 1 })
+        .sort({ $expr: { $subtract: ["$downvotedBy", "$upvotedBy"] } })
         .limit(limit)
         .skip((page - 1) * limit)
         .exec();
@@ -223,6 +223,7 @@ router.get("/Complaint", async (req, res) => {
       totalDocuments = await Complaint.countDocuments();
     } else {
       complaints = await Complaint.find()
+        .sort({ timestamp: -1 })
         .limit(limit)
         .skip((page - 1) * limit)
         .exec();

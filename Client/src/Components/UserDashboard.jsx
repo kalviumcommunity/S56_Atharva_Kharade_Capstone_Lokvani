@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
-import { UserContext } from '../UserContext';
+import Cookies from 'js-cookie';
 import './CSS/UserDashboard.css';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../UserContext';
+
 import { FaRegUserCircle } from 'react-icons/fa';
-import { IconContext } from 'react-icons';
 import { GoHome } from 'react-icons/go';
 import { GrDocumentUser } from 'react-icons/gr';
 import { MdOutlineSmsFailed } from 'react-icons/md';
-import { BsFillPeopleFill } from 'react-icons/bs';
-import { FaBuildingNgo } from 'react-icons/fa6';
 import { TbLogout } from 'react-icons/tb';
-import Cookies from 'js-cookie';
+import { CgProfile } from "react-icons/cg";
+import { BsPeopleFill } from "react-icons/bs";
 
 const UserDashboard = () => {
   const { user } = useContext(UserContext);
@@ -33,9 +33,7 @@ const UserDashboard = () => {
         </div>
 
         <div className="userDetail">
-          <IconContext.Provider value={{ color: 'black', size: '40px' }}>
-            <FaRegUserCircle />
-          </IconContext.Provider>
+          <FaRegUserCircle className='DB-UserDIcon' />
           <div>
             <h1>{username}</h1>
             <p>{email}</p>
@@ -46,9 +44,7 @@ const UserDashboard = () => {
           <Link to={'/User'}>
             <div className="UserOptions">
               <div className="UserIcon">
-                <IconContext.Provider value={{ color: 'black', size: '30px' }}>
-                  <GoHome className='Dashboard-icons' />
-                </IconContext.Provider>
+                <GoHome className='DB-UserIcon' />
               </div>
               <div>
                 <h1>Home</h1>
@@ -59,9 +55,7 @@ const UserDashboard = () => {
           <Link to={'/Complaint'}>
             <div className="UserOptions">
               <div className="UserIcon">
-                <IconContext.Provider value={{ color: 'black', size: '30px' }}>
-                  <MdOutlineSmsFailed />
-                </IconContext.Provider>
+                <MdOutlineSmsFailed className='DB-UserIcon' />
               </div>
               <div>
                 <h1>Raise Complaint</h1>
@@ -72,9 +66,7 @@ const UserDashboard = () => {
           <Link to={'/MyComplaints'}>
             <div className="UserOptions">
               <div className="UserIcon">
-                <IconContext.Provider value={{ color: 'black', size: '30px' }}>
-                  <GrDocumentUser />
-                </IconContext.Provider>
+                <GrDocumentUser className='DB-UserIcon' />
               </div>
               <div>
                 <h1>My Complaints</h1>
@@ -85,9 +77,7 @@ const UserDashboard = () => {
           <Link to={'/Communities'}>
             <div className="UserOptions">
               <div className="UserIcon">
-                <IconContext.Provider value={{ color: 'black', size: '30px' }}>
-                  <BsFillPeopleFill />
-                </IconContext.Provider>
+                <BsPeopleFill className='DB-UserIcon' />
               </div>
               <div>
                 <h1>Communities</h1>
@@ -95,21 +85,19 @@ const UserDashboard = () => {
             </div>
           </Link>
 
-          <div className="UserOptions">
-            <div className="UserIcon">
-              <IconContext.Provider value={{ color: 'black', size: '30px' }}>
-                <FaBuildingNgo />
-              </IconContext.Provider>
+          <Link to={'/ProfileEdit'}>
+            <div className="UserOptions">
+              <div className="UserIcon">
+                <CgProfile className='DB-UserIcon' />
+              </div>
+              <div>
+                <h1>Profile</h1>
+              </div>
             </div>
-            <div>
-              <h1>NGOs</h1>
-            </div>
-          </div>
+          </Link>
           <div className="UserOptions" onClick={handleLogout}>
             <div className="UserIcon">
-              <IconContext.Provider value={{ color: 'black', size: '30px' }}>
-                <TbLogout />
-              </IconContext.Provider>
+              <TbLogout className='DB-UserIcon' />
             </div>
             <div>
               <h1>Logout</h1>

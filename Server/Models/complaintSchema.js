@@ -47,6 +47,10 @@ const complaintSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    timestamp: {
+      type: Date,
+      default: Date.now,
+    },
     upvotedBy: [
       {
         type: String,
@@ -61,11 +65,7 @@ const complaintSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    voteCount: {
-      type: Number,
-      default: 0,
-    },
-    comments: [commentSchema], 
+    comments: [commentSchema],
   },
   { versionKey: false }
 );
