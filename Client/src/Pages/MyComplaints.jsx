@@ -6,13 +6,9 @@ import { FaRegComment } from "react-icons/fa";
 import Chip from '@mui/material/Chip';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { useContext } from 'react';
-import { UserContext } from '../UserContext';
 
 const MyComplaints = () => {
   const [complaints, setComplaints] = useState([]);
-  // const { user } = useContext(UserContext);
-  // const { email, username } = user;
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const token = Cookies.get("token");
@@ -45,7 +41,7 @@ const MyComplaints = () => {
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint/${email}`);
       const data = response.data;
-      setComplaints(data);
+      setComplaints(data.complaints);
       console.log(data);
     } catch (error) {
       console.error('Error fetching complaints:', error);
@@ -62,7 +58,7 @@ const MyComplaints = () => {
               <p>No complaints logged by you.</p>
             </div>
           ) : (
-            complaints.complaints.map(complaint => (
+            complaints.map(complaint => (
               <div key={complaint._id} className="MyComplaint-complaint-box">
                 <div className="MyComplaint-box-title">
                   <h1>{complaint.title}</h1>

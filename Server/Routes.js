@@ -245,7 +245,7 @@ router.get("/Complaint", async (req, res) => {
   }
 });
 
-router.get("/Complaint/:email", async (req, res) => {
+router.get("/MyComplaint/:email", async (req, res) => {
   try {
     const email = req.params.email;
     const complaints = await Complaint.find({ createdBy: email });
