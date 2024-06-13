@@ -22,6 +22,8 @@ const SortBySelect = ({ handleChange }) => {
         <MenuItem value="">None</MenuItem>
         <MenuItem value="most-voted">Most Voted</MenuItem>
         <MenuItem value="most-downvoted">Most Downvoted</MenuItem>
+        <MenuItem value="most-commented">Most Commented</MenuItem>
+        <MenuItem value="least-commented">Least Commented</MenuItem>
       </Select>
     </FormControl>
   );

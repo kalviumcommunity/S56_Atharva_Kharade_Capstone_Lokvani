@@ -247,6 +247,44 @@ router.get("/Complaint", async (req, res) => {
       ]);
 
       totalDocuments = await Complaint.countDocuments();
+    } else if (sortBy === "most-commented") {
+      complaints = await Complaint.aggregate([
+        {
+          $addFields: {
+            commentCount: { $size: "$comments" },
+          },
+        },
+        {
+          $sort: { commentCount: -1 },
+        },
+        {
+          $skip: (page - 1) * limit,
+        },
+        {
+          $limit: limit,
+        },
+      ]);
+
+      totalDocuments = await Complaint.countDocuments();
+    } else if (sortBy === "least-commented") {
+      complaints = await Complaint.aggregate([
+        {
+          $addFields: {
+            commentCount: { $size: "$comments" },
+          },
+        },
+        {
+          $sort: { commentCount: 1 },
+        },
+        {
+          $skip: (page - 1) * limit,
+        },
+        {
+          $limit: limit,
+        },
+      ]);
+
+      totalDocuments = await Complaint.countDocuments();
     } else {
       complaints = await Complaint.find()
         .sort({ timestamp: -1 })
