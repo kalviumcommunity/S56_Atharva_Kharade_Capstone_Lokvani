@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ring2 } from 'ldrs'
+import { ring2 } from 'ldrs';
 import "./CSS/MainPage.css";
 import SortBySelect from "../Components/SortBy";
 import SearchInput from "../Components/Search";
@@ -10,9 +10,8 @@ import { BiUpvote, BiSolidUpvote, BiDownvote, BiSolidDownvote } from "react-icon
 import { FaRegComment } from "react-icons/fa";
 import { MdOutlineReport } from "react-icons/md";
 import CustomPagination from "../Components/Pagination";
-import { MdGroupAdd } from "react-icons/md";
-import { MdGroups } from "react-icons/md";
-ring2.register()
+import { MdGroupAdd, MdGroups } from "react-icons/md";
+ring2.register();
 
 const MainPage = () => {
   const [complaints, setComplaints] = useState([]);
@@ -22,12 +21,8 @@ const MainPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [communities, setCommunities] = useState([]);
   const [email, setEmail] = useState("");
-  const [loadingCommunities, setLoadingCommunities] = useState(false); 
+  const [loadingCommunities, setLoadingCommunities] = useState(false);
   const token = Cookies.get("token");
-
-  useEffect(() => {
-    fetchComplaints();
-  }, [email]);
 
   useEffect(() => {
     fetchComplaints();
@@ -46,10 +41,12 @@ const MainPage = () => {
           sortBy: sortBy
         }
       });
+
       let filteredComplaints = response.data.complaints;
       if (searchQuery) {
+        const keywords = searchQuery.trim().toLowerCase().split(/\s+/);
         filteredComplaints = filteredComplaints.filter(complaint =>
-          complaint.title.toLowerCase().includes(searchQuery.toLowerCase())
+          keywords.every(keyword => complaint.title.toLowerCase().includes(keyword))
         );
       }
 
@@ -69,17 +66,7 @@ const MainPage = () => {
   };
 
   const handleSearchChange = (event) => {
-    const query = event.target.value.toLowerCase();
-    setSearchQuery(query);
-
-    const keywords = query.trim().toLowerCase().split(/\s+/);
-
-    const filteredComplaints = complaints.filter((complaint) => {
-      const title = complaint.title.toLowerCase();
-      return keywords.every(keyword => title.includes(keyword));
-    });
-
-    setComplaints(filteredComplaints);
+    setSearchQuery(event.target.value);
   };
 
   const handleUserDetails = async () => {
@@ -97,7 +84,7 @@ const MainPage = () => {
   };
 
   const handleUpvote = async (index) => {
-    let userEmail = email;
+    const userEmail = email;
     try {
       const updatedComplaints = [...complaints];
       const complaint = updatedComplaints[index];
@@ -105,15 +92,12 @@ const MainPage = () => {
       if (complaint.upvotedBy.includes(userEmail)) {
         const emailIndex = complaint.upvotedBy.indexOf(userEmail);
         complaint.upvotedBy.splice(emailIndex, 1);
-        complaint.voteCount -= 1;
       } else {
         if (complaint.downvotedBy.includes(userEmail)) {
           const downvotedIndex = complaint.downvotedBy.indexOf(userEmail);
           complaint.downvotedBy.splice(downvotedIndex, 1);
-          complaint.voteCount += 1;
         }
         complaint.upvotedBy.push(userEmail);
-        complaint.voteCount += 1;
       }
 
       const response = await axios.put(
@@ -127,7 +111,6 @@ const MainPage = () => {
         if (complaint.upvotedBy.includes(userEmail)) {
           const emailIndex = complaint.upvotedBy.indexOf(userEmail);
           complaint.upvotedBy.splice(emailIndex, 1);
-          complaint.voteCount -= 1;
         }
         setComplaints(updatedComplaints);
       }
@@ -137,7 +120,7 @@ const MainPage = () => {
   };
 
   const handleDownvote = async (index) => {
-    let userEmail = email;
+    const userEmail = email;
     try {
       const updatedComplaints = [...complaints];
       const complaint = updatedComplaints[index];
@@ -145,15 +128,12 @@ const MainPage = () => {
       if (complaint.downvotedBy.includes(userEmail)) {
         const emailIndex = complaint.downvotedBy.indexOf(userEmail);
         complaint.downvotedBy.splice(emailIndex, 1);
-        complaint.voteCount += 1;
       } else {
         if (complaint.upvotedBy.includes(userEmail)) {
           const upvotedIndex = complaint.upvotedBy.indexOf(userEmail);
           complaint.upvotedBy.splice(upvotedIndex, 1);
-          complaint.voteCount -= 1;
         }
         complaint.downvotedBy.push(userEmail);
-        complaint.voteCount -= 1;
       }
 
       const response = await axios.put(
@@ -167,7 +147,6 @@ const MainPage = () => {
         if (complaint.downvotedBy.includes(userEmail)) {
           const emailIndex = complaint.downvotedBy.indexOf(userEmail);
           complaint.downvotedBy.splice(emailIndex, 1);
-          complaint.voteCount += 1;
         }
         setComplaints(updatedComplaints);
       }
@@ -184,12 +163,10 @@ const MainPage = () => {
       });
       setCommunities(response.data);
       setLoadingCommunities(false);
-      // console.log(response.data);
     } catch (error) {
       console.error("Error fetching communities:", error);
       setLoadingCommunities(false);
     }
-    // console.log(email);
   };
 
   const handleJoinCommunity = async (communityId) => {
