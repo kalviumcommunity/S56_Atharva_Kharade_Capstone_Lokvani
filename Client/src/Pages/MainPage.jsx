@@ -201,7 +201,6 @@ const MainPage = () => {
 
       if (response.status === 200) {
         fetchCommunities(email);
-        console.log(response.data);
       }
     } catch (error) {
       console.error("Error joining community:", error);

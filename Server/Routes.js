@@ -207,7 +207,7 @@ router.get("/Complaint", async (req, res) => {
 
     if (sortBy === "most-voted") {
       complaints = await Complaint.find()
-        .sort({ voteCount: -1 })
+        .sort({ $expr: { $subtract: ["$upvotedBy", "$downvotedBy"] } })
         .limit(limit)
         .skip((page - 1) * limit)
         .exec();
@@ -215,7 +215,7 @@ router.get("/Complaint", async (req, res) => {
       totalDocuments = await Complaint.countDocuments();
     } else if (sortBy === "most-downvoted") {
       complaints = await Complaint.find()
-        .sort({ voteCount: 1 })
+        .sort({ $expr: { $subtract: ["$downvotedBy", "$upvotedBy"] } })
         .limit(limit)
         .skip((page - 1) * limit)
         .exec();
@@ -223,6 +223,7 @@ router.get("/Complaint", async (req, res) => {
       totalDocuments = await Complaint.countDocuments();
     } else {
       complaints = await Complaint.find()
+        .sort({ timestamp: -1 })
         .limit(limit)
         .skip((page - 1) * limit)
         .exec();
@@ -244,10 +245,10 @@ router.get("/Complaint", async (req, res) => {
   }
 });
 
-router.get("/Complaint/:username", async (req, res) => {
+router.get("/MyComplaint/:email", async (req, res) => {
   try {
-    const username = req.params.username;
-    const complaints = await Complaint.find({ createdBy: username });
+    const email = req.params.email;
+    const complaints = await Complaint.find({ createdBy: email });
     res.json(complaints);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -737,6 +738,23 @@ router.put("/removeMember", async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.get("/UserDetails", async (req, res) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.Access_Token);
+    const userId = decoded._id;
+    const user = await User.findById(userId);
+    res.json({ username: user.username, email: user.email });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
