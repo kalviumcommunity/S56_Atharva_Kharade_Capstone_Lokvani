@@ -12,15 +12,15 @@ import { useContext } from 'react';
 const MyComplaints = () => {
   const [complaints, setComplaints] = useState();
   const { user } = useContext(UserContext);
-  const { email, username } = user;
+  const { userId } = user;
 
   useEffect(() => {
     fetchComplaints();
-  }, [email]);
+  }, [userId]);
 
   const fetchComplaints = async () => {
     try {
-      const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/MyComplaint/${email}`);
+      const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/MyComplaint/${userId}`);
       const data = response.data;
       setComplaints(data);
       console.log(data);

@@ -126,7 +126,7 @@ const LogComplaint = () => {
         } catch (error) {
             console.error('Error creating complaint:', error);
             toast.error('Failed to submit complaint.');
-            console.log(Number(userId))
+            console.log(userId)
         }
     };
 

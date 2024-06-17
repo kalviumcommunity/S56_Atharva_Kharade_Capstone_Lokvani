@@ -309,16 +309,18 @@ router.get("/Complaint", async (req, res) => {
   }
 });
 
-router.get("/MyComplaint/:email", async (req, res) => {
+//My Complaints Page
+router.get("/MyComplaint/:userId", async (req, res) => {
   try {
-    const email = req.params.email;
-    const complaints = await Complaint.find({ createdBy: email });
+    const userId = req.params.userId;
+    const complaints = await Complaint.find({ createdBy: userId });
     res.json(complaints);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
+//Edit profle page
 router.put("/Complaint/:username", async (req, res) => {
   const { username } = req.params;
   const { newUsername, newEmail } = req.body;
@@ -351,9 +353,14 @@ router.put("/Complaint/:username", async (req, res) => {
   }
 });
 
+//Upvote Complaint
 router.put("/:id/upvote", validateObjectId, async (req, res) => {
   const { id } = req.params;
-  const { userEmail } = req.body;
+  const { userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ message: "Invalid or missing userId" });
+  }
 
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -367,15 +374,15 @@ router.put("/:id/upvote", validateObjectId, async (req, res) => {
       return res.status(404).json({ message: "Complaint not found" });
     }
 
-    if (complaint.upvotedBy.includes(userEmail)) {
+    if (complaint.upvotedBy.includes(userId)) {
       await Complaint.findByIdAndUpdate(id, {
-        $pull: { upvotedBy: userEmail },
+        $pull: { upvotedBy: userId },
         $inc: { voteCount: -1 },
       }).session(session);
     } else {
       await Complaint.findByIdAndUpdate(id, {
-        $addToSet: { upvotedBy: userEmail },
-        $pull: { downvotedBy: userEmail },
+        $addToSet: { upvotedBy: userId },
+        $pull: { downvotedBy: userId },
         $inc: { voteCount: 1 },
       }).session(session);
     }
@@ -397,9 +404,14 @@ router.put("/:id/upvote", validateObjectId, async (req, res) => {
   }
 });
 
+//Downvote Complaint
 router.put("/:id/downvote", validateObjectId, async (req, res) => {
   const { id } = req.params;
-  const { userEmail } = req.body;
+  const { userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ message: "Invalid or missing userId" });
+  }
 
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -413,15 +425,15 @@ router.put("/:id/downvote", validateObjectId, async (req, res) => {
       return res.status(404).json({ message: "Complaint not found" });
     }
 
-    if (complaint.downvotedBy.includes(userEmail)) {
+    if (complaint.downvotedBy.includes(userId)) {
       await Complaint.findByIdAndUpdate(id, {
-        $pull: { downvotedBy: userEmail },
+        $pull: { downvotedBy: userId },
         $inc: { voteCount: 1 },
       }).session(session);
     } else {
       await Complaint.findByIdAndUpdate(id, {
-        $addToSet: { downvotedBy: userEmail },
-        $pull: { upvotedBy: userEmail },
+        $addToSet: { downvotedBy: userId },
+        $pull: { upvotedBy: userId },
         $inc: { voteCount: -1 },
       }).session(session);
     }
@@ -549,10 +561,10 @@ router.put("/comment/:id", async (req, res) => {
 });
 
 router.get("/community", async (req, res) => {
-  const { email } = req.query;
+  const { userId } = req.query;
   try {
     const community = await Community.find({
-      members: { $in: email },
+      members: { $in: userId },
     });
     res.json(community);
   } catch (err) {
@@ -746,7 +758,7 @@ router.get("/getCommunity", async (req, res) => {
 });
 
 router.post("/addMember", async (req, res) => {
-  const { communityId, email } = req.body;
+  const { communityId, userId } = req.body;
 
   try {
     if (!ObjectId.isValid(communityId)) {
@@ -759,13 +771,13 @@ router.post("/addMember", async (req, res) => {
       return res.status(404).json({ error: "Community not found" });
     }
 
-    if (community.members.includes(email)) {
+    if (community.members.includes(userId)) {
       return res
         .status(400)
         .json({ error: "Email already exists in members array" });
     }
 
-    community.members.push(email);
+    community.members.push(userId);
 
     await community.save();
 
@@ -779,7 +791,7 @@ router.post("/addMember", async (req, res) => {
 });
 
 router.put("/removeMember", async (req, res) => {
-  const { communityId, email } = req.body;
+  const { communityId, userId } = req.body;
 
   try {
     if (!ObjectId.isValid(communityId)) {
@@ -789,12 +801,12 @@ router.put("/removeMember", async (req, res) => {
     if (!community) {
       return res.status(404).json({ error: "Community not found" });
     }
-    if (!community.members.includes(email)) {
+    if (!community.members.includes(userId)) {
       return res
         .status(400)
         .json({ error: "Email does not exist in members array" });
     }
-    community.members.pull(email);
+    community.members.pull(userId);
     await community.save();
     return res
       .status(200)
