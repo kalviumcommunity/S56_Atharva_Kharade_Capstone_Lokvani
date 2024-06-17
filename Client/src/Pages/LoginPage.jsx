@@ -15,7 +15,6 @@ import { MdOutlineAdminPanelSettings } from 'react-icons/md';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
 import { UserContext } from '../UserContext';
-// import jwtDecode from 'jwt-decode';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -72,6 +71,7 @@ const LoginPage = () => {
       });
       setUser(userDataResponse.data);
       navigate('/User');
+      sessionStorage.setItem('username', username);
     } catch (error) {
       console.error('Error:', error.response.data.error);
       if (error.response.status === 401) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { ring2 } from 'ldrs';
 import "./CSS/MainPage.css";
 import SortBySelect from "../Components/SortBy";
@@ -11,6 +11,8 @@ import { FaRegComment } from "react-icons/fa";
 import { MdOutlineReport } from "react-icons/md";
 import CustomPagination from "../Components/Pagination";
 import { MdGroupAdd, MdGroups } from "react-icons/md";
+import { UserContext } from '../UserContext';
+
 ring2.register();
 
 const MainPage = () => {
@@ -20,9 +22,11 @@ const MainPage = () => {
   const [sortBy, setSortBy] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [communities, setCommunities] = useState([]);
-  const [email, setEmail] = useState("");
+  // const [email, setEmail] = useState("");
   const [loadingCommunities, setLoadingCommunities] = useState(false);
   const token = Cookies.get("token");
+    const { user } = useContext(UserContext);
+  const { email, username } = user;
 
   useEffect(() => {
     fetchComplaints();
@@ -76,7 +80,7 @@ const MainPage = () => {
           Authorization: token
         }
       });
-      setEmail(response.data.email);
+      let userId = response.data.userId;
       fetchCommunities(response.data.email);
     } catch (error) {
       console.error("Error fetching user details:", error);

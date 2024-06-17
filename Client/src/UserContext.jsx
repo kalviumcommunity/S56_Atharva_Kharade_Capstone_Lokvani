@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState({ username: '', email: '' });
+  const [user, setUser] = useState({ userId: '' });
   const [loading, setLoading] = useState(true);
   const token = Cookies.get('token');
 
@@ -18,7 +18,7 @@ export const UserProvider = ({ children }) => {
               Authorization: token
             }
           });
-          setUser({ username: response.data.username, email: response.data.email });
+          setUser({ userId: response.data.userId });
         } catch (error) {
           console.error('Error fetching user data:', error);
         } finally {
