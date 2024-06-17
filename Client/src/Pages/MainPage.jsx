@@ -1,10 +1,9 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { ring2 } from 'ldrs';
 import "./CSS/MainPage.css";
 import SortBySelect from "../Components/SortBy";
 import SearchInput from "../Components/Search";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 import { BiUpvote, BiSolidUpvote, BiDownvote, BiSolidDownvote } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
@@ -22,19 +21,13 @@ const MainPage = () => {
   const [sortBy, setSortBy] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [communities, setCommunities] = useState([]);
-  const [email, setEmail] = useState("");
   const [loadingCommunities, setLoadingCommunities] = useState(false);
-  const token = Cookies.get("token");
-    const { user } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const { userId } = user;
 
   useEffect(() => {
     fetchComplaints();
   }, [currentPage, sortBy, searchQuery]);
-
-  // useEffect(() => {
-  //   handleUserDetails();
-  // }, [token]);
 
   const fetchComplaints = async () => {
     try {
@@ -73,22 +66,8 @@ const MainPage = () => {
     setSearchQuery(event.target.value);
   };
 
-  // const handleUserDetails = async () => {
-  //   try {
-  //     const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
-  //       headers: {
-  //         Authorization: token
-  //       }
-  //     });
-  //     let userId = response.data.userId;
-  //     fetchCommunities(response.data.email);
-  //   } catch (error) {
-  //     console.error("Error fetching user details:", error);
-  //   }
-  // };
-
   const handleUpvote = async (index) => {
-    const userId = email;
+    console.log(userId)
     try {
       const updatedComplaints = [...complaints];
       const complaint = updatedComplaints[index];
@@ -124,7 +103,6 @@ const MainPage = () => {
   };
 
   const handleDownvote = async (index) => {
-    const userId = email;
     try {
       const updatedComplaints = [...complaints];
       const complaint = updatedComplaints[index];
@@ -161,6 +139,7 @@ const MainPage = () => {
 
   const fetchCommunities = async (userId) => {
     setLoadingCommunities(true);
+    consoe.log(userId)
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/getCommunity`, {
         params: { userId }

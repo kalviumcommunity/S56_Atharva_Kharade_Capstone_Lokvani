@@ -745,10 +745,10 @@ router.put("/community/:name/posts/:postId/comment", async (req, res) => {
 });
 
 router.get("/getCommunity", async (req, res) => {
-  const { email } = req.query;
+  const { userId } = req.query;
   try {
     const community = await Community.find({
-      members: { $nin: email },
+      members: { $nin: userId },
     });
     res.json(community);
   } catch (error) {

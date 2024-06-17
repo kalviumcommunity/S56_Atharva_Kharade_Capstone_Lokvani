@@ -18,7 +18,7 @@ export const UserProvider = ({ children }) => {
               Authorization: token
             }
           });
-          setUser({ userId: response.data._id });
+          setUser({ userId: response.data.userId });
         } catch (error) {
           console.error('Error fetching user data:', error);
         } finally {
