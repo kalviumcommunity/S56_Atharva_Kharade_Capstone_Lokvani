@@ -44,7 +44,7 @@ const complaintSchema = new mongoose.Schema(
       required: true,
     },
     createdBy: {
-      type: Number,
+      type: String,
       required: true,
     },
     timestamp: {
@@ -53,12 +53,12 @@ const complaintSchema = new mongoose.Schema(
     },
     upvotedBy: [
       {
-        type: Number,
+        type: String,
       },
     ],
     downvotedBy: [
       {
-        type: Number,
+        type: String,
       },
     ],
     verified: {

@@ -216,7 +216,7 @@ const MainPage = () => {
                     <p>{complaint.description}</p>
                   </div>
                   <div className="lower-descp-funct">
-                    <div className="Complaint-vote">
+                    {/* <div className="Complaint-vote">
                       {complaint.upvotedBy.includes(email) ? (
                         <BiSolidUpvote className="vote-arrows arrows-fill" onClick={() => handleUpvote(index)} />
                       ) : (
@@ -228,7 +228,7 @@ const MainPage = () => {
                       ) : (
                         <BiDownvote className="vote-arrows" onClick={() => handleDownvote(index)} />
                       )}
-                    </div>
+                    </div> */}
                     <div className="Complaint-comment">
                       <Link to={`/comment/${complaint._id}`}><FaRegComment className="comment-arrows" /></Link>
                       <h1>{complaint.comments.length}</h1>

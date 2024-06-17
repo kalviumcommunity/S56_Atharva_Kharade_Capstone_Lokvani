@@ -81,8 +81,8 @@ const LogComplaint = () => {
                     Authorization: token
                 }
             });
-            console.log(response.data);
-            setUserId(response.data._id);
+            console.log(response.data.userId);
+            setUserId(response.data.userId);
         } catch (error) {
             console.error("Error fetching user details:", error);
         }
@@ -126,6 +126,7 @@ const LogComplaint = () => {
         } catch (error) {
             console.error('Error creating complaint:', error);
             toast.error('Failed to submit complaint.');
+            console.log(Number(userId))
         }
     };
 
