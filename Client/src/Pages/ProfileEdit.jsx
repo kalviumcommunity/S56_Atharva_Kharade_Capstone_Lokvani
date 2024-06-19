@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FaRegEdit } from "react-icons/fa";
 
 const ProfileEdit = () => {
   const { user } = useContext(UserContext);
@@ -17,7 +18,10 @@ const ProfileEdit = () => {
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const [modalUsername, setModalUsername] = useState('');
+  const [modalEmail, setModalEmail] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null); // State for selected file
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -39,11 +43,40 @@ const ProfileEdit = () => {
   }, [userId]);
 
   const handleEditClick = () => {
+    setModalUsername(username);
+    setModalEmail(email);
     setIsModalOpen(true);
   };
 
   const handleModalClose = () => {
     setIsModalOpen(false);
+  };
+
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const handleFileUpload = async () => {
+    try {
+      if (!selectedFile) {
+        alert('Please select a file');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('image', selectedFile);
+      const response = await axios.post(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserProfileImage/${userId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      console.log('File upload successful:', response.data);
+      toast.success('Profile image updated successfully!');
+    } catch (error) {
+      console.error('Error uploading file:', error.message);
+      toast.error('Failed to update profile image. Please try again.');
+    }
   };
 
   const handleSave = async (newUsername, newEmail) => {
@@ -76,13 +109,28 @@ const ProfileEdit = () => {
     }
   };
 
+  const handleLogoClick = (e) => {
+    e.stopPropagation();
+  };
+
   return (
     <div className='UserProfileEditBody'>
       <UserDashboard />
       <div className='profileEditMain'>
         <div className="profileImageDiv">
-          <div className="profileImage">
+          <div className="profileImage" onClick={() => document.getElementById('fileInput').click()}>
             <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Profile" />
+            <div className="profileImageEditLogoDiv">
+              <label htmlFor="fileInput" className='profileImageEditLogo' onClick={handleLogoClick}>
+                <FaRegEdit />
+              </label>
+              <input
+                type="file"
+                id="fileInput"
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+              />
+            </div>
           </div>
           <div className="profileEditDetail">
             <div className="profileEditPersonal">
@@ -145,8 +193,8 @@ const ProfileEdit = () => {
           <TextField
             id="username"
             label="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={modalUsername}
+            onChange={(e) => setModalUsername(e.target.value)}
             fullWidth
             variant="outlined"
             sx={{ mb: 2 }}
@@ -154,8 +202,8 @@ const ProfileEdit = () => {
           <TextField
             id="email"
             label="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={modalEmail}
+            onChange={(e) => setModalEmail(e.target.value)}
             fullWidth
             variant="outlined"
             sx={{ mb: 2 }}
@@ -164,7 +212,7 @@ const ProfileEdit = () => {
             <Button onClick={handleModalClose} variant="contained" sx={{ mr: 2 }}>
               Close
             </Button>
-            <Button onClick={() => handleSave(username, email)} variant="contained" color="primary">
+            <Button onClick={() => handleSave(modalUsername, modalEmail)} variant="contained" color="primary">
               Save
             </Button>
           </div>

@@ -830,7 +830,7 @@ router.put("/UserEdit/:userId", async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { username, email },
-      { new: true } 
+      { new: true }
     );
 
     if (!updatedUser) {
@@ -841,6 +841,53 @@ router.put("/UserEdit/:userId", async (req, res) => {
   } catch (error) {
     console.error("Error updating user profile:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.post("/changeProfileImage", upload.single("image"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No image uploaded" });
+    }
+
+    cloudinary.uploader.upload(req.file.path, async function (error, result) {
+      if (error) {
+        return res
+          .status(500)
+          .json({ error: "Error uploading image to Cloudinary" });
+      }
+
+      try {
+        const { userId } = req.body;
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+          return res.status(404).json({ error: "User not found" });
+        }
+
+        user.Image = result.secure_url;
+
+        await user.save();
+
+        res.status(200).json({
+          status: "success",
+          message: "Profile image updated successfully",
+          user,
+        });
+      } catch (error) {
+        res
+          .status(500)
+          .json({
+            error: "Error updating profile image",
+            details: error.message,
+          });
+      }
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Internal server error", details: error.message });
   }
 });
 
