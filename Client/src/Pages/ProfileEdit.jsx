@@ -21,15 +21,26 @@ const ProfileEdit = () => {
   const [modalUsername, setModalUsername] = useState('');
   const [modalEmail, setModalEmail] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null); // State for selected file
+  const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserProfiles/${userId}`);
-        setUsername(response.data.username);
-        setEmail(response.data.email);
+        const userData = response.data;
+
+        setUsername(userData.username);
+        setEmail(userData.email);
+
+        if (userData.Image) {
+          setImageUrl(userData.Image);
+        } else {
+          setImageUrl("https://www.w3schools.com/howto/img_avatar.png");
+        }
+
+        console.log('User Profile:', userData);
       } catch (err) {
         if (err.response && err.response.status === 404) {
           setError('User not found');
@@ -38,6 +49,7 @@ const ProfileEdit = () => {
         }
       }
     };
+
 
     fetchUserProfile();
   }, [userId]);
@@ -52,26 +64,29 @@ const ProfileEdit = () => {
     setIsModalOpen(false);
   };
 
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-  };
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    setSelectedFile(file);
 
-  const handleFileUpload = async () => {
+    if (!file) {
+      alert('Please select a file');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('userId', userId);
+    console.log('Form Data:', formData);
+
     try {
-      if (!selectedFile) {
-        alert('Please select a file');
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append('image', selectedFile);
-      const response = await axios.post(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserProfileImage/${userId}`, formData, {
+      const response = await axios.post(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/changeProfileImage`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
 
       console.log('File upload successful:', response.data);
+      setImageUrl(response.data.user.Image);
       toast.success('Profile image updated successfully!');
     } catch (error) {
       console.error('Error uploading file:', error.message);
@@ -119,7 +134,7 @@ const ProfileEdit = () => {
       <div className='profileEditMain'>
         <div className="profileImageDiv">
           <div className="profileImage" onClick={() => document.getElementById('fileInput').click()}>
-            <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Profile" />
+            <img src={imageUrl} alt="Profile" />
             <div className="profileImageEditLogoDiv">
               <label htmlFor="fileInput" className='profileImageEditLogo' onClick={handleLogoClick}>
                 <FaRegEdit />
@@ -147,7 +162,7 @@ const ProfileEdit = () => {
             <div className="profileEditBio">
               <MdEdit className='profileBioEditPen' />
               <h1>Bio</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet efficitur nulla. Aliquam mattis justo eros, ac malesuada ipsum varius id. Morbi in ligula venenatis, convallis erat a, placerat.</p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet efficitur nulla. Aliquam mattis justo eros, ac malesuada</p>
             </div>
           </div>
         </div>
