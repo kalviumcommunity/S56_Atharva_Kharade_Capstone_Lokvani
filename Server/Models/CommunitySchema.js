@@ -40,10 +40,6 @@ const PostsSchema = new mongoose.Schema({
       type: String,
     },
   ],
-  voteCount: {
-    type: Number,
-    default: 0,
-  },
   comments: [commentSchema],
 });
 

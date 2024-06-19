@@ -21,6 +21,7 @@ const LogComplaint = () => {
     const [titleError, setTitleError] = useState('');
     const [descriptionError, setDescriptionError] = useState('');
     const [file, setFile] = useState(null);
+    const [userId, setUserId] = useState('');
 
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
@@ -80,9 +81,8 @@ const LogComplaint = () => {
                     Authorization: token
                 }
             });
-            console.log(response.data);
-            setEmail(response.data.email);
-            setUsername(response.data.username);
+            console.log(response.data.userId);
+            setUserId(response.data.userId);
         } catch (error) {
             console.error("Error fetching user details:", error);
         }
@@ -107,7 +107,7 @@ const LogComplaint = () => {
             formData.append('complaintType', complaintType);
             formData.append('location', location);
             formData.append('image', file);
-            formData.append('createdBy', email);
+            formData.append('createdBy', userId);
 
             const response = await axios.post('https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint', formData, {
                 headers: {
@@ -126,6 +126,7 @@ const LogComplaint = () => {
         } catch (error) {
             console.error('Error creating complaint:', error);
             toast.error('Failed to submit complaint.');
+            console.log(userId)
         }
     };
 

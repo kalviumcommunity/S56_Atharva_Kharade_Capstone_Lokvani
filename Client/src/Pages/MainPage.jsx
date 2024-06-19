@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { ring2 } from 'ldrs';
 import "./CSS/MainPage.css";
 import SortBySelect from "../Components/SortBy";
 import SearchInput from "../Components/Search";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 import { BiUpvote, BiSolidUpvote, BiDownvote, BiSolidDownvote } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
 import { MdOutlineReport } from "react-icons/md";
 import CustomPagination from "../Components/Pagination";
 import { MdGroupAdd, MdGroups } from "react-icons/md";
+import { UserContext } from '../UserContext';
+
 ring2.register();
 
 const MainPage = () => {
@@ -20,17 +21,17 @@ const MainPage = () => {
   const [sortBy, setSortBy] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [communities, setCommunities] = useState([]);
-  const [email, setEmail] = useState("");
   const [loadingCommunities, setLoadingCommunities] = useState(false);
-  const token = Cookies.get("token");
+  const { user } = useContext(UserContext);
+  const { userId } = user;
 
   useEffect(() => {
     fetchComplaints();
   }, [currentPage, sortBy, searchQuery]);
 
   useEffect(() => {
-    handleUserDetails();
-  }, [token]);
+    fetchCommunities(userId);
+  }, [userId]);
 
   const fetchComplaints = async () => {
     try {
@@ -69,47 +70,33 @@ const MainPage = () => {
     setSearchQuery(event.target.value);
   };
 
-  const handleUserDetails = async () => {
-    try {
-      const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
-        headers: {
-          Authorization: token
-        }
-      });
-      setEmail(response.data.email);
-      fetchCommunities(response.data.email);
-    } catch (error) {
-      console.error("Error fetching user details:", error);
-    }
-  };
-
   const handleUpvote = async (index) => {
-    const userEmail = email;
+    console.log(userId)
     try {
       const updatedComplaints = [...complaints];
       const complaint = updatedComplaints[index];
 
-      if (complaint.upvotedBy.includes(userEmail)) {
-        const emailIndex = complaint.upvotedBy.indexOf(userEmail);
+      if (complaint.upvotedBy.includes(userId)) {
+        const emailIndex = complaint.upvotedBy.indexOf(userId);
         complaint.upvotedBy.splice(emailIndex, 1);
       } else {
-        if (complaint.downvotedBy.includes(userEmail)) {
-          const downvotedIndex = complaint.downvotedBy.indexOf(userEmail);
+        if (complaint.downvotedBy.includes(userId)) {
+          const downvotedIndex = complaint.downvotedBy.indexOf(userId);
           complaint.downvotedBy.splice(downvotedIndex, 1);
         }
-        complaint.upvotedBy.push(userEmail);
+        complaint.upvotedBy.push(userId);
       }
 
       const response = await axios.put(
         `https://s56-atharva-kharade-capstone-lokvani.onrender.com/${complaint._id}/upvote`,
-        { userEmail }
+        { userId }
       );
 
       if (response.status === 200) {
         setComplaints(updatedComplaints);
       } else {
-        if (complaint.upvotedBy.includes(userEmail)) {
-          const emailIndex = complaint.upvotedBy.indexOf(userEmail);
+        if (complaint.upvotedBy.includes(userId)) {
+          const emailIndex = complaint.upvotedBy.indexOf(userId);
           complaint.upvotedBy.splice(emailIndex, 1);
         }
         setComplaints(updatedComplaints);
@@ -120,32 +107,31 @@ const MainPage = () => {
   };
 
   const handleDownvote = async (index) => {
-    const userEmail = email;
     try {
       const updatedComplaints = [...complaints];
       const complaint = updatedComplaints[index];
 
-      if (complaint.downvotedBy.includes(userEmail)) {
-        const emailIndex = complaint.downvotedBy.indexOf(userEmail);
+      if (complaint.downvotedBy.includes(userId)) {
+        const emailIndex = complaint.downvotedBy.indexOf(userId);
         complaint.downvotedBy.splice(emailIndex, 1);
       } else {
-        if (complaint.upvotedBy.includes(userEmail)) {
-          const upvotedIndex = complaint.upvotedBy.indexOf(userEmail);
+        if (complaint.upvotedBy.includes(userId)) {
+          const upvotedIndex = complaint.upvotedBy.indexOf(userId);
           complaint.upvotedBy.splice(upvotedIndex, 1);
         }
-        complaint.downvotedBy.push(userEmail);
+        complaint.downvotedBy.push(userId);
       }
 
       const response = await axios.put(
         `https://s56-atharva-kharade-capstone-lokvani.onrender.com/${complaint._id}/downvote`,
-        { userEmail }
+        { userId }
       );
 
       if (response.status === 200) {
         setComplaints(updatedComplaints);
       } else {
-        if (complaint.downvotedBy.includes(userEmail)) {
-          const emailIndex = complaint.downvotedBy.indexOf(userEmail);
+        if (complaint.downvotedBy.includes(userId)) {
+          const emailIndex = complaint.downvotedBy.indexOf(userId);
           complaint.downvotedBy.splice(emailIndex, 1);
         }
         setComplaints(updatedComplaints);
@@ -155,11 +141,11 @@ const MainPage = () => {
     }
   };
 
-  const fetchCommunities = async (email) => {
+  const fetchCommunities = async (userId) => {
     setLoadingCommunities(true);
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/getCommunity`, {
-        params: { email }
+        params: { userId }
       });
       setCommunities(response.data);
       setLoadingCommunities(false);
@@ -173,11 +159,11 @@ const MainPage = () => {
     try {
       const response = await axios.post(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/addMember`, {
         communityId,
-        email
+        userId
       });
 
       if (response.status === 200) {
-        fetchCommunities(email);
+        fetchCommunities(userId);
       }
     } catch (error) {
       console.error("Error joining community:", error);
@@ -213,13 +199,13 @@ const MainPage = () => {
                   </div>
                   <div className="lower-descp-funct">
                     <div className="Complaint-vote">
-                      {complaint.upvotedBy.includes(email) ? (
+                      {complaint.upvotedBy.includes(userId) ? (
                         <BiSolidUpvote className="vote-arrows arrows-fill" onClick={() => handleUpvote(index)} />
                       ) : (
                         <BiUpvote className="vote-arrows" onClick={() => handleUpvote(index)} />
                       )}
                       <h1>{((complaint.upvotedBy && complaint.upvotedBy.length) || 0) - ((complaint.downvotedBy && complaint.downvotedBy.length) || 0)}</h1>
-                      {complaint.downvotedBy.includes(email) ? (
+                      {complaint.downvotedBy.includes(userId) ? (
                         <BiSolidDownvote className="vote-arrows arrows-fill" onClick={() => handleDownvote(index)} />
                       ) : (
                         <BiDownvote className="vote-arrows" onClick={() => handleDownvote(index)} />

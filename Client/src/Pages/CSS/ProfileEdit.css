@@ -46,6 +46,34 @@
     rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   margin: 30px 0;
   overflow: hidden;
+  position: relative;
+}
+
+.profileImageEditLogoDiv{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 300px;
+  /* border: 5px solid black; */
+  border-radius: 50%;
+  z-index: 1;
+  background-color: #00000046;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profileImageEditLogoDiv:hover{
+  opacity: 1;
+  cursor: pointer;
+}
+
+.profileImageEditLogo {
+  font-size: 50px;
+  color: rgba(255, 255, 255, 0.603);
+  cursor: pointer;
 }
 
 .profileEditDetail {
@@ -193,4 +221,16 @@
 
 .profileLikedBox h1 {
   font-size: 15px;
+}
+
+#a{
+  font-size: 30px;
+  font-family: "Poppins", serif;
+  font-weight: 400;
+  text-align: center;
+}
+
+.b{
+  width: 100px;
+  height: 50px;
 }

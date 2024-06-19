@@ -14,8 +14,9 @@ import { BsPeopleFill } from "react-icons/bs";
 
 const UserDashboard = () => {
   const { user } = useContext(UserContext);
-  const { email, username } = user;
+  const { userId } = user;
   const navigate = useNavigate();
+  const username = sessionStorage.getItem('username');
 
   const handleLogout = () => {
     Cookies.remove('token');
@@ -32,13 +33,16 @@ const UserDashboard = () => {
           </div>
         </div>
 
-        <div className="userDetail">
-          <FaRegUserCircle className='DB-UserDIcon' />
-          <div>
-            <h1>{username}</h1>
-            <p>{email}</p>
+        <Link to={'/ProfileEdit'}>
+          <div className="userDetail">
+            <div className="userDetailProfilePic">
+              <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Profile" />
+            </div>
+            <div>
+              <h1>{username}</h1>
+            </div>
           </div>
-        </div>
+        </Link>
 
         <div style={{ marginTop: '15px' }}>
           <Link to={'/User'}>
@@ -85,16 +89,6 @@ const UserDashboard = () => {
             </div>
           </Link>
 
-          <Link to={'/ProfileEdit'}>
-            <div className="UserOptions">
-              <div className="UserIcon">
-                <CgProfile className='DB-UserIcon' />
-              </div>
-              <div>
-                <h1>Profile</h1>
-              </div>
-            </div>
-          </Link>
           <div className="UserOptions" onClick={handleLogout}>
             <div className="UserIcon">
               <TbLogout className='DB-UserIcon' />

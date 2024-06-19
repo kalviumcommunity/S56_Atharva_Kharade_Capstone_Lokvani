@@ -144,7 +144,7 @@ router.post("/Login", async (req, res) => {
     }
 
     const token = jwt.sign({ _id: user._id }, process.env.Access_Token, {
-      expiresIn: "100d",
+      expiresIn: "10d",
     });
 
     res.status(200).json({
@@ -309,51 +309,25 @@ router.get("/Complaint", async (req, res) => {
   }
 });
 
-router.get("/MyComplaint/:email", async (req, res) => {
+//My Complaints Page
+router.get("/MyComplaint/:userId", async (req, res) => {
   try {
-    const email = req.params.email;
-    const complaints = await Complaint.find({ createdBy: email });
+    const userId = req.params.userId;
+    const complaints = await Complaint.find({ createdBy: userId });
     res.json(complaints);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.put("/Complaint/:username", async (req, res) => {
-  const { username } = req.params;
-  const { newUsername, newEmail } = req.body;
-
-  try {
-    const existingUsername = await User.findOne({ username: newUsername });
-    if (existingUsername && existingUsername.username !== username) {
-      return res.status(400).json({ message: "Username already exists" });
-    }
-
-    const existingEmail = await User.findOne({ email: newEmail });
-    if (existingEmail && existingEmail.username !== username) {
-      return res.status(400).json({ message: "Email already exists" });
-    }
-
-    const user = await User.findOneAndUpdate(
-      { username },
-      { username: newUsername, email: newEmail },
-      { new: true }
-    );
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    return res.status(200).json({ message: "User updated successfully", user });
-  } catch (error) {
-    console.error("Error updating user:", error);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-});
-
+//Upvote Complaint
 router.put("/:id/upvote", validateObjectId, async (req, res) => {
   const { id } = req.params;
-  const { userEmail } = req.body;
+  const { userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ message: "Invalid or missing userId" });
+  }
 
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -367,16 +341,14 @@ router.put("/:id/upvote", validateObjectId, async (req, res) => {
       return res.status(404).json({ message: "Complaint not found" });
     }
 
-    if (complaint.upvotedBy.includes(userEmail)) {
+    if (complaint.upvotedBy.includes(userId)) {
       await Complaint.findByIdAndUpdate(id, {
-        $pull: { upvotedBy: userEmail },
-        $inc: { voteCount: -1 },
+        $pull: { upvotedBy: userId },
       }).session(session);
     } else {
       await Complaint.findByIdAndUpdate(id, {
-        $addToSet: { upvotedBy: userEmail },
-        $pull: { downvotedBy: userEmail },
-        $inc: { voteCount: 1 },
+        $addToSet: { upvotedBy: userId },
+        $pull: { downvotedBy: userId },
       }).session(session);
     }
 
@@ -397,9 +369,14 @@ router.put("/:id/upvote", validateObjectId, async (req, res) => {
   }
 });
 
+//Downvote Complaint
 router.put("/:id/downvote", validateObjectId, async (req, res) => {
   const { id } = req.params;
-  const { userEmail } = req.body;
+  const { userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ message: "Invalid or missing userId" });
+  }
 
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -413,15 +390,15 @@ router.put("/:id/downvote", validateObjectId, async (req, res) => {
       return res.status(404).json({ message: "Complaint not found" });
     }
 
-    if (complaint.downvotedBy.includes(userEmail)) {
+    if (complaint.downvotedBy.includes(userId)) {
       await Complaint.findByIdAndUpdate(id, {
-        $pull: { downvotedBy: userEmail },
+        $pull: { downvotedBy: userId },
         $inc: { voteCount: 1 },
       }).session(session);
     } else {
       await Complaint.findByIdAndUpdate(id, {
-        $addToSet: { downvotedBy: userEmail },
-        $pull: { upvotedBy: userEmail },
+        $addToSet: { downvotedBy: userId },
+        $pull: { upvotedBy: userId },
         $inc: { voteCount: -1 },
       }).session(session);
     }
@@ -549,10 +526,10 @@ router.put("/comment/:id", async (req, res) => {
 });
 
 router.get("/community", async (req, res) => {
-  const { email } = req.query;
+  const { userId } = req.query;
   try {
     const community = await Community.find({
-      members: { $in: email },
+      members: { $in: userId },
     });
     res.json(community);
   } catch (err) {
@@ -607,7 +584,7 @@ router.post("/community/:name/posts", async (req, res) => {
 router.put("/community/:name/posts/:postId/upvote", async (req, res) => {
   const name = decodeURIComponent(req.params.name);
   const { postId } = req.params;
-  const { userEmail } = req.body;
+  const { userId } = req.body;
 
   try {
     const community = await Community.findOne({ name });
@@ -620,13 +597,13 @@ router.put("/community/:name/posts/:postId/upvote", async (req, res) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
-    if (post.upvotedBy.includes(userEmail)) {
-      post.upvotedBy.pull(userEmail);
+    if (post.upvotedBy.includes(userId)) {
+      post.upvotedBy.pull(userId);
       post.voteCount -= 1;
     } else {
-      post.upvotedBy.push(userEmail);
-      if (post.downvotedBy.includes(userEmail)) {
-        post.downvotedBy.pull(userEmail);
+      post.upvotedBy.push(userId);
+      if (post.downvotedBy.includes(userId)) {
+        post.downvotedBy.pull(userId);
         post.voteCount += 2;
       } else {
         post.voteCount += 1;
@@ -647,7 +624,7 @@ router.put("/community/:name/posts/:postId/upvote", async (req, res) => {
 router.put("/community/:name/posts/:postId/downvote", async (req, res) => {
   const name = decodeURIComponent(req.params.name);
   const { postId } = req.params;
-  const { userEmail } = req.body;
+  const { userId } = req.body;
 
   try {
     const community = await Community.findOne({ name });
@@ -660,13 +637,13 @@ router.put("/community/:name/posts/:postId/downvote", async (req, res) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
-    if (post.downvotedBy.includes(userEmail)) {
-      post.downvotedBy.pull(userEmail);
+    if (post.downvotedBy.includes(userId)) {
+      post.downvotedBy.pull(userId);
       post.voteCount += 1;
     } else {
-      post.downvotedBy.push(userEmail);
-      if (post.upvotedBy.includes(userEmail)) {
-        post.upvotedBy.pull(userEmail);
+      post.downvotedBy.push(userId);
+      if (post.upvotedBy.includes(userId)) {
+        post.upvotedBy.pull(userId);
         post.voteCount -= 2;
       } else {
         post.voteCount -= 1;
@@ -733,10 +710,10 @@ router.put("/community/:name/posts/:postId/comment", async (req, res) => {
 });
 
 router.get("/getCommunity", async (req, res) => {
-  const { email } = req.query;
+  const { userId } = req.query;
   try {
     const community = await Community.find({
-      members: { $nin: email },
+      members: { $nin: userId },
     });
     res.json(community);
   } catch (error) {
@@ -746,7 +723,7 @@ router.get("/getCommunity", async (req, res) => {
 });
 
 router.post("/addMember", async (req, res) => {
-  const { communityId, email } = req.body;
+  const { communityId, userId } = req.body;
 
   try {
     if (!ObjectId.isValid(communityId)) {
@@ -759,13 +736,13 @@ router.post("/addMember", async (req, res) => {
       return res.status(404).json({ error: "Community not found" });
     }
 
-    if (community.members.includes(email)) {
+    if (community.members.includes(userId)) {
       return res
         .status(400)
         .json({ error: "Email already exists in members array" });
     }
 
-    community.members.push(email);
+    community.members.push(userId);
 
     await community.save();
 
@@ -779,7 +756,7 @@ router.post("/addMember", async (req, res) => {
 });
 
 router.put("/removeMember", async (req, res) => {
-  const { communityId, email } = req.body;
+  const { communityId, userId } = req.body;
 
   try {
     if (!ObjectId.isValid(communityId)) {
@@ -789,12 +766,12 @@ router.put("/removeMember", async (req, res) => {
     if (!community) {
       return res.status(404).json({ error: "Community not found" });
     }
-    if (!community.members.includes(email)) {
+    if (!community.members.includes(userId)) {
       return res
         .status(400)
         .json({ error: "Email does not exist in members array" });
     }
-    community.members.pull(email);
+    community.members.pull(userId);
     await community.save();
     return res
       .status(200)
@@ -807,16 +784,120 @@ router.put("/removeMember", async (req, res) => {
 
 router.get("/UserDetails", async (req, res) => {
   const token = req.headers.authorization;
-
   if (!token) {
     return res.status(401).json({ error: "Unauthorized" });
   }
-
   try {
     const decoded = jwt.verify(token, process.env.Access_Token);
     const userId = decoded._id;
+    res.json({ userId });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get("/UserProfiles/:userId", async (req, res) => {
+  const { userId } = req.params;
+  try {
     const user = await User.findById(userId);
-    res.json({ username: user.username, email: user.email });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.put("/UserEdit/:userId", async (req, res) => {
+  const { userId } = req.params;
+  const { username, email } = req.body;
+
+  try {
+    const existingUserByUsername = await User.findOne({ username });
+    if (
+      existingUserByUsername &&
+      existingUserByUsername._id.toString() !== userId
+    ) {
+      return res.status(400).json({ error: "Username already taken" });
+    }
+
+    const existingUserByEmail = await User.findOne({ email });
+    if (existingUserByEmail && existingUserByEmail._id.toString() !== userId) {
+      return res.status(400).json({ error: "Email already taken" });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { username, email },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.post("/changeProfileImage", upload.single("image"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No image uploaded" });
+    }
+
+    cloudinary.uploader.upload(req.file.path, async function (error, result) {
+      if (error) {
+        return res
+          .status(500)
+          .json({ error: "Error uploading image to Cloudinary" });
+      }
+
+      try {
+        const { userId } = req.body;
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+          return res.status(404).json({ error: "User not found" });
+        }
+
+        user.Image = result.secure_url;
+
+        await user.save();
+
+        res.status(200).json({
+          status: "success",
+          message: "Profile image updated successfully",
+          user,
+        });
+      } catch (error) {
+        res.status(500).json({
+          error: "Error updating profile image",
+          details: error.message,
+        });
+      }
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Internal server error", details: error.message });
+  }
+});
+
+router.get("/userDataImage/:userId", async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    } else {
+      res.json({ user });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
