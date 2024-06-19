@@ -17,10 +17,10 @@ const Community = () => {
     const [description, setDescription] = useState('');
     const [posts, setPosts] = useState([]);
     const { name } = useParams();
-    const { user } = useContext(UserContext);
-    const { email } = user;
-    const userEmail = email;
+    const userEmail = "email";
     const navigate = useNavigate();
+    const { user } = useContext(UserContext);
+    const { userId } = user;
 
     const img = 'https://images.unsplash.com/photo-1612838320302-4b3b3b3b3b3b';
 
@@ -83,23 +83,23 @@ const Community = () => {
                 return;
             }
 
-            if (post.upvotedBy.includes(userEmail)) {
-                const emailIndex = post.upvotedBy.indexOf(userEmail);
+            if (post.upvotedBy.includes(userId)) {
+                const emailIndex = post.upvotedBy.indexOf(userId);
                 post.upvotedBy.splice(emailIndex, 1);
                 post.voteCount -= 1;
             } else {
-                if (post.downvotedBy.includes(userEmail)) {
-                    const downvotedIndex = post.downvotedBy.indexOf(userEmail);
+                if (post.downvotedBy.includes(userId)) {
+                    const downvotedIndex = post.downvotedBy.indexOf(userId);
                     post.downvotedBy.splice(downvotedIndex, 1);
                     post.voteCount += 1;
                 }
-                post.upvotedBy.push(userEmail);
+                post.upvotedBy.push(userId);
                 post.voteCount += 1;
             }
 
             const response = await axios.put(
                 `https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}/posts/${_id}/upvote`,
-                { userEmail }
+                { userId }
             );
 
             if (response.status === 200) {
@@ -129,23 +129,23 @@ const Community = () => {
                 return;
             }
 
-            if (post.downvotedBy.includes(userEmail)) {
-                const emailIndex = post.downvotedBy.indexOf(userEmail);
+            if (post.downvotedBy.includes(userId)) {
+                const emailIndex = post.downvotedBy.indexOf(userId);
                 post.downvotedBy.splice(emailIndex, 1);
                 post.voteCount += 1;
             } else {
-                if (post.upvotedBy.includes(userEmail)) {
-                    const upvotedIndex = post.upvotedBy.indexOf(userEmail);
+                if (post.upvotedBy.includes(userId)) {
+                    const upvotedIndex = post.upvotedBy.indexOf(userId);
                     post.upvotedBy.splice(upvotedIndex, 1);
                     post.voteCount -= 1;
                 }
-                post.downvotedBy.push(userEmail);
+                post.downvotedBy.push(userId);
                 post.voteCount -= 1;
             }
 
             const response = await axios.put(
                 `https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}/posts/${_id}/downvote`,
-                { userEmail }
+                { userId }
             );
 
             if (response.status === 200) {
@@ -160,7 +160,7 @@ const Community = () => {
     }
 
     const handleLeaveCommunity = async (communityId) => {
-        let email = userEmail;
+        let email = userId;
         try {
             const response = await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/removeMember`, { communityId, email });
             navigate('/Communities');

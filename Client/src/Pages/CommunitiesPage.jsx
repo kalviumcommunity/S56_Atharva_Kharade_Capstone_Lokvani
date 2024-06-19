@@ -1,43 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './CSS/CommunitiesPage.css';
 import UserDashboard from '../Components/UserDashboard';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Cookies from "js-cookie";
+import { UserContext } from '../UserContext';
 
 const CommunitiesPage = () => {
   const [communities, setCommunities] = useState([]);
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+  const { user } = useContext(UserContext);
+  const { userId } = user;
 
   useEffect(() => {
-    handleUserDetails();
-  }, [email]);
-
-
-  const handleUserDetails = async () => {
-    const token = Cookies.get("token");
-    try {
-      const response = await axios.get("https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails", {
-        headers: {
-          Authorization: token
-        }
-      });
-      setEmail(response.data.email);
-      setUsername(response.data.username);
-      fetchCommunities(response.data.email);
-    } catch (error) {
-      console.error("Error fetching user details:", error);
-    }
-  };
-
+    fetchCommunities();
+  }, [userId]);
 
   const fetchCommunities = async () => {
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community`, {
-        params: { email }
+        params: { userId }
       });
       setCommunities(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching communities:", error);
     }

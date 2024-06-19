@@ -5,12 +5,33 @@ import UserDashboard from '../Components/UserDashboard'
 import { UserContext } from '../UserContext';
 import { useContext } from 'react';
 import axios from 'axios';
+import { useEffect,useState } from 'react';
 
 const ProfileEdit = () => {
   const { user } = useContext(UserContext);
-  const { email, username } = user;
+  const { userId } = user;
 
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
 
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserProfiles/${userId}`);
+        setUsername(response.data.username);
+        setEmail(response.data.email);
+        console.log(response.data);
+      } catch (err) {
+        if (err.response && err.response.status === 404) {
+          setError('User not found');
+        } else {
+          setError('An error occurred');
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, [userId]);
 
   return (
     <div className='UserProfileEditBody'>

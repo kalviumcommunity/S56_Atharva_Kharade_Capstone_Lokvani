@@ -377,13 +377,11 @@ router.put("/:id/upvote", validateObjectId, async (req, res) => {
     if (complaint.upvotedBy.includes(userId)) {
       await Complaint.findByIdAndUpdate(id, {
         $pull: { upvotedBy: userId },
-        $inc: { voteCount: -1 },
       }).session(session);
     } else {
       await Complaint.findByIdAndUpdate(id, {
         $addToSet: { upvotedBy: userId },
         $pull: { downvotedBy: userId },
-        $inc: { voteCount: 1 },
       }).session(session);
     }
 
@@ -619,7 +617,7 @@ router.post("/community/:name/posts", async (req, res) => {
 router.put("/community/:name/posts/:postId/upvote", async (req, res) => {
   const name = decodeURIComponent(req.params.name);
   const { postId } = req.params;
-  const { userEmail } = req.body;
+  const { userId } = req.body;
 
   try {
     const community = await Community.findOne({ name });
@@ -632,13 +630,13 @@ router.put("/community/:name/posts/:postId/upvote", async (req, res) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
-    if (post.upvotedBy.includes(userEmail)) {
-      post.upvotedBy.pull(userEmail);
+    if (post.upvotedBy.includes(userId)) {
+      post.upvotedBy.pull(userId);
       post.voteCount -= 1;
     } else {
-      post.upvotedBy.push(userEmail);
-      if (post.downvotedBy.includes(userEmail)) {
-        post.downvotedBy.pull(userEmail);
+      post.upvotedBy.push(userId);
+      if (post.downvotedBy.includes(userId)) {
+        post.downvotedBy.pull(userId);
         post.voteCount += 2;
       } else {
         post.voteCount += 1;
@@ -659,7 +657,7 @@ router.put("/community/:name/posts/:postId/upvote", async (req, res) => {
 router.put("/community/:name/posts/:postId/downvote", async (req, res) => {
   const name = decodeURIComponent(req.params.name);
   const { postId } = req.params;
-  const { userEmail } = req.body;
+  const { userId } = req.body;
 
   try {
     const community = await Community.findOne({ name });
@@ -672,13 +670,13 @@ router.put("/community/:name/posts/:postId/downvote", async (req, res) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
-    if (post.downvotedBy.includes(userEmail)) {
-      post.downvotedBy.pull(userEmail);
+    if (post.downvotedBy.includes(userId)) {
+      post.downvotedBy.pull(userId);
       post.voteCount += 1;
     } else {
-      post.downvotedBy.push(userEmail);
-      if (post.upvotedBy.includes(userEmail)) {
-        post.upvotedBy.pull(userEmail);
+      post.downvotedBy.push(userId);
+      if (post.upvotedBy.includes(userId)) {
+        post.upvotedBy.pull(userId);
         post.voteCount -= 2;
       } else {
         post.voteCount -= 1;
@@ -826,6 +824,19 @@ router.get("/UserDetails", async (req, res) => {
     const decoded = jwt.verify(token, process.env.Access_Token);
     const userId = decoded._id;
     res.json({ userId });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get("/UserProfiles/:userId", async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

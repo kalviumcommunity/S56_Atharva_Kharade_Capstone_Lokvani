@@ -29,6 +29,10 @@ const MainPage = () => {
     fetchComplaints();
   }, [currentPage, sortBy, searchQuery]);
 
+  useEffect(() => {
+    fetchCommunities(userId);
+  }, [userId]);
+
   const fetchComplaints = async () => {
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint`, {
@@ -139,7 +143,6 @@ const MainPage = () => {
 
   const fetchCommunities = async (userId) => {
     setLoadingCommunities(true);
-    consoe.log(userId)
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/getCommunity`, {
         params: { userId }
