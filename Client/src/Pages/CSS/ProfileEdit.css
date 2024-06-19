@@ -194,3 +194,15 @@
 .profileLikedBox h1 {
   font-size: 15px;
 }
+
+#a{
+  font-size: 30px;
+  font-family: "Poppins", serif;
+  font-weight: 400;
+  text-align: center;
+}
+
+.b{
+  width: 100px;
+  height: 50px;
+}

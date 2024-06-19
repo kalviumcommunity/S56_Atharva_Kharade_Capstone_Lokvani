@@ -842,5 +842,28 @@ router.get("/UserProfiles/:userId", async (req, res) => {
   }
 });
 
+router.put('/UserEdit/:userId', async (req, res) => {
+  const { userId } = req.params;
+  const { username, email } = req.body;
+
+  try {
+    // Update user profile in the database
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { username, email },
+      { new: true } // To return the updated document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(updatedUser); // Send updated user profile as response
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.get("*", (req, res) => res.status(404).send("Page not found"));
 module.exports = { router };

@@ -1,11 +1,15 @@
-import React from 'react'
 import './CSS/ProfileEdit.css'
-import { MdEdit } from "react-icons/md";
-import UserDashboard from '../Components/UserDashboard'
+import React, { useContext, useEffect, useState } from 'react';
+import './CSS/ProfileEdit.css';
+import { MdEdit } from 'react-icons/md';
+import UserDashboard from '../Components/UserDashboard';
 import { UserContext } from '../UserContext';
-import { useContext } from 'react';
 import axios from 'axios';
-import { useEffect,useState } from 'react';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+
 
 const ProfileEdit = () => {
   const { user } = useContext(UserContext);
@@ -13,6 +17,8 @@ const ProfileEdit = () => {
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -20,7 +26,6 @@ const ProfileEdit = () => {
         const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserProfiles/${userId}`);
         setUsername(response.data.username);
         setEmail(response.data.email);
-        console.log(response.data);
       } catch (err) {
         if (err.response && err.response.status === 404) {
           setError('User not found');
@@ -33,6 +38,28 @@ const ProfileEdit = () => {
     fetchUserProfile();
   }, [userId]);
 
+  const handleEditClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSave = async (newUsername, newEmail) => {
+    try {
+      const response = await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserProfiles/${userId}`, {
+        username: newUsername,
+        email: newEmail,
+      });
+      setUsername(response.data.username);
+      setEmail(response.data.email);
+      setIsModalOpen(false); 
+    } catch (err) {
+      console.error('Failed to save profile changes:', err);
+    }
+  };
+
   return (
     <div className='UserProfileEditBody'>
       <UserDashboard />
@@ -43,7 +70,7 @@ const ProfileEdit = () => {
           </div>
           <div className="profileEditDetail">
             <div className="profileEditPersonal">
-              <MdEdit className='profilePerEditPen' />
+              <MdEdit className='profilePerEditPen' onClick={handleEditClick} />
               <div className="profileEditName">
                 <h6>UserName</h6>
                 <h1>{username}</h1>
@@ -72,7 +99,7 @@ const ProfileEdit = () => {
             </div>
           </div>
           <div className="profileComplaintCommented">
-            <h1>Posts Made </h1>
+            <h1>Posts Made</h1>
             <div>
               <div className="profileLikedPost">
                 <div className='profileLikedBox'>
@@ -83,8 +110,54 @@ const ProfileEdit = () => {
           </div>
         </div>
       </div>
-    </div>
-  )
-}
+      <Modal
+        open={isModalOpen}
+        onClose={handleModalClose}
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '25%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 500,
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          borderRadius: 2,
+          p: 3,
+        }}>
+          <h1 id="a">Edit Profile</h1>
+          <TextField
+            id="username"
+            label="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            fullWidth
+            variant="outlined"
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            id="email"
+            label="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            fullWidth
+            variant="outlined"
+            sx={{ mb: 2 }}
+          />
+          <div style={{ display: "flex", justifyContent: "space-evenly" }}>
 
-export default ProfileEdit
+            <Button onClick={handleModalClose} variant="contained" sx={{ mr: 2 }}>
+              Close
+            </Button>
+            <Button onClick={() => handleSave(username, email)} variant="contained" color="primary">
+              Save
+            </Button>
+          </div>
+        </Box>
+      </Modal>
+    </div>
+  );
+};
+
+export default ProfileEdit;
+
