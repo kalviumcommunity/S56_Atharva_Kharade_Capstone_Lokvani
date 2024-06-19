@@ -1,6 +1,5 @@
-import './CSS/ProfileEdit.css'
-import React, { useContext, useEffect, useState } from 'react';
 import './CSS/ProfileEdit.css';
+import React, { useContext, useEffect, useState } from 'react';
 import { MdEdit } from 'react-icons/md';
 import UserDashboard from '../Components/UserDashboard';
 import { UserContext } from '../UserContext';
@@ -9,7 +8,8 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProfileEdit = () => {
   const { user } = useContext(UserContext);
@@ -48,15 +48,31 @@ const ProfileEdit = () => {
 
   const handleSave = async (newUsername, newEmail) => {
     try {
-      const response = await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserProfiles/${userId}`, {
+      const response = await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserEdit/${userId}`, {
         username: newUsername,
         email: newEmail,
       });
       setUsername(response.data.username);
       setEmail(response.data.email);
-      setIsModalOpen(false); 
+      setIsModalOpen(false);
+
+      sessionStorage.setItem('username', response.data.username);
+
+      toast.success('Profile updated successfully!');
     } catch (err) {
       console.error('Failed to save profile changes:', err);
+
+      if (err.response && err.response.data && err.response.data.error) {
+        if (err.response.data.error === 'Username already taken') {
+          toast.error('Username already taken. Please choose a different username.');
+        } else if (err.response.data.error === 'Email already taken') {
+          toast.error('Email already taken. Please choose a different email.');
+        } else {
+          toast.error('Failed to update profile. Please try again.');
+        }
+      } else {
+        toast.error('Failed to update profile. Please try again.');
+      }
     }
   };
 
@@ -145,7 +161,6 @@ const ProfileEdit = () => {
             sx={{ mb: 2 }}
           />
           <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-
             <Button onClick={handleModalClose} variant="contained" sx={{ mr: 2 }}>
               Close
             </Button>
@@ -155,9 +170,9 @@ const ProfileEdit = () => {
           </div>
         </Box>
       </Modal>
+      <ToastContainer />
     </div>
   );
 };
 
 export default ProfileEdit;
-

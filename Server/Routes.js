@@ -320,39 +320,6 @@ router.get("/MyComplaint/:userId", async (req, res) => {
   }
 });
 
-//Edit profle page
-router.put("/Complaint/:username", async (req, res) => {
-  const { username } = req.params;
-  const { newUsername, newEmail } = req.body;
-
-  try {
-    const existingUsername = await User.findOne({ username: newUsername });
-    if (existingUsername && existingUsername.username !== username) {
-      return res.status(400).json({ message: "Username already exists" });
-    }
-
-    const existingEmail = await User.findOne({ email: newEmail });
-    if (existingEmail && existingEmail.username !== username) {
-      return res.status(400).json({ message: "Email already exists" });
-    }
-
-    const user = await User.findOneAndUpdate(
-      { username },
-      { username: newUsername, email: newEmail },
-      { new: true }
-    );
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    return res.status(200).json({ message: "User updated successfully", user });
-  } catch (error) {
-    console.error("Error updating user:", error);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-});
-
 //Upvote Complaint
 router.put("/:id/upvote", validateObjectId, async (req, res) => {
   const { id } = req.params;
@@ -842,26 +809,38 @@ router.get("/UserProfiles/:userId", async (req, res) => {
   }
 });
 
-router.put('/UserEdit/:userId', async (req, res) => {
+router.put("/UserEdit/:userId", async (req, res) => {
   const { userId } = req.params;
   const { username, email } = req.body;
 
   try {
-    // Update user profile in the database
+    const existingUserByUsername = await User.findOne({ username });
+    if (
+      existingUserByUsername &&
+      existingUserByUsername._id.toString() !== userId
+    ) {
+      return res.status(400).json({ error: "Username already taken" });
+    }
+
+    const existingUserByEmail = await User.findOne({ email });
+    if (existingUserByEmail && existingUserByEmail._id.toString() !== userId) {
+      return res.status(400).json({ error: "Email already taken" });
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { username, email },
-      { new: true } // To return the updated document
+      { new: true } 
     );
 
     if (!updatedUser) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
-    res.json(updatedUser); // Send updated user profile as response
+    res.json(updatedUser);
   } catch (error) {
-    console.error('Error updating user profile:', error);
-    res.status(500).json({ error: error.message });
+    console.error("Error updating user profile:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
