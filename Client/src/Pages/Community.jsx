@@ -7,7 +7,6 @@ import { BiUpvote, BiSolidUpvote, BiDownvote, BiSolidDownvote } from "react-icon
 import { FaRegComment } from "react-icons/fa";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from '../UserContext';
@@ -22,8 +21,6 @@ const Community = () => {
     const { user } = useContext(UserContext);
     const { userId } = user;
 
-    const img = 'https://images.unsplash.com/photo-1612838320302-4b3b3b3b3b3b';
-
     useEffect(() => {
         const fetchCommunity = async () => {
             try {
@@ -31,6 +28,7 @@ const Community = () => {
                 if (response.status === 200 && response.data) {
                     setCommunity(response.data);
                     setPosts(response.data.posts);
+                    console.log('Community fetched successfully:', response.data.posts);
                 } else {
                     console.error("Error fetching community:", response.statusText);
                 }
@@ -51,21 +49,12 @@ const Community = () => {
 
         try {
             const response = await axios.post(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}/posts`, postData);
-            console.log('Post created successfully:', response.data);
+            console.log('Post created successfully:', response.data.post);
             setDescription('');
         } catch (error) {
             console.error('Error creating post:', error.response.data);
         }
     };
-
-    const handleClick = (_id) => {
-        const post = posts.find(post => post._id === _id);
-        if (post) {
-            console.log(userEmail);
-        } else {
-            console.log("Post not found");
-        }
-    }
 
     const handleUpvote = async (_id) => {
         try {
@@ -215,10 +204,10 @@ const Community = () => {
                             <div key={post._id} className="Posts-list-item">
                                 <div className="Post-user-detail">
                                     <div className="user-detail-profile">
-
+                                        <img src={post.userImage || 'default_image_url'} alt="" />
                                     </div>
                                     <div className="user-detail-name">
-                                        <h1>{post.createdBy}</h1>
+                                        <h1>{post.username}</h1>
                                     </div>
                                 </div>
                                 <div className="Post-list-descp">
@@ -251,7 +240,8 @@ const Community = () => {
                         <h1>{community.name}</h1>
                     </div>
                     <div className="Community-descp-img">
-                        <img src={img} alt="community-img" onClick={() => handleClick("66308db0523c7a2afedbdd27")} />
+                        {/* Provide a default image URL for community image */}
+                        <img src={community.image || 'default_image_url'} alt="community-img" onClick={() => handleClick("66308db0523c7a2afedbdd27")} />
                     </div>
                     <div>
                         <button className='Community-join-btn' onClick={() => handleLeaveCommunity(community._id)}>Leave Community</button>

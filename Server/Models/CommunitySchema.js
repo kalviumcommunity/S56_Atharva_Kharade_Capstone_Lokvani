@@ -30,6 +30,12 @@ const PostsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  username: {
+    type: String,
+  },
+  userImage: {
+    type: String,
+  },
   upvotedBy: [
     {
       type: String,
