@@ -22,35 +22,33 @@ const Community = () => {
     const { userId } = user;
 
     useEffect(() => {
-        const fetchCommunity = async () => {
-            try {
-                const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}`);
-                if (response.status === 200 && response.data) {
-                    setCommunity(response.data);
-                    setPosts(response.data.posts);
-                    console.log('Community fetched successfully:', response.data.posts);
-                } else {
-                    console.error("Error fetching community:", response.statusText);
-                }
-            } catch (error) {
-                console.error("Error fetching community:", error);
-            }
-        };
-        if (name) {
-            fetchCommunity();
-        }
+        fetchCommunity();
     }, [name]);
+
+    const fetchCommunity = async () => {
+        try {
+            const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}`);
+            if (response.status === 200 && response.data) {
+                setCommunity(response.data);
+                setPosts(response.data.posts.reverse());
+            } else {
+                console.error("Error fetching community:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error fetching community:", error);
+        }
+    };
 
     const handlePostSubmit = async () => {
         const postData = {
             description,
             createdBy: userId
         };
-
         try {
             const response = await axios.post(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}/posts`, postData);
             console.log('Post created successfully:', response.data.post);
             setDescription('');
+            fetchCommunity();
         } catch (error) {
             console.error('Error creating post:', error.response.data);
         }

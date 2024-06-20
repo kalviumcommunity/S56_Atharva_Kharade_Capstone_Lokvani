@@ -121,7 +121,7 @@ const CommentPage = () => {
                     <div className="Comment-descp-box">
                         <h1 style={{ color: "black", fontSize: "30px" }}>Comments</h1>
                         {complaint.comments.length > 0 ? (
-                            complaint.comments.map((comment, index) => (
+                            complaint.comments.slice().reverse().map((comment, index) => (
                                 <div key={index} className="Comment-Box">
                                     <div className="Comment-Box-title">
                                         <div className="Comment-Box-logo">
