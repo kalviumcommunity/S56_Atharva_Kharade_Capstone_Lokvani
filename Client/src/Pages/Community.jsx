@@ -46,7 +46,7 @@ const Community = () => {
     const handlePostSubmit = async () => {
         const postData = {
             description,
-            createdBy: userEmail
+            createdBy: userId
         };
 
         try {

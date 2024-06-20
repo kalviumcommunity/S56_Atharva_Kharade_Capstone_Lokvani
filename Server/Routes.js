@@ -565,11 +565,18 @@ router.post("/community/:name/posts", async (req, res) => {
       return res.status(404).json({ error: "Community not found" });
     }
 
-    const { description, createdBy } = req.body;
+    const { description, createdBy } = req.body
+
+    const user = await User.findById(createdBy);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
     const newPost = {
       description,
       createdBy,
+      username: user.username,
+      userImage: user.Image,
       comments: [],
     };
 
