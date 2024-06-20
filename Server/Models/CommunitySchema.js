@@ -47,6 +47,10 @@ const PostsSchema = new mongoose.Schema({
     },
   ],
   comments: [commentSchema],
+  timestamp: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const CommunitySchema = new mongoose.Schema({

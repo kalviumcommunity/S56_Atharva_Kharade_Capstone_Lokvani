@@ -160,6 +160,19 @@ const Community = () => {
 
     }
 
+    const formatISTDate = (utcDate) => {
+        const date = new Date(utcDate);
+        return date.toLocaleString('en-IN', {
+            timeZone: 'Asia/Kolkata',
+            hour12: true,
+            hour: 'numeric',
+            minute: 'numeric',
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        });
+    };
+
     return (
         <div className='Community-main'>
             <UserDashboard />
@@ -229,6 +242,9 @@ const Community = () => {
                                         <Link to={`/community/${name}/posts/${post._id}`}><FaRegComment className="Post-vote-arrows" /></Link>
                                     </div>
                                 </div>
+                                <div className="post-timestamp">
+                                    <p>Posted on: {formatISTDate(post.timestamp)}</p>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -240,7 +256,6 @@ const Community = () => {
                         <h1>{community.name}</h1>
                     </div>
                     <div className="Community-descp-img">
-                        {/* Provide a default image URL for community image */}
                         <img src={community.image || 'default_image_url'} alt="community-img" onClick={() => handleClick("66308db0523c7a2afedbdd27")} />
                     </div>
                     <div>
