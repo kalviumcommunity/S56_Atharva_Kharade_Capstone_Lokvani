@@ -12,6 +12,7 @@ const CommentPage = () => {
     const { user } = useContext(UserContext);
     const { userId } = user;
     const [username, setUsername] = useState('');
+    const [userImage, setUserImage] = useState('');
 
     const { id } = useParams();
     const [complaint, setComplaint] = useState(null);
@@ -38,6 +39,8 @@ const CommentPage = () => {
             try {
                 const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/userDataImage/${userId}`);
                 setUsername(response.data.user.username);
+                setUserImage(response.data.user.Image);
+                console.log('User Image:', response.data.user.Image)
             } catch (error) {
                 console.error("Error fetching user:", error);
             }
@@ -50,7 +53,8 @@ const CommentPage = () => {
         try {
             await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/comment/${id}`, {
                 userId: userId,
-                comment: commentText
+                comment: commentText,
+                userImage: userImage
             });
             const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/ComplaintComment/${id}`);
             setComplaint(response.data);
@@ -122,7 +126,11 @@ const CommentPage = () => {
                                     <div className="Comment-Box-title">
                                         <div className="Comment-Box-logo">
                                             <IconContext.Provider value={{ color: 'black', size: '40px' }}>
-                                                <FaRegUserCircle />
+                                                {comment.userImage ? (
+                                                    <img src={comment.userImage} alt="User" className='User-img' />
+                                                ) : (
+                                                    <FaRegUserCircle />
+                                                )}
                                             </IconContext.Provider>
                                         </div>
                                         <h1 style={{ color: "black", fontSize: "15px" }}>{comment.username}</h1>
