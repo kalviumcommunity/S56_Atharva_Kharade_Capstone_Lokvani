@@ -2,9 +2,16 @@ const mongoose = require("mongoose");
 
 const commentSchema = new mongoose.Schema(
   {
-    email: {
+    userId: {
       type: String,
       required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    Image: {
+      type: String,
     },
     comment: {
       type: String,

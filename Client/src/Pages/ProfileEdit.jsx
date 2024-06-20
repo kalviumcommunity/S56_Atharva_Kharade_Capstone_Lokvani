@@ -87,6 +87,7 @@ const ProfileEdit = () => {
 
       console.log('File upload successful:', response.data);
       setImageUrl(response.data.user.Image);
+      sessionStorage.setItem('userImage', response.data.user.Image);
       toast.success('Profile image updated successfully!');
     } catch (error) {
       console.error('Error uploading file:', error.message);

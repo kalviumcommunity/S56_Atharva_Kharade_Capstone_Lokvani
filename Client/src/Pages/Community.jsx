@@ -7,7 +7,6 @@ import { BiUpvote, BiSolidUpvote, BiDownvote, BiSolidDownvote } from "react-icon
 import { FaRegComment } from "react-icons/fa";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from '../UserContext';
@@ -22,50 +21,38 @@ const Community = () => {
     const { user } = useContext(UserContext);
     const { userId } = user;
 
-    const img = 'https://images.unsplash.com/photo-1612838320302-4b3b3b3b3b3b';
-
     useEffect(() => {
-        const fetchCommunity = async () => {
-            try {
-                const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}`);
-                if (response.status === 200 && response.data) {
-                    setCommunity(response.data);
-                    setPosts(response.data.posts);
-                } else {
-                    console.error("Error fetching community:", response.statusText);
-                }
-            } catch (error) {
-                console.error("Error fetching community:", error);
-            }
-        };
-        if (name) {
-            fetchCommunity();
-        }
+        fetchCommunity();
     }, [name]);
+
+    const fetchCommunity = async () => {
+        try {
+            const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}`);
+            if (response.status === 200 && response.data) {
+                setCommunity(response.data);
+                setPosts(response.data.posts.reverse());
+            } else {
+                console.error("Error fetching community:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error fetching community:", error);
+        }
+    };
 
     const handlePostSubmit = async () => {
         const postData = {
             description,
-            createdBy: userEmail
+            createdBy: userId
         };
-
         try {
             const response = await axios.post(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/community/${name}/posts`, postData);
-            console.log('Post created successfully:', response.data);
+            console.log('Post created successfully:', response.data.post);
             setDescription('');
+            fetchCommunity();
         } catch (error) {
             console.error('Error creating post:', error.response.data);
         }
     };
-
-    const handleClick = (_id) => {
-        const post = posts.find(post => post._id === _id);
-        if (post) {
-            console.log(userEmail);
-        } else {
-            console.log("Post not found");
-        }
-    }
 
     const handleUpvote = async (_id) => {
         try {
@@ -171,6 +158,19 @@ const Community = () => {
 
     }
 
+    const formatISTDate = (utcDate) => {
+        const date = new Date(utcDate);
+        return date.toLocaleString('en-IN', {
+            timeZone: 'Asia/Kolkata',
+            hour12: true,
+            hour: 'numeric',
+            minute: 'numeric',
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        });
+    };
+
     return (
         <div className='Community-main'>
             <UserDashboard />
@@ -215,10 +215,10 @@ const Community = () => {
                             <div key={post._id} className="Posts-list-item">
                                 <div className="Post-user-detail">
                                     <div className="user-detail-profile">
-
+                                        <img src={post.userImage || 'default_image_url'} alt="" />
                                     </div>
                                     <div className="user-detail-name">
-                                        <h1>{post.createdBy}</h1>
+                                        <h1>{post.username}</h1>
                                     </div>
                                 </div>
                                 <div className="Post-list-descp">
@@ -240,6 +240,9 @@ const Community = () => {
                                         <Link to={`/community/${name}/posts/${post._id}`}><FaRegComment className="Post-vote-arrows" /></Link>
                                     </div>
                                 </div>
+                                <div className="post-timestamp">
+                                    <p>Posted on: {formatISTDate(post.timestamp)}</p>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -251,7 +254,7 @@ const Community = () => {
                         <h1>{community.name}</h1>
                     </div>
                     <div className="Community-descp-img">
-                        <img src={img} alt="community-img" onClick={() => handleClick("66308db0523c7a2afedbdd27")} />
+                        <img src={community.image || 'default_image_url'} alt="community-img" onClick={() => handleClick("66308db0523c7a2afedbdd27")} />
                     </div>
                     <div>
                         <button className='Community-join-btn' onClick={() => handleLeaveCommunity(community._id)}>Leave Community</button>

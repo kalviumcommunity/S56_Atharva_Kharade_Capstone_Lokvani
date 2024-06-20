@@ -502,13 +502,18 @@ router.get("/ComplaintComment/:id", async (req, res) => {
 router.put("/comment/:id", async (req, res) => {
   try {
     const complaintId = req.params.id;
-    const { email, comment } = req.body;
+    const { userId, comment, Image } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
     const updatedComplaint = await Complaint.findByIdAndUpdate(
       complaintId,
       {
         $push: {
-          comments: { email, comment },
+          comments: { userId, username: user.username, Image, comment },
         },
       },
       { new: true }
@@ -517,7 +522,6 @@ router.put("/comment/:id", async (req, res) => {
     if (!updatedComplaint) {
       return res.status(404).json({ error: "Complaint not found" });
     }
-
     res.json(updatedComplaint);
   } catch (err) {
     console.error(err);
@@ -561,11 +565,18 @@ router.post("/community/:name/posts", async (req, res) => {
       return res.status(404).json({ error: "Community not found" });
     }
 
-    const { description, createdBy } = req.body;
+    const { description, createdBy } = req.body
+
+    const user = await User.findById(createdBy);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
     const newPost = {
       description,
       createdBy,
+      username: user.username,
+      userImage: user.Image,
       comments: [],
     };
 

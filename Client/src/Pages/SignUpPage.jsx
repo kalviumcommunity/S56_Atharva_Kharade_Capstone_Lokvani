@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./CSS/SignUpPage.css";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
@@ -13,6 +13,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
+import { UserContext } from '../UserContext';
 
 
 const SignUpPage = () => {
@@ -24,6 +25,7 @@ const SignUpPage = () => {
     const [usernameError, setUsernameError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
     const navigate = useNavigate();
+    const { setUser } = useContext(UserContext);
 
     const handlePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -76,9 +78,22 @@ const SignUpPage = () => {
 
             console.log("Success:", response.data);
             Cookies.set("token", response.data.token);
+
+            const userDataResponse = await axios.get('https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails', {
+                headers: {
+                    Authorization: response.data.token,
+                },
+            });
+
+            const userImage = userDataResponse.data.user?.Image || 'https://www.w3schools.com/howto/img_avatar.png';
+            setUser(userDataResponse.data.userId);
+            console.log("User Data:", userDataResponse.data.userId);
+            sessionStorage.setItem('username', username);
+            sessionStorage.setItem('userImage', userImage);
             navigate("/user");
             toast.success("User has been registered successfully.");
-        } catch (error) {
+        }
+        catch (error) {
             if (error.response.status === 400) {
                 if (error.response.data.error === "Email already exists!") {
                     toast.warning("Email already exists. Please log in instead.");

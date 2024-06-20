@@ -30,6 +30,12 @@ const PostsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  username: {
+    type: String,
+  },
+  userImage: {
+    type: String,
+  },
   upvotedBy: [
     {
       type: String,
@@ -41,6 +47,10 @@ const PostsSchema = new mongoose.Schema({
     },
   ],
   comments: [commentSchema],
+  timestamp: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const CommunitySchema = new mongoose.Schema({
