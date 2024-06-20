@@ -54,7 +54,7 @@ const CommentPage = () => {
             await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/comment/${id}`, {
                 userId: userId,
                 comment: commentText,
-                userImage: userImage
+                Image: userImage
             });
             const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/ComplaintComment/${id}`);
             setComplaint(response.data);
@@ -126,8 +126,8 @@ const CommentPage = () => {
                                     <div className="Comment-Box-title">
                                         <div className="Comment-Box-logo">
                                             <IconContext.Provider value={{ color: 'black', size: '40px' }}>
-                                                {comment.userImage ? (
-                                                    <img src={comment.userImage} alt="User" className='User-img' />
+                                                {comment.Image ? (
+                                                    <img src={comment.Image} alt="User" className='User-img' />
                                                 ) : (
                                                     <FaRegUserCircle />
                                                 )}

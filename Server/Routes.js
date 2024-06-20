@@ -502,7 +502,7 @@ router.get("/ComplaintComment/:id", async (req, res) => {
 router.put("/comment/:id", async (req, res) => {
   try {
     const complaintId = req.params.id;
-    const { userId, comment, userImage } = req.body;
+    const { userId, comment, Image } = req.body;
 
     const user = await User.findById(userId);
     if (!user) {
@@ -513,7 +513,7 @@ router.put("/comment/:id", async (req, res) => {
       complaintId,
       {
         $push: {
-          comments: { userId, username: user.username, userImage, comment },
+          comments: { userId, username: user.username, Image, comment },
         },
       },
       { new: true }
