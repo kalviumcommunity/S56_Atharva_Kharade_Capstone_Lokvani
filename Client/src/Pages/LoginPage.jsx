@@ -63,7 +63,6 @@ const LoginPage = () => {
         { username, password }
       );
 
-      const userDataImage = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/userDataImage/${response.data.userId}`);
 
       Cookies.set('token', response.data.token);
       const userDataResponse = await axios.get('https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails', {
@@ -71,11 +70,14 @@ const LoginPage = () => {
           Authorization: response.data.token,
         },
       });
+
+      const userDataImage = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/userDataImage/${userDataResponse.data.userId}`);
       setUser(userDataResponse.data);
       console.log('Success:', response.data);
       navigate('/User');
       sessionStorage.setItem('username', username);
-      sessionStorage.setItem('userImage', userDataImage.Image);
+      sessionStorage.setItem('userImage', userDataImage.data.user.Image);
+      console.log('User Data:', userDataImage.data.user.Image); 
     } catch (error) {
       console.error('Error:', error.response.data.error);
       if (error.response.status === 401) {

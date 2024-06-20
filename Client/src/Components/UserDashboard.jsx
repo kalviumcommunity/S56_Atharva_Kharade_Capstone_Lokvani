@@ -17,6 +17,7 @@ const UserDashboard = () => {
   const { userId } = user;
   const navigate = useNavigate();
   const username = sessionStorage.getItem('username');
+  const Image = sessionStorage.getItem('userImage')
 
   const handleLogout = () => {
     Cookies.remove('token');
@@ -36,7 +37,7 @@ const UserDashboard = () => {
         <Link to={'/ProfileEdit'}>
           <div className="userDetail">
             <div className="userDetailProfilePic">
-              <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Profile" />
+              <img src={Image} alt="Profile" />
             </div>
             <div>
               <h1>{username}</h1>

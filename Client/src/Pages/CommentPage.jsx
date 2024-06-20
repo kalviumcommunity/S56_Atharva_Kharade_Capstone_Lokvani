@@ -2,17 +2,16 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import UserDashboard from '../Components/UserDashboard';
-// import img from './CSS/Image-Placeholder.png';
 import { BiSolidUpvote, BiSolidDownvote } from "react-icons/bi";
 import './CSS/CommentPage.css';
-import Cookies from 'js-cookie';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
 import { UserContext } from '../UserContext';
 
 const CommentPage = () => {
     const { user } = useContext(UserContext);
-    const { email, username } = user;
+    const { userId } = user;
+    const [username, setUsername] = useState('');
 
     const { id } = useParams();
     const [complaint, setComplaint] = useState(null);
@@ -31,10 +30,26 @@ const CommentPage = () => {
         fetchComplaint();
     }, [id]);
 
+    useEffect(() => {
+        const fetchUser = async () => {
+            if (!userId) {
+                return;
+            }
+            try {
+                const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/userDataImage/${userId}`);
+                setUsername(response.data.user.username);
+            } catch (error) {
+                console.error("Error fetching user:", error);
+            }
+        };
+
+        fetchUser();
+    }, [userId]);
+
     const handleCommentSubmit = async () => {
         try {
             await axios.put(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/comment/${id}`, {
-                email: email,
+                userId: userId,
                 comment: commentText
             });
             const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/ComplaintComment/${id}`);
@@ -110,11 +125,10 @@ const CommentPage = () => {
                                                 <FaRegUserCircle />
                                             </IconContext.Provider>
                                         </div>
-                                        <h1 style={{ color: "black", fontSize: "15px" }}>{comment.email}</h1>
+                                        <h1 style={{ color: "black", fontSize: "15px" }}>{comment.username}</h1>
                                         <h1 style={{ color: "black", fontSize: "15px" }}>
-                                            {new Date(comment.timestamp).toLocaleString([], { hour: '2-digit', minute: '2-digit' })}
+                                            {new Date(comment.timestamp).toLocaleString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                         </h1>
-
                                     </div>
                                     <div className="Comment-Box-descp">
                                         <p style={{ color: "black", fontSize: "20px" }}>{comment.comment}</p>
@@ -125,7 +139,6 @@ const CommentPage = () => {
                             <p>No comments yet.</p>
                         )}
                     </div>
-
                 </div>
             </div>
         </div>
