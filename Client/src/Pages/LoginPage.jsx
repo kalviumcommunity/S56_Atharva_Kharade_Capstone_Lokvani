@@ -54,34 +54,42 @@ const LoginPage = () => {
     if (!username || !password || usernameError || passwordError || loading) {
       return;
     }
-
+  
     setLoading(true);
-
+  
     try {
       const response = await axios.post(
         'https://s56-atharva-kharade-capstone-lokvani.onrender.com/login',
         { username, password }
       );
-
-
+  
+      console.log('Login response:', response.data); 
+  
       Cookies.set('token', response.data.token);
+  
       const userDataResponse = await axios.get('https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails', {
         headers: {
           Authorization: response.data.token,
         },
       });
-
+  
+      console.log('User details response:', userDataResponse.data); 
+      let tempuserId = userDataResponse.data.userId;
+  
       const userDataImage = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/userDataImage/${userDataResponse.data.userId}`);
+      
+      console.log('User image response:', userDataImage.data); 
+  
       setUser(userDataResponse.data);
       sessionStorage.setItem('username', username);
-      sessionStorage.setItem('userImage', userDataImage.data.user.Image);
+      sessionStorage.setItem('userImage', userDataImage.data.user?.Image || 'https://www.w3schools.com/howto/img_avatar.png');
       navigate('/User');
     } catch (error) {
-      console.error('Error:', error.response.data.error);
-      if (error.response.status === 401) {
-        if (error.response.data.error === 'User not found') {
+      console.error('Error:', error);
+      if (error.response && error.response.status === 401) {
+        if (error.response && error.response.data.error === 'User not found') {
           toast.error('User not found.');
-        } else if (error.response.data.error === "Password doesn't match") {
+        } else if (error.response && error.response.data.error === "Password doesn't match") {
           toast.error("Password doesn't match.");
         } else {
           toast.error('An error occurred while logging in.');
