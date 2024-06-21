@@ -54,31 +54,39 @@ const LoginPage = () => {
     if (!username || !password || usernameError || passwordError || loading) {
       return;
     }
-
+  
     setLoading(true);
-
+  
     try {
       const response = await axios.post(
         'https://s56-atharva-kharade-capstone-lokvani.onrender.com/login',
         { username, password }
       );
-
-
+  
+      console.log('Login response:', response.data); // Log the login response to check for `_id` and other user data
+  
       Cookies.set('token', response.data.token);
+  
       const userDataResponse = await axios.get('https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails', {
         headers: {
           Authorization: response.data.token,
         },
       });
-
+  
+      console.log('User details response:', userDataResponse.data); // Log user details response to check `_id`
+      let tempuserId = userDataResponse.data.userId;
+  
       const userDataImage = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/userDataImage/${userDataResponse.data.userId}`);
+      
+      console.log('User image response:', userDataImage.data); // Log user image response to check if `_id` is included
+  
       setUser(userDataResponse.data);
       sessionStorage.setItem('username', username);
-      sessionStorage.setItem('userImage', userDataImage.data.user.Image);
+      sessionStorage.setItem('userImage', userDataImage.data.user?.Image || 'https://www.w3schools.com/howto/img_avatar.png');
       navigate('/User');
     } catch (error) {
-      console.error('Error:', error.response.data.error);
-      if (error.response.status === 401) {
+      console.error('Error:', error);
+      if (error.response && error.response.status === 401) {
         if (error.response.data.error === 'User not found') {
           toast.error('User not found.');
         } else if (error.response.data.error === "Password doesn't match") {
