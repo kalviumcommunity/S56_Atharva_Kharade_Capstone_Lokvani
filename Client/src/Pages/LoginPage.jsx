@@ -63,7 +63,7 @@ const LoginPage = () => {
         { username, password }
       );
   
-      console.log('Login response:', response.data); // Log the login response to check for `_id` and other user data
+      console.log('Login response:', response.data); 
   
       Cookies.set('token', response.data.token);
   
@@ -73,12 +73,12 @@ const LoginPage = () => {
         },
       });
   
-      console.log('User details response:', userDataResponse.data); // Log user details response to check `_id`
+      console.log('User details response:', userDataResponse.data); 
       let tempuserId = userDataResponse.data.userId;
   
       const userDataImage = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/userDataImage/${userDataResponse.data.userId}`);
       
-      console.log('User image response:', userDataImage.data); // Log user image response to check if `_id` is included
+      console.log('User image response:', userDataImage.data); 
   
       setUser(userDataResponse.data);
       sessionStorage.setItem('username', username);
@@ -87,9 +87,9 @@ const LoginPage = () => {
     } catch (error) {
       console.error('Error:', error);
       if (error.response && error.response.status === 401) {
-        if (error.response.data.error === 'User not found') {
+        if (error.response && error.response.data.error === 'User not found') {
           toast.error('User not found.');
-        } else if (error.response.data.error === "Password doesn't match") {
+        } else if (error.response && error.response.data.error === "Password doesn't match") {
           toast.error("Password doesn't match.");
         } else {
           toast.error('An error occurred while logging in.');
