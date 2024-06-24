@@ -11,7 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
-import jwtDecode from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 import Cookies from "js-cookie";
 import { UserContext } from '../UserContext';
 
