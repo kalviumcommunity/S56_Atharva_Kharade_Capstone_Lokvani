@@ -24,6 +24,7 @@ const MainPage = () => {
   const [loadingCommunities, setLoadingCommunities] = useState(false);
   const { user } = useContext(UserContext);
   const { userId } = user;
+  const [loadingComplaints, setLoadingComplaints] = useState(false);
 
   useEffect(() => {
     fetchComplaints();
@@ -34,6 +35,7 @@ const MainPage = () => {
   }, [userId]);
 
   const fetchComplaints = async () => {
+    setLoadingComplaints(true);
     try {
       const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint`, {
         params: {
@@ -55,6 +57,8 @@ const MainPage = () => {
       setTotalPages(response.data.pagination.totalPages);
     } catch (error) {
       console.error("Error fetching complaints:", error);
+    } finally {
+      setLoadingComplaints(false);
     }
   };
 
@@ -178,81 +182,93 @@ const MainPage = () => {
             <div className="SearchBar-sort">
               <SortBySelect handleChange={handleSortChange} />
             </div>
-            <div className="SearchBar-areaSelect">
-              <SortBySelect />
-            </div>
           </div>
           <div className="SeachBar-searchInput">
             <SearchInput value={searchQuery} onChange={handleSearchChange} />
           </div>
         </div>
         <div className="middle-Complaints">
-          {complaints.map((complaint, index) => (
-            <div className="Complaint-Box" key={index}>
-              <div className="Complaint-Box-title">
-                <h1>{complaint.title}</h1>
-              </div>
-              <div className="Complaint-lower">
-                <div className="Complaint-lower-descp">
-                  <div className="Complaint-descp">
-                    <p>{complaint.description}</p>
-                  </div>
-                  <div className="lower-descp-funct">
-                    <div className="Complaint-vote">
-                      {complaint.upvotedBy.includes(userId) ? (
-                        <BiSolidUpvote className="vote-arrows arrows-fill" onClick={() => handleUpvote(index)} />
-                      ) : (
-                        <BiUpvote className="vote-arrows" onClick={() => handleUpvote(index)} />
-                      )}
-                      <h1>{((complaint.upvotedBy && complaint.upvotedBy.length) || 0) - ((complaint.downvotedBy && complaint.downvotedBy.length) || 0)}</h1>
-                      {complaint.downvotedBy.includes(userId) ? (
-                        <BiSolidDownvote className="vote-arrows arrows-fill" onClick={() => handleDownvote(index)} />
-                      ) : (
-                        <BiDownvote className="vote-arrows" onClick={() => handleDownvote(index)} />
-                      )}
-                    </div>
-                    <div className="Complaint-comment">
-                      <Link to={`/comment/${complaint._id}`}><FaRegComment className="comment-arrows" /></Link>
-                      <h1>{complaint.comments.length}</h1>
-                    </div>
-                    <div className="Complaint-report">
-                      <MdOutlineReport className="vote-report" />
-                    </div>
-                  </div>
-                </div>
-                <div className="Complaint-lower-right">
-                  <div className="lower-right-img">
-                    <img
-                      src={complaint.Image}
-                      alt="Complaint"
-                      className="complaint-img-size"
-                    />
-                  </div>
-                  <div className="lower-right-tags">
-                    <div className="ComplaintType">
-                      <div className="function-Type">
-                        <h1>{complaint.complaintType}</h1>
-                      </div>
-                    </div>
-                    <div className="Complaint-verfication">
-                      <div className="function-reviewTag">
-                        <h1>
-                          {complaint.verified ? "Verified" : "Not Verified"}
-                        </h1>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          {loadingComplaints ? (
+            <div className="loader">
+              <l-ring-2
+                size="40"
+                stroke="5"
+                stroke-length="0.25"
+                bg-opacity="0.1"
+                speed="0.8"
+                color="black"
+              ></l-ring-2>
             </div>
-          ))}
-          <CustomPagination
-            count={totalPages}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-            variant="outlined"
-            shape="rounded"
-          />
+          ) : (
+            <>
+              {complaints.map((complaint, index) => (
+                <div className="Complaint-Box" key={index}>
+                  <div className="Complaint-Box-title">
+                    <h1>{complaint.title}</h1>
+                  </div>
+                  <div className="Complaint-lower">
+                    <div className="Complaint-lower-descp">
+                      <div className="Complaint-descp">
+                        <p>{complaint.description}</p>
+                      </div>
+                      <div className="lower-descp-funct">
+                        <div className="Complaint-vote">
+                          {complaint.upvotedBy.includes(userId) ? (
+                            <BiSolidUpvote className="vote-arrows arrows-fill" onClick={() => handleUpvote(index)} />
+                          ) : (
+                            <BiUpvote className="vote-arrows" onClick={() => handleUpvote(index)} />
+                          )}
+                          <h1>{((complaint.upvotedBy && complaint.upvotedBy.length) || 0) - ((complaint.downvotedBy && complaint.downvotedBy.length) || 0)}</h1>
+                          {complaint.downvotedBy.includes(userId) ? (
+                            <BiSolidDownvote className="vote-arrows arrows-fill" onClick={() => handleDownvote(index)} />
+                          ) : (
+                            <BiDownvote className="vote-arrows" onClick={() => handleDownvote(index)} />
+                          )}
+                        </div>
+                        <div className="Complaint-comment">
+                          <Link to={`/comment/${complaint._id}`}><FaRegComment className="comment-arrows" /></Link>
+                          <h1>{complaint.comments.length}</h1>
+                        </div>
+                        <div className="Complaint-report">
+                          <MdOutlineReport className="vote-report" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="Complaint-lower-right">
+                      <div className="lower-right-img">
+                        <img
+                          src={complaint.Image}
+                          alt="Complaint"
+                          className="complaint-img-size"
+                        />
+                      </div>
+                      <div className="lower-right-tags">
+                        <div className="ComplaintType">
+                          <div className="function-Type">
+                            <h1>{complaint.complaintType}</h1>
+                          </div>
+                        </div>
+                        <div className="Complaint-verfication">
+                          <div className="function-reviewTag">
+                            <h1>{complaint.verified ? "Verified" : "Not Verified"}</h1>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <div className="Pagination">
+                <CustomPagination
+                  count={totalPages}
+                  currentPage={currentPage}
+                  onPageChange={handlePageChange}
+                  variant="outlined"
+                  shape="rounded"
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
       <div className="MainPage-side">
