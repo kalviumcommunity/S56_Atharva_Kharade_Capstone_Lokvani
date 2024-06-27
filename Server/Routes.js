@@ -19,7 +19,8 @@ router.get("/", (req, res) => {
 });
 
 const generateOTP = () => {
-  return crypto.randomBytes(3).toString("hex");
+  const otp = Math.floor(100000 + Math.random() * 900000);
+  return otp.toString();
 };
 
 const sendOTPEmail = async (email, otp) => {
@@ -81,7 +82,7 @@ router.post("/Signup", async (req, res) => {
       password: hashedPassword,
       username: req.body.username,
       otp: otp,
-      otpExpires: Date.now() + 3600000, // OTP expires in 1 hour
+      otpExpires: Date.now() + 3600000,
     });
 
     await sendOTPEmail(newUser.email, otp);
@@ -95,14 +96,31 @@ router.post("/Signup", async (req, res) => {
 router.post("/verify-otp", async (req, res) => {
   try {
     const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return res
+        .status(400)
+        .json({ code: "MISSING_FIELDS", error: "Email and OTP are required" });
+    }
+
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ error: "User not found" });
+      return res
+        .status(404)
+        .json({ code: "USER_NOT_FOUND", error: "User not found" });
     }
 
-    if (user.otp !== otp || user.otpExpires < Date.now()) {
-      return res.status(400).json({ error: "Invalid or expired OTP" });
+    if (user.otp !== otp) {
+      return res
+        .status(400)
+        .json({ code: "INVALID_OTP", error: "Invalid OTP" });
+    }
+
+    if (user.otpExpires < Date.now()) {
+      return res
+        .status(400)
+        .json({ code: "EXPIRED_OTP", error: "Expired OTP" });
     }
 
     user.otp = undefined;
@@ -113,9 +131,10 @@ router.post("/verify-otp", async (req, res) => {
       expiresIn: "100d",
     });
 
-    res.status(200).json({ token });
+    res.status(200).json({ code: "SUCCESS", token });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error during OTP verification:", error);
+    res.status(500).json({ code: "SERVER_ERROR", error: error.message });
   }
 });
 

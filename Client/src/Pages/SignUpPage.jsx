@@ -78,7 +78,7 @@ const SignUpPage = () => {
             );
 
             toast.success(response.data.message);
-            setStep(2); // Move to OTP step
+            setStep(2); 
         } catch (error) {
             if (error.response.status === 400) {
                 if (error.response.data.error === "Email already exists!") {
