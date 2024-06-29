@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Cookies from 'js-cookie';
 import './CSS/UserDashboard.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { UserContext } from '../UserContext';
 
 import { FaRegUserCircle } from 'react-icons/fa';
@@ -16,8 +16,9 @@ const UserDashboard = () => {
   const { user } = useContext(UserContext);
   const { userId } = user;
   const navigate = useNavigate();
+  const location = useLocation();
   const username = sessionStorage.getItem('username');
-  const Image = sessionStorage.getItem('userImage')
+  const Image = sessionStorage.getItem('userImage');
 
   const handleLogout = () => {
     Cookies.remove('token');
@@ -47,7 +48,7 @@ const UserDashboard = () => {
 
         <div style={{ marginTop: '15px' }}>
           <Link to={'/User'}>
-            <div className="UserOptions">
+            <div className={`UserOptions ${location.pathname === '/User' ? 'active' : ''}`}>
               <div className="UserIcon">
                 <GoHome className='DB-UserIcon' />
               </div>
@@ -58,7 +59,7 @@ const UserDashboard = () => {
           </Link>
 
           <Link to={'/Complaint'}>
-            <div className="UserOptions">
+            <div className={`UserOptions ${location.pathname === '/Complaint' ? 'active' : ''}`}>
               <div className="UserIcon">
                 <MdOutlineSmsFailed className='DB-UserIcon' />
               </div>
@@ -69,7 +70,7 @@ const UserDashboard = () => {
           </Link>
 
           <Link to={'/MyComplaints'}>
-            <div className="UserOptions">
+            <div className={`UserOptions ${location.pathname === '/MyComplaints' ? 'active' : ''}`}>
               <div className="UserIcon">
                 <GrDocumentUser className='DB-UserIcon' />
               </div>
@@ -80,7 +81,7 @@ const UserDashboard = () => {
           </Link>
 
           <Link to={'/Communities'}>
-            <div className="UserOptions">
+            <div className={`UserOptions ${location.pathname === '/Communities' ? 'active' : ''}`}>
               <div className="UserIcon">
                 <BsPeopleFill className='DB-UserIcon' />
               </div>

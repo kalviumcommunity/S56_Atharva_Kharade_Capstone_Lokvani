@@ -11,10 +11,36 @@ const cloudinary = require("./Cloudinary");
 const rateLimit = require("express-rate-limit");
 const { ObjectId } = require("mongoose").Types;
 const mongoose = require("mongoose");
+const nodemailer = require("nodemailer");
+const crypto = require("crypto");
 
 router.get("/", (req, res) => {
   res.send("SERVER WORKING!");
 });
+
+const generateOTP = () => {
+  const otp = Math.floor(100000 + Math.random() * 900000);
+  return otp.toString();
+};
+
+const sendOTPEmail = async (email, otp) => {
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  let mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: "Your OTP Code",
+    text: `Your OTP code is ${otp}`,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -50,19 +76,65 @@ router.post("/Signup", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
+    const otp = generateOTP();
     const newUser = await User.create({
       email: req.body.email,
       password: hashedPassword,
       username: req.body.username,
+      otp: otp,
+      otpExpires: Date.now() + 3600000,
     });
 
-    const token = jwt.sign({ _id: newUser._id }, process.env.Access_Token, {
+    await sendOTPEmail(newUser.email, otp);
+
+    res.status(201).json({ message: "OTP sent to your email" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post("/verify-otp", async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return res
+        .status(400)
+        .json({ code: "MISSING_FIELDS", error: "Email and OTP are required" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ code: "USER_NOT_FOUND", error: "User not found" });
+    }
+
+    if (user.otp !== otp) {
+      return res
+        .status(400)
+        .json({ code: "INVALID_OTP", error: "Invalid OTP" });
+    }
+
+    if (user.otpExpires < Date.now()) {
+      return res
+        .status(400)
+        .json({ code: "EXPIRED_OTP", error: "Expired OTP" });
+    }
+
+    user.otp = undefined;
+    user.otpExpires = undefined;
+    await user.save();
+
+    const token = jwt.sign({ _id: user._id }, process.env.Access_Token, {
       expiresIn: "100d",
     });
 
-    res.status(201).json({ token });
+    res.status(200).json({ code: "SUCCESS", token });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error during OTP verification:", error);
+    res.status(500).json({ code: "SERVER_ERROR", error: error.message });
   }
 });
 
@@ -565,7 +637,7 @@ router.post("/community/:name/posts", async (req, res) => {
       return res.status(404).json({ error: "Community not found" });
     }
 
-    const { description, createdBy } = req.body
+    const { description, createdBy } = req.body;
 
     const user = await User.findById(createdBy);
     if (!user) {

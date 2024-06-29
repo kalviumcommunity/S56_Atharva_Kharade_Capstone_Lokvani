@@ -99,6 +99,7 @@
   align-items: center;
   justify-content: space-between;
   background-color: #ffffff;
+  padding: 0 10px;
 }
 
 .SearchBar-sort {
@@ -422,4 +423,18 @@
   font-weight: 600;
   margin: 10px;
   text-align: center;
+}
+
+.Pagination{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }

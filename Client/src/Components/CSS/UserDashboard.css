@@ -1,134 +1,139 @@
-.DashBoard-main{
-    width: 100vw;
-    height: 100vh;
-    display: flex;
+.DashBoard-main {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
 }
 
-.Sidenav{
-    width: 250px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    border-right: 2.5px solid rgb(235, 235, 235);
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+.Sidenav {
+  width: 250px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 2.5px solid rgb(235, 235, 235);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
-.Sidenav1{
-    width: 100%;
-    height: 100%;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+.UserOptions.active {
+  background-color: #e2ebff;
+  color: #164191;
 }
 
-.logoSidenav{
-    height: 60px;
-    width: 60px;
-    background-image: url(./Logo.png);
-    background-size: cover;
+.Sidenav1 {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
-.SideNav-logo{
-    width: 98%;
-    height: 70px;
-    padding:10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.logoSidenav {
+  height: 60px;
+  width: 60px;
+  background-image: url(./Logo.png);
+  background-size: cover;
 }
 
-.SideNav-logo h1{
-    font-size: 35px;
-    font-family: "Marcellus SC", serif;
+.SideNav-logo {
+  width: 98%;
+  height: 70px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.userDetail{
-    width: 240px;
-    height: 50px;
-    border-radius: 5px;
-    margin: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 15px;
-    background-color: #e4edff;
-    cursor: pointer;
+.SideNav-logo h1 {
+  font-size: 35px;
+  font-family: "Marcellus SC", serif;
 }
 
-.userDetail h1{
-    font-size: 20px;
-    font-family: "Poppins", sans-serif;
-    font-weight: 500;
-    margin-left: 20px;
-    display: flex;
-    align-items: center;
+.userDetail {
+  width: 240px;
+  height: 50px;
+  border-radius: 5px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  background-color: #e4edff;
+  cursor: pointer;
 }
 
-.userDetail:hover{
-    background-color: #aec1e9;
-    color: #164191;
+.userDetail h1 {
+  font-size: 20px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
 }
 
-.userDetailProfilePic{
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    overflow: hidden;
+.userDetail:hover {
+  background-color: #c7d5f3;
+  color: #ff0000;
 }
 
-.UserOptions{
-    width: 240px;
-    height: 40px;
-    border-radius: 5px;
-    margin: 5px;
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
+.userDetailProfilePic {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  overflow: hidden;
 }
 
-.UserOptions h1{
-    font-size: 18px;
-    font-family: "Poppins", sans-serif;
-    font-weight: 500;
-    margin-left: 5px;
+.UserOptions {
+  width: 240px;
+  height: 40px;
+  border-radius: 5px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
 }
 
-.UserIcon{
-    width: 20%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.UserOptions h1 {
+  font-size: 18px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  margin-left: 5px;
 }
 
-.UserOptions-active{
-    background-color: #ffffff;
+.UserIcon {
+  width: 20%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.UserOptions:hover{
-    cursor: pointer;
-    background-color: #aec1e9;
-    color: #164191;
+.UserOptions-active {
+  background-color: #ffffff;
 }
 
-.Dashboard-icons{
-    color: 'black';
-    size: '50px';
+.UserOptions:hover {
+  cursor: pointer;
+  background-color: #aec1e9;
+  color: #164191;
 }
 
-.Dashboard-icons:hover{
-    color: #fff;
-}
-  
-.DB-UserIcon{
-    font-size: 30px;
+.Dashboard-icons {
+  color: "black";
+  size: "50px";
 }
 
-.DB-UserDIcon{
-    font-size: 40px;
+.Dashboard-icons:hover {
+  color: #fff;
+}
+
+.DB-UserIcon {
+  font-size: 30px;
+}
+
+.DB-UserDIcon {
+  font-size: 40px;
 }
