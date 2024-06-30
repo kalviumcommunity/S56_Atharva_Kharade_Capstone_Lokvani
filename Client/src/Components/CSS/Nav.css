@@ -109,6 +109,7 @@ nav {
   position: relative;
   z-index: 1000;
   color: black;
+  background-color: #F6F0EC;
 }
 
 .logo {

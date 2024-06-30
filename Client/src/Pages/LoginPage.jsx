@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import './CSS/LoginPage.css';
-import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -12,9 +11,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
 import { MdOutlineAdminPanelSettings } from 'react-icons/md';
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { UserContext } from '../UserContext';
+import { jwtDecode } from 'jwt-decode';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -54,32 +53,31 @@ const LoginPage = () => {
     if (!username || !password || usernameError || passwordError || loading) {
       return;
     }
-  
+
     setLoading(true);
-  
+
     try {
       const response = await axios.post(
         'https://s56-atharva-kharade-capstone-lokvani.onrender.com/login',
         { username, password }
       );
-  
-      console.log('Login response:', response.data); 
-  
+
+      console.log('Login response:', response.data);
+
       Cookies.set('token', response.data.token);
-  
+
       const userDataResponse = await axios.get('https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails', {
         headers: {
           Authorization: response.data.token,
         },
       });
-  
-      console.log('User details response:', userDataResponse.data); 
-      let tempuserId = userDataResponse.data.userId;
-  
+
+      console.log('User details response:', userDataResponse.data);
+
       const userDataImage = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/userDataImage/${userDataResponse.data.userId}`);
-      
-      console.log('User image response:', userDataImage.data); 
-  
+
+      console.log('User image response:', userDataImage.data);
+
       setUser(userDataResponse.data);
       sessionStorage.setItem('username', username);
       sessionStorage.setItem('userImage', userDataImage.data.user?.Image || 'https://www.w3schools.com/howto/img_avatar.png');
@@ -102,24 +100,24 @@ const LoginPage = () => {
     }
   };
 
-  // const handleGoogleLoginSuccess = async (credentialResponse) => {
-  //   const decoded = jwtDecode(credentialResponse.credential);
+  const handleGoogleLoginSuccess = async (credentialResponse) => {
+    const decoded = jwtDecode(credentialResponse.credential);
 
-  //   const { email } = decoded;
+    const { email } = decoded;
 
-  //   try {
-  //     const response = await axios.post(
-  //       'https://s56-atharva-kharade-capstone-lokvani.onrender.com/GoogleLogin',
-  //       { email: email }
-  //     );
-  //     console.log("Success:", response.data);
-  //     Cookies.set('token', response.data.token);
-  //     navigate('/User');
-  //   } catch (error) {
-  //     console.error("Error:", error.response.data);
-  //     toast.error(`${error.response.data.error}`);
-  //   }
-  // }
+    try {
+      const response = await axios.post(
+        'https://s56-atharva-kharade-capstone-lokvani.onrender.com/GoogleLogin',
+        { email: email }
+      );
+      console.log("Success:", response.data);
+      Cookies.set('token', response.data.token);
+      navigate('/User');
+    } catch (error) {
+      console.error("Error:", error.response.data);
+      toast.error(`${error.response.data.error}`);
+    }
+  }
 
   return (
     <div className="Login-main">
@@ -157,28 +155,24 @@ const LoginPage = () => {
             >
               Username
             </InputLabel>
-            <TextField
+            <input
               id="username-input"
-              variant="outlined"
-              fullWidth
-              margin="normal"
+              type="text"
               value={username}
               onChange={handleUsernameChange}
-              error={usernameError}
-              helperText={
-                usernameError
-                  ? 'Username should be at least 4 characters long.'
-                  : ''
-              }
-              InputProps={{
-                style: {
-                  fontSize: '20px',
-                  marginTop: '-25px',
-                  height: '50px',
-                  borderRadius: '6px',
-                },
+              className={`input ${usernameError ? 'input-error' : ''}`}
+              style={{
+                fontSize: '20px',
+                height: '50px',
+                borderRadius: '6px',
+                outline: 'none',
+                width: '100%',
+                padding: '0 10px',
               }}
             />
+            {usernameError && (
+              <span className="error-text">Username should be at least 4 characters long.</span>
+            )}
             <InputLabel
               shrink
               htmlFor="password-input"
@@ -192,42 +186,45 @@ const LoginPage = () => {
             >
               Password
             </InputLabel>
-            <TextField
-              id="password-input"
-              variant="outlined"
-              type={showPassword ? "text" : "password"}
-              fullWidth
-              margin="normal"
-              value={password}
-              onChange={handlePasswordChange}
-              error={passwordError}
-              helperText={
-                passwordError
-                  ? "Password must be at least 8 characters long."
-                  : ""
-              }
-              InputProps={{
-                style: {
+            <div style={{ position: 'relative', width: '100%' }}>
+              <input
+                id="password-input"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={handlePasswordChange}
+                className={`input ${passwordError ? 'input-error' : ''}`}
+                style={{
                   fontSize: "18px",
-                  marginTop: "-20px",
                   height: "50px",
                   borderRadius: "6px",
-                },
-                endAdornment: (
-                  <IconButton onClick={handlePasswordVisibility} edge="end">
-                    <img
-                      src={showPassword ? eyeIconVisible : eyeIconHidden}
-                      alt={showPassword ? "Hide password" : "Show password"}
-                      style={{
-                        width: "24px",
-                        height: "24px",
-                        objectFit: "contain",
-                      }}
-                    />
-                  </IconButton>
-                ),
-              }}
-            />
+                  outline: 'none',
+                  width: '100%',
+                  padding: '0 40px 0 10px',
+                }}
+              />
+              <IconButton
+                onClick={handlePasswordVisibility}
+                style={{
+                  position: 'absolute',
+                  right: '10px',
+                  top: '46%',
+                  transform: 'translateY(-50%)',
+                }}
+              >
+                <img
+                  src={showPassword ? eyeIconVisible : eyeIconHidden}
+                  alt={showPassword ? "Hide password" : "Show password"}
+                  style={{
+                    width: "24px",
+                    height: "24px",
+                    objectFit: "contain",
+                  }}
+                />
+              </IconButton>
+            </div>
+            {passwordError && (
+              <span className="error-text">Password must be at least 8 characters long.</span>
+            )}
           </div>
           <div className="LoginPage-btn">
             <button className="Login-btn" onClick={handleLogin} disabled={loading}>
@@ -245,7 +242,7 @@ const LoginPage = () => {
             <p>OR</p>
           </div>
           <div>
-            {/* <div className="google-login-button">
+            <div className="custom-google-button">
               <GoogleOAuthProvider clientId="722611360376-mt0evhdhlt6jr55qmk92dumipmdg5khv.apps.googleusercontent.com">
                 <GoogleLogin
                   text='continue_with'
@@ -253,13 +250,14 @@ const LoginPage = () => {
                   size='large'
                   shape='pill'
                   width='800px'
+                  border='false'
                   onSuccess={handleGoogleLoginSuccess}
                   onError={() => {
                     console.log('Login Failed')
                   }}
                 />
               </GoogleOAuthProvider>
-            </div> */}
+            </div>
             <div className='LoginPage-admin'>
               <div>
                 <p>
@@ -275,7 +273,6 @@ const LoginPage = () => {
                   <h1>Admin</h1>
                 </div>
               </Link>
-
             </div>
           </div>
         </div>
