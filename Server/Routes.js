@@ -560,7 +560,7 @@ router.put("/VerifyComplaint/:id", async (req, res) => {
 
     const mailOptions = {
       from: complaint.email,
-      to: "department-email@example.com",
+      to: "atharvak6363@gmail.com",
       subject: complaint.title,
       text: `
       Title: ${complaint.title}
