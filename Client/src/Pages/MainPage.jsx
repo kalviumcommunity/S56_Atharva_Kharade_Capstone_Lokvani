@@ -201,6 +201,14 @@ const MainPage = () => {
             </div>
           ) : (
             <>
+              {/* <div className="Complaint-Box">
+                <div className="Complaint-Box-title">
+                  <h1>Pollution in Pune due to River</h1>
+                </div>
+                <div className="Complaint-lower">
+                  
+                </div>
+              </div> */}
               {complaints.map((complaint, index) => (
                 <div className="Complaint-Box" key={index}>
                   <div className="Complaint-Box-title">
@@ -246,6 +254,11 @@ const MainPage = () => {
                         <div className="ComplaintType">
                           <div className="function-Type">
                             <h1>{complaint.complaintType}</h1>
+                          </div>
+                        </div>
+                        <div className="ComplaintType">
+                          <div className="function-Type">
+                            <h1>{complaint.area}</h1>
                           </div>
                         </div>
                         <div className="Complaint-verfication">

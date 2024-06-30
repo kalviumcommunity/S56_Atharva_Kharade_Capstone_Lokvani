@@ -240,9 +240,9 @@ const Community = () => {
                                         <Link to={`/community/${name}/posts/${post._id}`}><FaRegComment className="Post-vote-arrows" /></Link>
                                     </div>
                                 </div>
-                                <div className="post-timestamp">
+                                {/* <div className="post-timestamp">
                                     <p>Posted on: {formatISTDate(post.timestamp)}</p>
-                                </div>
+                                </div> */}
                             </div>
                         ))}
                     </div>
