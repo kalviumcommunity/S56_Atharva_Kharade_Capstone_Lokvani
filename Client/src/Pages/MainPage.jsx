@@ -196,19 +196,11 @@ const MainPage = () => {
                 stroke-length="0.25"
                 bg-opacity="0.1"
                 speed="0.8"
-                color="black"
+                color="#968ED5"
               ></l-ring-2>
             </div>
           ) : (
             <>
-              {/* <div className="Complaint-Box">
-                <div className="Complaint-Box-title">
-                  <h1>Pollution in Pune due to River</h1>
-                </div>
-                <div className="Complaint-lower">
-                  
-                </div>
-              </div> */}
               {complaints.map((complaint, index) => (
                 <div className="Complaint-Box" key={index}>
                   <div className="Complaint-Box-title">
@@ -294,22 +286,33 @@ const MainPage = () => {
               stroke-length="0.25"
               bg-opacity="0.1"
               speed="0.8"
-              color="black"
+              color="#968ED5"
             ></l-ring-2>
           ) : (
-            communities.map((community, index) => (
-              <div className="MainPage-community-name" key={index}>
-                <h1>{community.name}</h1>
-                <div className="MainPage-community-name-function">
-                  <div className="community-function-members">
-                    <MdGroups className="community-btn-img" />
-                    <h1>{community.members.length}</h1>
+            communities.length > 0 ? (
+              communities.map((community, index) => (
+                <div className="MainPage-community-name" key={index}>
+                  <h1>{community.name}</h1>
+                  <div className="MainPage-community-name-function">
+                    <div className="community-function-members">
+                      <MdGroups className="community-btn-img" />
+                      <h1>{community.members.length}</h1>
+                    </div>
+                    <button onClick={() => handleJoinCommunity(community._id)}>
+                      <MdGroupAdd className="Join-community-btn-img" /> Join
+                    </button>
                   </div>
-                  <button onClick={() => handleJoinCommunity(community._id)}><MdGroupAdd className="Join-community-btn-img" /> Join</button>
                 </div>
+              ))
+            ) : (
+              <div className="joined-all-communities-message">
+                <h1>
+                  You have joined all communities. <br /> Stay tuned for new communities!
+                </h1>
               </div>
-            ))
+            )
           )}
+
         </div>
       </div>
     </div>

@@ -80,6 +80,7 @@ router.post("/Signup", async (req, res) => {
     const newUser = await User.create({
       email: req.body.email,
       password: hashedPassword,
+      Image: `https://avatar.iran.liara.run/username?username=${req.body.username}`,
       username: req.body.username,
       otp: otp,
       otpExpires: Date.now() + 3600000,
