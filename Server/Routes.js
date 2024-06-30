@@ -539,14 +539,6 @@ router.get("/AdminComplaints", async (req, res) => {
 router.put("/VerifyComplaint/:id", async (req, res) => {
   const { id } = req.params;
 
-  let transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-
   try {
     const complaint = await Complaint.findByIdAndUpdate(
       id,
@@ -558,18 +550,39 @@ router.put("/VerifyComplaint/:id", async (req, res) => {
       return res.status(404).json({ error: "Complaint not found" });
     }
 
+    const user = await User.findById(complaint.createdBy);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const htmlBody = `
+      <html>
+        <body>
+          <h2>${complaint.title}</h2>
+          <p>Description: ${complaint.description}</p>
+          <p>Location: ${complaint.Location}</p>
+          <p>Type of Complaint: ${complaint.complaintType}</p>
+          <p>Area: ${complaint.area}</p>
+          <p>User Email: ${user.email}</p>
+          <hr />
+          <p><em>This email is sent on behalf of the user who submitted the complaint.</em></p>
+        </body>
+      </html>
+    `;
+
     const mailOptions = {
-      from: `${complaint.email}`,
+      from: process.env.EMAIL_USER,
       to: "atharvak6363@gmail.com",
       subject: complaint.title,
-      text: `
-Title: ${complaint.title}
-Description: ${complaint.description}
-Location: ${complaint.Location}
-Type of Complaint: ${complaint.type}
-Area: ${complaint.area}
-
-Note: This email is sent on behalf of the user who submitted the complaint.`,
+      html: htmlBody,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
