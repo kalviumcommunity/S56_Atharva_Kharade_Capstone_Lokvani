@@ -253,11 +253,12 @@ const MainPage = () => {
                             <h1>{complaint.area}</h1>
                           </div>
                         </div>
-                        <div className="Complaint-verfication">
-                          <div className="function-reviewTag">
+                        <div className="Complaint-verification">
+                          <div className="function-reviewTag" style={{ backgroundColor: complaint.verified ? "#1BE41B" : "#ED6C02" }}>
                             <h1>{complaint.verified ? "Verified" : "Not Verified"}</h1>
                           </div>
                         </div>
+
                       </div>
                     </div>
                   </div>

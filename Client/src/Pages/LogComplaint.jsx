@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './CSS/LogComplaint.css';
-import TextField from "@mui/material/TextField";
-import InputLabel from "@mui/material/InputLabel";
 import PuneAreaSelect from "../Components/AreaSelect";
 import ComplaintType from "../Components/ComplaintType";
 import axios from 'axios';
@@ -10,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
+import Uploader from '../Components/fileUpload';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const LogComplaint = () => {
     const navigate = useNavigate();
@@ -22,9 +22,7 @@ const LogComplaint = () => {
     const [descriptionError, setDescriptionError] = useState('');
     const [file, setFile] = useState(null);
     const [userId, setUserId] = useState('');
-
-    const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         handleUserDetails();
@@ -36,6 +34,7 @@ const LogComplaint = () => {
         setArea('');
         setComplaintType('');
         setLocation('');
+        setFile(null);
         navigate('/User');
     };
 
@@ -43,7 +42,7 @@ const LogComplaint = () => {
         const inputTitle = e.target.value;
         setTitle(inputTitle);
 
-        const wordCount = inputTitle.trim().split(/\s/).filter(Boolean).length;
+        const wordCount = inputTitle.trim().split(/\s+/).filter(Boolean).length;
 
         if (wordCount < 3) {
             setTitleError('Title must contain at least 3 words');
@@ -58,7 +57,7 @@ const LogComplaint = () => {
         const inputDescription = e.target.value;
         setDescription(inputDescription);
 
-        const wordCount = inputDescription.trim().split(/\s/).filter(Boolean).length;
+        const wordCount = inputDescription.trim().split(/\s+/).filter(Boolean).length;
 
         if (wordCount < 25) {
             setDescriptionError('Description must contain at least 25 words');
@@ -67,10 +66,6 @@ const LogComplaint = () => {
         } else {
             setDescriptionError('');
         }
-    };
-
-    const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
     };
 
     const handleUserDetails = async () => {
@@ -99,6 +94,8 @@ const LogComplaint = () => {
             return;
         }
 
+        setLoading(true);
+
         try {
             const formData = new FormData();
             formData.append('title', title);
@@ -117,16 +114,12 @@ const LogComplaint = () => {
 
             console.log('Complaint created successfully:', response.data);
             toast.success('Complaint submitted successfully.');
-            setTitle('');
-            setDescription('');
-            setArea('');
-            setComplaintType('');
-            setLocation('');
-            setFile(null);
+            handleCancel();
         } catch (error) {
             console.error('Error creating complaint:', error);
             toast.error('Failed to submit complaint.');
-            console.log(userId)
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -137,75 +130,41 @@ const LogComplaint = () => {
                 <div className="Complaint-Box-Body">
                     <h1>Raise A Complaint</h1>
                     <div className="Complaint-title-input">
-                        <InputLabel
-                            shrink
-                            htmlFor="Complaint-title-input"
+                        <label className='logComplaint-label' htmlFor="Complaint-title-input">Title <span style={{ color: "red" }}>*</span></label>
+                        <input
+                            className="complaintInput Complaint-title-input"
+                            type="text"
                             style={{
-                                fontSize: "35px",
-                                fontWeight: "400",
-                                color: "#000000",
-                                fontFamily: "Poppins",
-                                marginTop: "10px",
-                            }}
-                            required
-                        >
-                            Title
-                        </InputLabel>
-                        <TextField
-                            id="Complaint-title-input"
-                            variant="outlined"
-                            fullWidth
-                            margin="normal"
-                            InputProps={{
-                                style: {
-                                    fontSize: "20px",
-                                    marginTop: "-30px",
-                                    height: "40px",
-                                    borderRadius: "6px",
-                                    borderColor: titleError ? 'red' : '',
-                                },
+                                fontSize: "20px",
+                                height: "40px",
+                                borderRadius: "6px",
+                                borderColor: titleError ? 'red' : '',
+                                width: "100%",
+                                margin: "8px 0 0 0",
+                                padding: "8px"
                             }}
                             value={title}
                             onChange={handleTitleChange}
-                            error={!!titleError}
-                            helperText={titleError}
                         />
+                        {titleError && <div style={{ color: "red" }}>{titleError}</div>}
                     </div>
 
                     <div className="Complaint-descp-input">
-                        <InputLabel
-                            shrink
-                            htmlFor="Complaint-descp-input"
+                        <label className='logComplaint-label' htmlFor="Complaint-title-input">Description <span style={{ color: "red" }}>*</span></label>
+                        <textarea
+                            className="complaintInput Complaint-descp-input"
                             style={{
-                                fontSize: "35px",
-                                fontWeight: "400",
-                                color: "#000000",
-                                fontFamily: "Poppins",
-                                marginTop: "10px",
+                                fontSize: "20px",
+                                borderRadius: "6px",
+                                width: "100%",
+                                margin: "8px 0 0 0",
+                                padding: "8px"
                             }}
-                            required
-                        >
-                            Description
-                        </InputLabel>
-                        <TextField
-                            id="Complaint-descp-input"
-                            variant="outlined"
-                            fullWidth
-                            margin="normal"
-                            multiline
-                            size='small'
-                            InputProps={{
-                                style: {
-                                    fontSize: "20px",
-                                    marginTop: "-30px",
-                                    borderRadius: "6px",
-                                },
-                            }}
+                            rows="2"
                             value={description}
                             onChange={handleDescriptionChange}
-                            error={!!descriptionError}
-                            helperText={descriptionError}
                         />
+                        {descriptionError && <div style={{ color: "red" }}>{descriptionError}</div>}
                     </div>
 
                     <div className="Complaint-Location">
@@ -216,66 +175,48 @@ const LogComplaint = () => {
                             <ComplaintType value={complaintType} onChange={setComplaintType} />
                         </div>
                     </div>
+
                     <div className="Complaint-Location-input">
-                        <InputLabel
-                            shrink
-                            htmlFor="Complaint-Location-input"
+                        <label className='logComplaint-label' htmlFor="Complaint-title-input">Location <span style={{ color: "red" }}>*</span></label>
+                        <input
+                            className="complaintInput Complaint-Location-input"
+                            type="text"
                             style={{
-                                fontSize: "35px",
-                                fontWeight: "400",
-                                color: "#000000",
-                                fontFamily: "Poppins",
-                                marginTop: "15px",
-                            }}
-                        >
-                            Location <span style={{ fontSize: "14px" }}>(Optional)</span>
-                        </InputLabel>
-                        <TextField
-                            id="Complaint-Location-input"
-                            variant="outlined"
-                            fullWidth
-                            margin="normal"
-                            multiline
-                            InputProps={{
-                                style: {
-                                    fontSize: "20px",
-                                    marginTop: "-30px",
-                                    borderRadius: "6px",
-                                    height: "40px",
-                                },
+                                fontSize: "20px",
+                                borderRadius: "6px",
+                                height: "40px",
+                                width: "100%",
+                                margin: "8px 0",
+                                padding: "8px"
                             }}
                             value={location}
                             onChange={(e) => setLocation(e.target.value)}
                         />
                     </div>
-
-                    <div className="Complaint-Image-input">
-                        <InputLabel
-                            shrink
-                            htmlFor="Complaint-Image-input"
-                            style={{
-                                fontSize: "35px",
-                                fontWeight: "400",
-                                color: "#000000",
-                                fontFamily: "Poppins",
-                                marginTop: "15px",
-                            }}
-                            required
-                        >
-                            Image
-                        </InputLabel>
-                        <input type="file" onChange={handleFileChange} />
+                    <div style={{ width: "80%" }}>
+                        <label className='logComplaint-label' htmlFor="Complaint-title-input">Image <span style={{ color: "red" }}>*</span></label>
+                        <Uploader onFileSelect={(file) => setFile(file)} />
                     </div>
 
                     <div className="Complaint-buttons">
                         <button id='cancel' onClick={handleCancel}>Cancel</button>
-                        <button id='submit' onClick={handleSubmit}>Submit</button>
+                        <button id='submit' onClick={handleSubmit} disabled={loading}>
+                            {loading ? (
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <CircularProgress size={24} color="inherit" />
+                                    <span style={{ marginLeft: '8px' }}>Submitting</span>
+                                </div>
+                            ) : (
+                                'Submit'
+                            )}
+                        </button>
                     </div>
                 </div>
+
             </div>
             <ToastContainer />
         </div>
     );
-}
+};
 
 export default LogComplaint;

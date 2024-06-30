@@ -25,6 +25,7 @@
   align-items: center;
   flex-direction: column;
   overflow-y: auto;
+  background: #fff;
 }
 
 .MainPage-side-Navbar::-webkit-scrollbar {

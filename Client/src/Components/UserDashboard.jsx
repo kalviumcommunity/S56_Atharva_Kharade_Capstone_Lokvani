@@ -84,7 +84,7 @@ const UserDashboard = () => {
             <div className={`UserOptions ${location.pathname === '/ProfileEdit' ? 'active' : ''}`}>
               <div className="UserIcon">
                 <div className="userDetailProfilePic">
-                  <img src={Image} alt="Profile" />
+                  <img src={Image} />
                 </div>
               </div>
               <div>
