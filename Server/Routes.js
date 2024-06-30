@@ -559,17 +559,17 @@ router.put("/VerifyComplaint/:id", async (req, res) => {
     }
 
     const mailOptions = {
-      from: complaint.email,
+      from: `${complaint.email}`,
       to: "atharvak6363@gmail.com",
       subject: complaint.title,
       text: `
-      Title: ${complaint.title}
-      Description: ${complaint.description}
-      Location: ${complaint.Location}
-      Type of Complaint: ${complaint.type}
-      Area: ${complaint.area}
+Title: ${complaint.title}
+Description: ${complaint.description}
+Location: ${complaint.Location}
+Type of Complaint: ${complaint.type}
+Area: ${complaint.area}
 
-      Note: This email is sent on behalf of the user who submitted the complaint.`,
+Note: This email is sent on behalf of the user who submitted the complaint.`,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
