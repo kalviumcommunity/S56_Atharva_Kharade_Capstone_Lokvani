@@ -7,9 +7,22 @@
   width: calc(100vw - 250px);
   height: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-wrap: wrap;
   overflow-y: auto;
+}
+
+.No-complaints-message {
+  font-size: 30px;
+  font-family: "Poppins", serif;
+  font-size: 500;
+  margin: 20px;
+  text-align: center;
+  height: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .MyComplaint-body::-webkit-scrollbar {
@@ -29,7 +42,7 @@
   height: auto;
   width: 400px;
   border-radius: 5px;
-  margin: 15px 0;
+  margin: 15px 10px;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
@@ -53,7 +66,8 @@
 
 .MyComplaint-descp {
   height: 260px;
-  padding: 5px;
+  padding: 5px 20px;
+  width: 400px;
 }
 
 .MyComplaint-function {
@@ -66,4 +80,23 @@
 .MyComplaint-upvote {
   display: flex;
   align-items: center;
+}
+
+.MyComplaint-upvote h1 {
+  font-size: 20px;
+  font-family: "Poppins", serif;
+  font-size: 500;
+}
+
+.MyComplaint-comment {
+  display: flex;
+  align-items: center;
+  width: 50px;
+  justify-content: space-around;
+}
+
+.MyComplaint-comment h1 {
+  font-size: 20px;
+  font-family: "Poppins", serif;
+  font-size: 500;
 }
