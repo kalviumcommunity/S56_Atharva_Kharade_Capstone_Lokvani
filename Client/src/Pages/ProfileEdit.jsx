@@ -36,8 +36,6 @@ const ProfileEdit = () => {
 
         if (userData.Image) {
           setImageUrl(userData.Image);
-        } else {
-          setImageUrl("https://www.w3schools.com/howto/img_avatar.png");
         }
 
         console.log('User Profile:', userData);
@@ -135,7 +133,7 @@ const ProfileEdit = () => {
       <div className='profileEditMain'>
         <div className="profileImageDiv">
           <div className="profileImage" onClick={() => document.getElementById('fileInput').click()}>
-            <img src={imageUrl} alt="Profile" />
+            <img src={imageUrl} className='profileImageCircle'/>
             <div className="profileImageEditLogoDiv">
               <label htmlFor="fileInput" className='profileImageEditLogo' onClick={handleLogoClick}>
                 <FaRegEdit />

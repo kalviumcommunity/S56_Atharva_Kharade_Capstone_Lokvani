@@ -15,17 +15,17 @@
   height: 100%;
   display: flex;
   justify-content: center;
-  padding: 10px;
+  padding: 0 0 0 10px;
 }
 
 .MainPage-side-Navbar {
   width: 100%;
-  border-radius: 10px;
-  border: 1px solid black;
+  border-left: 2.5px solid rgb(199, 199, 199);
   display: flex;
   align-items: center;
   flex-direction: column;
   overflow-y: auto;
+  background: #fff;
 }
 
 .MainPage-side-Navbar::-webkit-scrollbar {
@@ -156,7 +156,7 @@
 
 .Complaint-Box {
   width: 95%;
-  height: 350px;
+  height: 400px;
   justify-self: center;
   margin-top: 10px;
   box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
@@ -176,7 +176,7 @@
 
 .Complaint-Box-title h1 {
   font-family: "Poppins", serif;
-  font-size: 4.5vh;
+  font-size: 35px;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -213,7 +213,8 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: baseline;
+  justify-content: center;
+  align-items: center;
   padding: 20px;
 }
 
@@ -229,14 +230,15 @@
   justify-content: space-between;
   align-items: center;
   margin-left: 10px;
-  width: 15%;
+  width: 90px;
   border: 2px solid grey;
   border-radius: 20px;
   padding: 0 5px;
+  height: 40px;
 }
 
 .Complaint-vote h1 {
-  font-size: 3.5vh;
+  font-size: 25px;
   font-family: "Poppins", serif;
 }
 
@@ -245,7 +247,7 @@
   cursor: pointer;
 }
 .comment-arrows {
-  font-size: 150%;
+  font-size: 30px;
   cursor: pointer;
 }
 
@@ -254,33 +256,37 @@
   justify-content: space-between;
   align-items: center;
   margin-left: 10px;
-  width: 13%;
+  width: 80px;
   border: 2px solid grey;
   border-radius: 20px;
   padding: 0 10px;
+  height: 40px;
 }
 
 .Complaint-comment h1 {
-  font-size: 3.5vh;
+  font-size: 25px;
   font-family: "Poppins", serif;
 }
 
 .Complaint-comment h1 {
-  font-size: 3.5vh;
+  font-size: 25px;
   font-family: "Poppins", serif;
 }
 
 .Complaint-report {
-  margin-left: 30px;
-  justify-self: flex-end;
+  margin-left: 10px;
 }
 .vote-report {
-  font-size: 200%;
+  font-size: 45px;
 }
 
 .Complaint-descp {
-  padding: 10px;
+  padding: 10px 10px 10px 20px;
   height: 80%;
+}
+
+.Complaint-descp p{
+  font-size: 18px;
 }
 
 .Comaplaint-functionalities {
@@ -295,7 +301,7 @@
 .function-reviewTag {
   margin: 10px;
   height: 30px;
-  width: auto;
+  width: 240px;
   border-radius: 35px;
   display: flex;
   align-items: center;
@@ -312,9 +318,9 @@
 .function-Type {
   margin: 10px;
   height: 30px;
-  width: auto;
+  width: 240px;
   border: 1px solid black;
-  border-radius: 35px;
+  border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -351,6 +357,7 @@
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
   margin: 15px 0px;
+  background-color: #E2EBFF;;
 }
 
 .MainPage-community-name h1 {
@@ -363,7 +370,7 @@
 .MainPage-community-name button {
   width: 40%;
   height: 30px;
-  background-color: #f5f6fa;
+  background-color: #E2EBFF;
   border-radius: 5px;
   border: 3px dashed #2f60b9;
   font-size: 20px;
@@ -437,4 +444,20 @@
   align-items: center;
   height: 100%;
   width: 100%;
+}
+
+.joined-all-communities-message{
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.joined-all-communities-message h1{
+  font-size: 25px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  text-align: center;
+  color: #0000008e;
+  margin-top: 30px;
 }

@@ -9,7 +9,7 @@
 }
 
 .Complaint-Box-Body {
-  width: 600px;
+  width: 70%;
   height: 100%;
   border-radius: 8px;
   display: flex;
@@ -17,7 +17,21 @@
   flex-direction: column;
   padding: 10px;
   overflow-y: auto;
-  background-color: rgba(80, 63, 205, 0.26);
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+.logComplaint-label {
+  font-size: 30px;
+  font-family: "Poppins", serif;
+}
+
+.complaintInput {
+  border: 1px solid #c4c4c4;
+  outline: none;
+}
+.complaintInput:focus {
+  border: 1px solid #1974cf;
 }
 
 .Complaint-Box-Body::-webkit-scrollbar {
@@ -72,7 +86,7 @@
 }
 
 .Complaint-buttons {
-  width: 80%;
+  width: 90%;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -92,14 +106,22 @@
 }
 
 #cancel {
-  background-color: #e55842;
+  background-color: #f46416;
+  color: white;
 }
 #submit {
-  background-color: #3ced6f;
+  background-color: #2f60b9;
+  color: white;
 }
 
 .Complaint-main-body {
   height: 100vh;
   width: 100vw;
   display: flex;
+}
+
+#submit:disabled {
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.3);
 }

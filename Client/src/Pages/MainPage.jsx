@@ -196,7 +196,7 @@ const MainPage = () => {
                 stroke-length="0.25"
                 bg-opacity="0.1"
                 speed="0.8"
-                color="black"
+                color="#968ED5"
               ></l-ring-2>
             </div>
           ) : (
@@ -248,11 +248,17 @@ const MainPage = () => {
                             <h1>{complaint.complaintType}</h1>
                           </div>
                         </div>
-                        <div className="Complaint-verfication">
-                          <div className="function-reviewTag">
+                        <div className="ComplaintType">
+                          <div className="function-Type">
+                            <h1>{complaint.area}</h1>
+                          </div>
+                        </div>
+                        <div className="Complaint-verification">
+                          <div className="function-reviewTag" style={{ backgroundColor: complaint.verified ? "#1BE41B" : "#ED6C02" }}>
                             <h1>{complaint.verified ? "Verified" : "Not Verified"}</h1>
                           </div>
                         </div>
+
                       </div>
                     </div>
                   </div>
@@ -281,22 +287,33 @@ const MainPage = () => {
               stroke-length="0.25"
               bg-opacity="0.1"
               speed="0.8"
-              color="black"
+              color="#968ED5"
             ></l-ring-2>
           ) : (
-            communities.map((community, index) => (
-              <div className="MainPage-community-name" key={index}>
-                <h1>{community.name}</h1>
-                <div className="MainPage-community-name-function">
-                  <div className="community-function-members">
-                    <MdGroups className="community-btn-img" />
-                    <h1>{community.members.length}</h1>
+            communities.length > 0 ? (
+              communities.map((community, index) => (
+                <div className="MainPage-community-name" key={index}>
+                  <h1>{community.name}</h1>
+                  <div className="MainPage-community-name-function">
+                    <div className="community-function-members">
+                      <MdGroups className="community-btn-img" />
+                      <h1>{community.members.length}</h1>
+                    </div>
+                    <button onClick={() => handleJoinCommunity(community._id)}>
+                      <MdGroupAdd className="Join-community-btn-img" /> Join
+                    </button>
                   </div>
-                  <button onClick={() => handleJoinCommunity(community._id)}><MdGroupAdd className="Join-community-btn-img" /> Join</button>
                 </div>
+              ))
+            ) : (
+              <div className="joined-all-communities-message">
+                <h1>
+                  You have joined all communities. <br /> Stay tuned for new communities!
+                </h1>
               </div>
-            ))
+            )
           )}
+
         </div>
       </div>
     </div>

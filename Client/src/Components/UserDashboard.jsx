@@ -35,17 +35,6 @@ const UserDashboard = () => {
           </div>
         </div>
 
-        <Link to={'/ProfileEdit'}>
-          <div className="userDetail">
-            <div className="userDetailProfilePic">
-              <img src={Image} alt="Profile" />
-            </div>
-            <div>
-              <h1>{username}</h1>
-            </div>
-          </div>
-        </Link>
-
         <div style={{ marginTop: '15px' }}>
           <Link to={'/User'}>
             <div className={`UserOptions ${location.pathname === '/User' ? 'active' : ''}`}>
@@ -87,6 +76,19 @@ const UserDashboard = () => {
               </div>
               <div>
                 <h1>Communities</h1>
+              </div>
+            </div>
+          </Link>
+
+          <Link to={'/ProfileEdit'}>
+            <div className={`UserOptions ${location.pathname === '/ProfileEdit' ? 'active' : ''}`}>
+              <div className="UserIcon">
+                <div className="userDetailProfilePic">
+                  <img src={Image} />
+                </div>
+              </div>
+              <div>
+                <h1>Profile</h1>
               </div>
             </div>
           </Link>

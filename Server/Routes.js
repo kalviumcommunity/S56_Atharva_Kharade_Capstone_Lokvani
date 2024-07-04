@@ -80,6 +80,7 @@ router.post("/Signup", async (req, res) => {
     const newUser = await User.create({
       email: req.body.email,
       password: hashedPassword,
+      Image: `https://avatar.iran.liara.run/username?username=${req.body.username}`,
       username: req.body.username,
       otp: otp,
       otpExpires: Date.now() + 3600000,
@@ -232,15 +233,23 @@ router.post("/Complaint", upload.single("image"), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: "No image uploaded" });
     }
+
     cloudinary.uploader.upload(req.file.path, async function (error, result) {
       if (error) {
         return res
           .status(500)
           .json({ error: "Error uploading image to cloudinary" });
       }
+
       try {
         const { title, description, area, complaintType, Location, createdBy } =
           req.body;
+
+        const user = await User.findById(createdBy);
+        if (!user) {
+          return res.status(404).json({ error: "User not found" });
+        }
+
         const newComplaint = await Complaint.create({
           title,
           description,
@@ -249,6 +258,7 @@ router.post("/Complaint", upload.single("image"), async (req, res) => {
           Location,
           Image: result.secure_url,
           createdBy,
+          email: user.email,
         });
 
         res.status(201).json({
@@ -529,12 +539,61 @@ router.get("/AdminComplaints", async (req, res) => {
 
 router.put("/VerifyComplaint/:id", async (req, res) => {
   const { id } = req.params;
+
   try {
-    const complaint = await Complaint.findByIdAndUpdate(id, { verified: true });
+    const complaint = await Complaint.findByIdAndUpdate(
+      id,
+      { verified: true },
+      { new: true }
+    );
+
     if (!complaint) {
       return res.status(404).json({ error: "Complaint not found" });
     }
-    res.json({ message: "Complaint verified successfully" });
+
+    const user = await User.findById(complaint.createdBy);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const htmlBody = `
+      <html>
+        <body>
+          <h2>${complaint.title}</h2>
+          <p>Description: ${complaint.description}</p>
+          <p>Location: ${complaint.Location}</p>
+          <p>Type of Complaint: ${complaint.complaintType}</p>
+          <p>Area: ${complaint.area}</p>
+          <p>User Email: ${user.email}</p>
+          <hr />
+          <p><em>This email is sent on behalf of the user who submitted the complaint.</em></p>
+        </body>
+      </html>
+    `;
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: "atharvak6363@gmail.com",
+      subject: complaint.title,
+      html: htmlBody,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending email:", error);
+        return res.status(500).json({ error: "Error sending email" });
+      }
+      console.log("Email sent:", info.response);
+      res.json({ message: "Complaint verified and email sent successfully" });
+    });
   } catch (error) {
     console.error("Error verifying complaint:", error);
     res.status(500).json({ error: "Internal server error" });

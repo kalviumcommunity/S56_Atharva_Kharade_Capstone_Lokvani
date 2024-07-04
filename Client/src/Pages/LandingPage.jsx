@@ -10,7 +10,7 @@ const LandingPage = () => {
     return (
         <>
             <Navbar />
-            <div className="landingMain">"
+            <div className="landingMain">
                 <div className='landingMainTitle'>
                     <h1>Speak Up.  Be Heard.  Make a  Difference.</h1>
                     <p>Your voice matters. It's time to be heard, connect with <br /> Lokvani to address local challenges.</p>

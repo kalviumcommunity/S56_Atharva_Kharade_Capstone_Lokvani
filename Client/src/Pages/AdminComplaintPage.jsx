@@ -21,7 +21,7 @@ const AdminComplaintPage = () => {
             const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint`, {
                 params: {
                     page: currentPage,
-                    limit: 7,
+                    limit: 5,
                     sortBy: sortBy
                 }
             });
