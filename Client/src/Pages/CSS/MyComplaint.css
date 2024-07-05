@@ -40,9 +40,9 @@
 
 .MyComplaint-complaint-box {
   height: auto;
-  width: 400px;
+  width: 380px;
   border-radius: 5px;
-  margin: 15px 10px;
+  margin: 15px 20px;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
@@ -67,7 +67,7 @@
 .MyComplaint-descp {
   height: 260px;
   padding: 5px 20px;
-  width: 400px;
+  width: 380px;
 }
 
 .MyComplaint-function {

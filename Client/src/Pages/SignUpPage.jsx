@@ -11,7 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { UserContext } from '../UserContext';
 
@@ -78,7 +78,7 @@ const SignUpPage = () => {
             );
 
             toast.success(response.data.message);
-            setStep(2); 
+            setStep(2);
         } catch (error) {
             if (error.response.status === 400) {
                 if (error.response.data.error === "Email already exists!") {
