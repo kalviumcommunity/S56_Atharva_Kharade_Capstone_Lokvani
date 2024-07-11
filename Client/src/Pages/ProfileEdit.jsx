@@ -165,28 +165,7 @@ const ProfileEdit = () => {
             </div>
           </div>
         </div>
-        <div className="profileEditComplaints">
-          <div className="profileComplaintLiked">
-            <h1>Liked Posts</h1>
-            <div>
-              <div className="profileLikedPost">
-                <div className='profileLikedBox'>
-                  <h1>Post Detail</h1>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="profileComplaintCommented">
-            <h1>Posts Made</h1>
-            <div>
-              <div className="profileLikedPost">
-                <div className='profileLikedBox'>
-                  <h1>Post Detail</h1>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </div>
       <Modal
         open={isModalOpen}

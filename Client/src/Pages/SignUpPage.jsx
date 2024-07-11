@@ -11,7 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { UserContext } from '../UserContext';
 
@@ -78,7 +78,7 @@ const SignUpPage = () => {
             );
 
             toast.success(response.data.message);
-            setStep(2); 
+            setStep(2);
         } catch (error) {
             if (error.response.status === 400) {
                 if (error.response.data.error === "Email already exists!") {
@@ -129,6 +129,8 @@ const SignUpPage = () => {
                 "https://s56-atharva-kharade-capstone-lokvani.onrender.com/GoogleSignup",
                 { params: { email } }
             );
+            Cookies.set("username", decoded.name);
+            Cookies.set("email", decoded.email);
             navigate("/GooglePassword");
         } catch (error) {
             toast.error(error.response.data.error);
@@ -137,70 +139,174 @@ const SignUpPage = () => {
 
     return (
         <div className="Signup-main">
-            <div className="Signup-container">
-                <div className="image-section">
-                    <img
-                        src="https://source.unsplash.com/featured/?abstract"
-                        alt="Signup"
-                    />
-                </div>
-                <div className="Signup-section">
-                    <h2>Welcome!</h2>
-                    <p>Signup to access your account</p>
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+            />
+            <div className="Signup-Img"></div>
+            <div className="Signup-Page">
+                <div className="Signup-Body">
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <h1 id="Signup-heading">Create an Account</h1>
+                        <Link to={"/Login"}>
+                            <p>
+                                <u>Log-in instead</u>
+                            </p>
+                        </Link>
+                    </div>
                     {step === 1 ? (
                         <>
-                            <TextField
-                                label="Email"
-                                variant="outlined"
-                                fullWidth
-                                margin="normal"
-                                value={email}
-                                onChange={handleEmailChange}
-                                error={emailError}
-                                helperText={emailError ? "Please enter a valid email address" : ""}
-                            />
-                            <TextField
-                                label="Username"
-                                variant="outlined"
-                                fullWidth
-                                margin="normal"
-                                value={username}
-                                onChange={handleUsernameChange}
-                                error={usernameError}
-                                helperText={usernameError ? "Username must be at least 4 characters long" : ""}
-                            />
-                            <InputLabel>Password</InputLabel>
-                            <div className="password-input-container">
+                            <div className="input-box">
+                                <InputLabel
+                                    shrink
+                                    htmlFor="email-input"
+                                    style={{
+                                        fontSize: "25px",
+                                        fontWeight: "400",
+                                        color: "#000000",
+                                        fontFamily: "Poppins",
+                                        marginTop: "10px",
+                                    }}
+                                >
+                                    Email
+                                </InputLabel>
                                 <TextField
-                                    type={showPassword ? "text" : "password"}
+                                    id="email-input"
                                     variant="outlined"
+                                    fullWidth
+                                    margin="normal"
+                                    value={email}
+                                    onChange={handleEmailChange}
+                                    error={emailError}
+                                    helperText={emailError ? "Invalid email address." : ""}
+                                    InputProps={{
+                                        style: {
+                                            fontSize: "18px",
+                                            marginTop: "-20px",
+                                            height: "50px",
+                                            borderRadius: "6px",
+                                        },
+                                    }}
+                                />
+                                <InputLabel
+                                    shrink
+                                    htmlFor="username-input"
+                                    style={{
+                                        fontSize: "25px",
+                                        fontWeight: "400",
+                                        color: "#000000",
+                                        fontFamily: "Poppins",
+                                        marginTop: "10px",
+                                    }}
+                                >
+                                    Username
+                                </InputLabel>
+                                <TextField
+                                    id="username-input"
+                                    variant="outlined"
+                                    fullWidth
+                                    margin="normal"
+                                    value={username}
+                                    onChange={handleUsernameChange}
+                                    error={usernameError}
+                                    helperText={
+                                        usernameError
+                                            ? "Username should be at least 4 characters long."
+                                            : ""
+                                    }
+                                    InputProps={{
+                                        style: {
+                                            fontSize: "18px",
+                                            marginTop: "-20px",
+                                            height: "50px",
+                                            borderRadius: "6px",
+                                        },
+                                    }}
+                                />
+                                <InputLabel
+                                    shrink
+                                    htmlFor="password-input"
+                                    style={{
+                                        fontSize: "25px",
+                                        fontWeight: "400",
+                                        color: "#000000",
+                                        fontFamily: "Poppins",
+                                        marginTop: "20px",
+                                    }}
+                                >
+                                    Password
+                                </InputLabel>
+                                <TextField
+                                    id="password-input"
+                                    variant="outlined"
+                                    type={showPassword ? "text" : "password"}
                                     fullWidth
                                     margin="normal"
                                     value={password}
                                     onChange={handlePasswordChange}
                                     error={passwordError}
-                                    helperText={passwordError ? "Password must be at least 8 characters long" : ""}
+                                    helperText={
+                                        passwordError
+                                            ? "Password must be at least 8 characters long."
+                                            : ""
+                                    }
+                                    InputProps={{
+                                        style: {
+                                            fontSize: "18px",
+                                            marginTop: "-20px",
+                                            height: "50px",
+                                            borderRadius: "6px",
+                                        },
+                                        endAdornment: (
+                                            <IconButton onClick={handlePasswordVisibility} edge="end">
+                                                <img
+                                                    src={showPassword ? eyeIconVisible : eyeIconHidden}
+                                                    alt={showPassword ? "Hide password" : "Show password"}
+                                                    style={{
+                                                        width: "24px",
+                                                        height: "24px",
+                                                        objectFit: "contain",
+                                                    }}
+                                                />
+                                            </IconButton>
+                                        ),
+                                    }}
                                 />
-                                <IconButton
-                                    className="eye-icon"
-                                    onClick={handlePasswordVisibility}
-                                >
-                                    <img
-                                        src={showPassword ? eyeIconVisible : eyeIconHidden}
-                                        alt="Toggle visibility"
-                                    />
-                                </IconButton>
                             </div>
-                            <button className="Signup-btn" onClick={handleSignUp}>
-                                Sign Up
-                            </button>
-                            <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
-                                <GoogleLogin
-                                    onSuccess={handleGoogleLoginSuccess}
-                                    onError={() => toast.error("Login Failed")}
-                                    cookiePolicy="single_host_origin"
-                                />
-                            </GoogleOAuthProvider>
+                            <div className="LoginPage-btn">
+                                <button className="Login-btn" onClick={handleSignUp}>
+                                    Sign Up
+                                </button>
+                            </div>
+                            <div
+                                style={{ marginTop: "15px", textAlign: "center", fontSize: "20px" }}
+                            >
+                                <p>OR</p>
+                            </div>
+                            <div>
+                                <GoogleOAuthProvider clientId="722611360376-mt0evhdhlt6jr55qmk92dumipmdg5khv.apps.googleusercontent.com">
+                                    <GoogleLogin
+                                        onSuccess={handleGoogleLoginSuccess}
+                                        onError={() => {
+                                            console.log('Login Failed')
+                                        }}
+                                    />
+                                </GoogleOAuthProvider>
+                            </div>
                         </>
                     ) : (
                         <>
@@ -212,20 +318,15 @@ const SignUpPage = () => {
                                 value={otp}
                                 onChange={(e) => setOtp(e.target.value)}
                             />
-                            <button className="Signup-btn" onClick={handleVerifyOtp}>
-                                Verify OTP
-                            </button>
+                            <div className="LoginPage-btn">
+                                <button className="Login-btn" onClick={handleVerifyOtp}>
+                                    Verify OTP
+                                </button>
+                            </div>
                         </>
                     )}
-                    <div className="signup-link-container">
-                        Already have an account?{" "}
-                        <Link className="signup-link" to="/Login">
-                            Login
-                        </Link>
-                    </div>
                 </div>
             </div>
-            <ToastContainer />
         </div>
     );
 };

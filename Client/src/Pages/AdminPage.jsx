@@ -67,9 +67,6 @@ const AdminPage = () => {
             <div className="SearchBar-sort">
               <SortBySelect />
             </div>
-            <div className="SearchBar-areaSelect">
-              <SortBySelect />
-            </div>
           </div>
           <div className="SeachBar-searchInput">
             <SearchInput />
@@ -101,15 +98,14 @@ const AdminPage = () => {
                       <h1>Type - {complaint.complaintType}</h1>
                     </div>
                     <div className="Admin-Complaint-Votes">
-                      <h1>Votes - {complaint.upvotedBy.length}</h1>
+                      <h1>Votes - {complaint.upvotedBy.length - complaint.downvotedBy.length ||0}</h1>
                     </div>
                     <div className="Admin-Complaint-Comments">
-                      <h1>Comments - 4</h1>
+                      <h1>Comments - {complaint.comments.length||0}</h1>
                     </div>
                     <div className="Admin-Complaint-Functions">
-                      <button onClick={() => handleVerify(complaint._id)}>Verify</button>
-                      <button onClick={() => handleDelete(complaint._id)}>Delete</button>
-                      <button>Re-Lodge</button>
+                      <button onClick={() => handleVerify(complaint._id)} id='submit'>Verify</button>
+                      <button onClick={() => handleDelete(complaint._id)}id='cancel'>Delete</button>
                     </div>
                   </div>
                 </div>

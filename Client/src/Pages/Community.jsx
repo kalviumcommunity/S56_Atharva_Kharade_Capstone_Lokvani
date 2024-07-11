@@ -198,6 +198,7 @@ const Community = () => {
                                 fullWidth
                                 margin="normal"
                                 multiline
+                                rows={2}
                                 size='small'
                                 InputProps={{
                                     style: {
@@ -214,11 +215,16 @@ const Community = () => {
                         {posts.map((post) => (
                             <div key={post._id} className="Posts-list-item">
                                 <div className="Post-user-detail">
-                                    <div className="user-detail-profile">
-                                        <img src={post.userImage || 'default_image_url'} alt="" />
+                                    <div style={{display:'flex',alignItems:'center'}}>
+                                        <div className="user-detail-profile">
+                                            <img src={post.userImage || 'default_image_url'} alt="" />
+                                        </div>
+                                        <div className="user-detail-name">
+                                            <h1>{post.username}</h1>
+                                        </div>
                                     </div>
-                                    <div className="user-detail-name">
-                                        <h1>{post.username}</h1>
+                                    <div className="post-timestamp">
+                                        <p>{formatISTDate(post.timestamp)}</p>
                                     </div>
                                 </div>
                                 <div className="Post-list-descp">
@@ -240,9 +246,7 @@ const Community = () => {
                                         <Link to={`/community/${name}/posts/${post._id}`}><FaRegComment className="Post-vote-arrows" /></Link>
                                     </div>
                                 </div>
-                                {/* <div className="post-timestamp">
-                                    <p>Posted on: {formatISTDate(post.timestamp)}</p>
-                                </div> */}
+
                             </div>
                         ))}
                     </div>
@@ -250,9 +254,6 @@ const Community = () => {
             </div>
             <div className="Community-Comment-Page">
                 <div className="Community-descp-box">
-                    <div className="Community-descp-box-title">
-                        <h1>{community.name}</h1>
-                    </div>
                     <div className="Community-descp-img">
                         <img src={community.image || 'default_image_url'} alt="community-img" onClick={() => handleClick("66308db0523c7a2afedbdd27")} />
                     </div>

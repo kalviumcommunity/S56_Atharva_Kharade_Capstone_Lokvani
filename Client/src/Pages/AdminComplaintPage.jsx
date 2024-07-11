@@ -16,12 +16,24 @@ const AdminComplaintPage = () => {
         fetchComplaints();
     }, [currentPage, sortBy, searchQuery]);
 
+    const renderDescription = (description) => {
+        if (description.split(' ').length > 25) {
+            return (
+                <>
+                    {description.split(' ').slice(0, 25).join(' ')}...
+                    <span className="view-more">View More</span>
+                </>
+            );
+        }
+        return description;
+    };
+
     const fetchComplaints = async () => {
         try {
             const response = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/Complaint`, {
                 params: {
                     page: currentPage,
-                    limit: 5,
+                    limit: 6,
                     sortBy: sortBy
                 }
             });
@@ -84,43 +96,39 @@ const AdminComplaintPage = () => {
                     </div>
                     <div className="Admin-Complaints">
                         {complaints.map(complaint => (
-                            <div key={complaint._id} className="MyComplaint-complaint-box">
+                            <div key={complaint._id} className="MyComplaint-complaint-box-admin">
                                 <div className="MyComplaint-box-title">
                                     <h1>{complaint.title}</h1>
                                 </div>
                                 <div className="MyComplaint-img">
                                     <img src={complaint.Image} alt="Complaint Image" className='complaint-img-size' />
                                 </div>
-                                <div className="MyComplaint-descp">
-                                    <p>{complaint.description}</p>
+                                <div className="MyComplaint-descp-admin">
+                                    <p>{renderDescription(complaint.description)}</p>
                                 </div>
-                                <div className="MyComplaint-function">
-                                    <div className="MyComplaint-upvote">
-                                        <h1>Votes: {complaint.voteCount}</h1>
-                                    </div>
-                                    <div className="MyComplaint-comment">
-                                        Comments: 4
+                                <div className="MyComplaint-function-Admin">
+                                    <div className="MyComplaint-status">
+                                        Area = {complaint.area}
                                     </div>
                                     <div className="MyComplaint-status">
-                                        Area: {complaint.area}
-                                    </div>
-                                    <div className="MyComplaint-status">
-                                        Type: {complaint.complaintType}
+                                        Type = {complaint.complaintType}
                                     </div>
                                 </div>
-                                <div>
-                                    <button onClick={() => handleDelete(complaint._id)}>Delete</button>
+                                <div style={{ width: '100%', justifyContent: "center", display: 'flex' }}>
+                                    <button onClick={() => handleDelete(complaint._id)} id='cancel' className='adminBtnCancel'>Delete</button>
                                 </div>
                             </div>
                         ))}
                     </div>
-                    <CustomPagination
-                        count={totalPages}
-                        currentPage={currentPage}
-                        onPageChange={handlePageChange}
-                        variant="outlined"
-                        shape="rounded"
-                    />
+                    <div className='Pagination'>
+                        <CustomPagination
+                            count={totalPages}
+                            currentPage={currentPage}
+                            onPageChange={handlePageChange}
+                            variant="outlined"
+                            shape="rounded"
+                        />
+                    </div>
                 </div>
             </div>
         </>

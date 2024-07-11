@@ -57,19 +57,17 @@
 .Admin-Complaints {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
   flex-wrap: wrap;
 }
 
 .Admin-Complaint-box {
-  width: 45%;
-  min-height: 500px;
-  max-height: auto;
-  margin-top: 20px;
+  width: 580px;
+  height: 420px;
   display: flex;
   padding: 5px 0;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
   border-radius: 5px;
+  margin: 20px;
 }
 
 .Admin-Complaint-box-left {
@@ -101,6 +99,9 @@
 
 .Admin-Complaint-box-right {
   width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .Admin-Complaint-Functions {
@@ -111,12 +112,11 @@
 }
 
 .Admin-Complaint-Functions button {
-  font-size: 20px;
-  border: 1px solid black;
+  font-size: 25px;
   border-radius: 5px;
-  padding: 0px 5px;
+  padding: 0px 10px;
   margin: 10px;
-  width: 100px;
+  width: 120px;
 }
 
 .complaint-img-size {
@@ -127,4 +127,38 @@
   font-size: 18px;
   font-family: "Poppins", serif;
   margin-left: 5px;
+}
+
+.MyComplaint-function-Admin{
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-family: "Poppins", serif;
+  font-size: 18px;
+  margin-left: 5px;
+}
+
+.MyComplaint-complaint-box-admin{
+  height: 510px;
+  width: 380px;
+  border-radius: 5px;
+  margin: 15px 20px;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+.MyComplaint-descp-admin{
+  height: 130px;
+  padding: 5px 20px;
+  width: 380px;
+}
+
+.adminBtnCancel{
+  /* height: 30px; */
+  margin: 10px;
+  font-size: 20px;
+  padding: 2px 20px;
+  font-family: "Poppins", serif;
+  border-radius: 5px;
 }
