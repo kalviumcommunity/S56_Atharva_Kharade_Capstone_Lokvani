@@ -59,7 +59,7 @@ const CommentPage = () => {
                             <div className="Comment-Complaint-function">
                                 <div className="Complaint-function-votes">
                                     <BiSolidUpvote className="Comment-arrows" />
-                                    <h1>{posts.voteCount}</h1>
+                                    <h1>{posts.upvotedBy.length - posts.downvotedBy.length || 0}</h1>
                                     <BiSolidDownvote className="Comment-arrows" />
                                 </div>
                             </div>

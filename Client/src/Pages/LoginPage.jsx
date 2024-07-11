@@ -104,7 +104,7 @@ const LoginPage = () => {
     const decoded = jwtDecode(credentialResponse.credential);
 
     const { email } = decoded;
-
+    // setUser(userDataResponse.data);
     try {
       const response = await axios.post(
         'https://s56-atharva-kharade-capstone-lokvani.onrender.com/GoogleLogin',
@@ -112,6 +112,19 @@ const LoginPage = () => {
       );
       console.log("Success:", response.data);
       Cookies.set('token', response.data.token);
+      const userDataResponse = await axios.get('https://s56-atharva-kharade-capstone-lokvani.onrender.com/UserDetails', {
+        headers: {
+          Authorization: response.data.token,
+        },
+      });
+      setUser(userDataResponse.data);
+
+      const userDataImage = await axios.get(`https://s56-atharva-kharade-capstone-lokvani.onrender.com/userDataImage/${userDataResponse.data.userId}`);
+
+      console.log('User image response:', userDataImage.data);
+
+      sessionStorage.setItem('username', username);
+      sessionStorage.setItem('userImage', userDataImage.data.user?.Image || 'https://www.w3schools.com/howto/img_avatar.png');
       navigate('/User');
     } catch (error) {
       console.error("Error:", error.response.data);

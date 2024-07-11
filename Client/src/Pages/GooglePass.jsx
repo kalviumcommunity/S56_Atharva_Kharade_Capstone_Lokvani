@@ -3,7 +3,6 @@ import './CSS/LoginPage.css';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
-import CircularProgress from '@mui/material/CircularProgress';
 import { Link, useNavigate } from 'react-router-dom';
 import eyeIconVisible from '../Assets/visibility.png';
 import eyeIconHidden from '../Assets/hide.png';
@@ -73,8 +72,10 @@ const GooglePass = () => {
                 "https://s56-atharva-kharade-capstone-lokvani.onrender.com/UsernameCheck",
                 { email, password, username }
             );
-
             console.log("Success:", response.data);
+            console.log("Success:", response.data);
+            Cookies.remove('username');
+            Cookies.remove('email');
             navigate('/User');
         } catch (error) {
             if (error.response.status === 400) {

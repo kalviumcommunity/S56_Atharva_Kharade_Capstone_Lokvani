@@ -6,7 +6,6 @@
 .Communities-body {
   width: calc(100vw - 250px);
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
   padding: 10px 0;
   overflow-y: auto;

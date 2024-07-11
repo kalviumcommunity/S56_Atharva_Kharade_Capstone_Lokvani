@@ -197,13 +197,3 @@ p {
   justify-content: center;
   margin: 10px 0;
 }
-
-#password-input:active {
-  border: 1px solid #1976D2;
-  font-family: "Poppins", sans-serif;
-
-}
-
-#password-input:focus {
-  border: 1px solid #1976D2;
-}

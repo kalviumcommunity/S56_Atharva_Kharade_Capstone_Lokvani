@@ -4,6 +4,12 @@
   display: flex;
 }
 
+.Pagination{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .Sidenav {
   width: 250px;
   height: 100%;
@@ -90,4 +96,26 @@
 
 .Dashboard-icons:hover {
   color: #fff;
+}
+
+.adminDetails {
+  width: 240px;
+  height: 50px;
+  border-radius: 5px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-top: 15px;
+  background-color: #888eb4;
+}
+
+.adminDetails h1 {
+  font-size: 25px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+  color:#fff;
 }

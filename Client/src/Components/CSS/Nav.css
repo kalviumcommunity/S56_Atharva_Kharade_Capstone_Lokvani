@@ -104,12 +104,11 @@ nav {
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  color: #fff;
   height: 60px;
   position: relative;
   z-index: 1000;
   color: black;
-  background-color: #F6F0EC;
+  background-color: #fff;
 }
 
 .logo {

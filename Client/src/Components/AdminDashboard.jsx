@@ -14,17 +14,8 @@ import Cookies from 'js-cookie';
 const AdminDashboard = () => {
     const navigate = useNavigate();
 
-    const username = Cookies.get('username');
-    let email = Cookies.get('email');
-
-    const maxEmailLength = 20;
-    if (email && email.length > maxEmailLength) {
-        email = email.slice(0, maxEmailLength) + '...';
-    }
 
     const handleLogout = () => {
-        Cookies.remove('username');
-        Cookies.remove('email');
         navigate('/');
     };
 
@@ -39,8 +30,8 @@ const AdminDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="userDetail">
-                        <IconContext.Provider value={{ color: 'black', size: '40px' }}>
+                    <div className="adminDetails">
+                        <IconContext.Provider value={{ color: 'white', size: '40px' }}>
                             <FaRegUserCircle />
                         </IconContext.Provider>
                         <div>
@@ -49,7 +40,7 @@ const AdminDashboard = () => {
                     </div>
 
                     <div style={{ marginTop: '15px' }}>
-
+                        <Link to={'/Admin'}>
                         <div className="AdminOptions">
                             <div className="UserIcon">
                                 <IconContext.Provider value={{ color: 'black', size: '35px' }}>
@@ -60,6 +51,7 @@ const AdminDashboard = () => {
                                 <h1>Verification</h1>
                             </div>
                         </div>
+                        </Link>
                         <Link to={'/AdminComplaints'}>
                         <div className="AdminOptions">
                             <div className="UserIcon">
@@ -73,29 +65,7 @@ const AdminDashboard = () => {
                         </div>
                         </Link>
 
-                        {/* <Link to={'/Communities'}> */}
-                            <div className="AdminOptions">
-                                <div className="UserIcon">
-                                    <IconContext.Provider value={{ color: 'black', size: '35px' }}>
-                                        <FaRegUserCircle />
-                                    </IconContext.Provider>
-                                </div>
-                                <div>
-                                    <h1>Profiles</h1>
-                                </div>
-                            </div>
-                        {/* </Link> */}
-
-                        <div className="AdminOptions">
-                            <div className="UserIcon">
-                                <IconContext.Provider value={{ color: 'black', size: '35px' }}>
-                                    <FaBuildingNgo />
-                                </IconContext.Provider>
-                            </div>
-                            <div>
-                                <h1>NGOs</h1>
-                            </div>
-                        </div>
+                        
                         <div className="AdminOptions" onClick={handleLogout}>
                             <div className="UserIcon">
                                 <IconContext.Provider value={{ color: 'black', size: '35px' }}>

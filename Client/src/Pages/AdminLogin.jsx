@@ -166,17 +166,6 @@ const AdminLogin = () => {
                             )}
                         </button>
                     </div>
-                    <div style={{ marginTop: '15px', textAlign: 'center', fontSize: '20px' }}>
-                        <p>OR</p>
-                    </div>
-                    <div>
-                        <div className="google-btn">
-                            <div className="google-img"></div>
-                            <div>
-                                <p>Sign-in with Google</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
